@@ -15,13 +15,21 @@
  */
 package com.skunk.scoutomatic.textui.gui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.R;
+import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragment;
 import com.skunk.scoutomatic.textui.gui.frag.WelcomeFragment;
 
 public class MainActivity extends FragmentActivity {
+	private Map<Class<? extends NamedTabFragment>, NamedTabFragment> fragments = new HashMap<Class<? extends NamedTabFragment>, NamedTabFragment>();
+	private NamedTabFragment currentFragment = new WelcomeFragment();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,12 +39,56 @@ public class MainActivity extends FragmentActivity {
 			if (savedInstanceState != null) {
 				return;
 			}
+			fragments.put(currentFragment.getClass(), currentFragment);
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.main_fragment_container, new WelcomeFragment())
+					.add(R.id.main_fragment_container, currentFragment)
 					.commit();
+			setFragment(currentFragment.getClass());
 		}
 	}
 
-	public void onArticleSelected(int position) {
+	public void changeFragment(View v) {
+		if (v.getId() == R.id.buttonLeft) {
+			setFragment(currentFragment.getPrevious());
+		}
+		if (v.getId() == R.id.buttonRight) {
+			setFragment(currentFragment.getNext());
+		}
+	}
+
+	private void setFragment(Class<? extends NamedTabFragment> fragClass) {
+		if (fragClass == null) {
+			return;
+		}
+		try {
+			NamedTabFragment tab = fragments.get(fragClass);
+			if (tab == null) {
+				tab = fragClass.newInstance();
+				fragments.put(fragClass, tab);
+			}
+			// Replace it
+			currentFragment = tab;
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.main_fragment_container, currentFragment)
+					.commit();
+
+			// Update NAV
+			View label = findViewById(R.id.fragmentCurrent);
+			View left = findViewById(R.id.buttonLeft);
+			View right = findViewById(R.id.buttonRight);
+			if (label != null && label instanceof TextView) {
+				((TextView) label).setText(tab.getName());
+			}
+			if (left != null) {
+				left.setVisibility(tab.getPrevious() != null ? View.VISIBLE
+						: View.INVISIBLE);
+			}
+			if (right != null) {
+				right.setVisibility(tab.getNext() != null ? View.VISIBLE
+						: View.INVISIBLE);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
