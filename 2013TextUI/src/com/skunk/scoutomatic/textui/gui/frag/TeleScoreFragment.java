@@ -31,6 +31,12 @@ public class TeleScoreFragment extends NamedTabFragment implements
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		updateScores();
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.tele_score_fragment, container,

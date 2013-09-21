@@ -9,7 +9,7 @@
         android:gravity="center" >
 
         <CheckBox
-            android:id="@+id/checkNoShow"
+            android:id="@+id/matchNoShow"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="No Show" />
@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
                 android:layout_marginTop="100dp"
+                android:contentDescription="Auto robot position"
                 android:src="@drawable/first_robot"
                 android:visibility="invisible" />
         </RelativeLayout>
@@ -57,7 +58,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Please Select a Location"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
 </TableLayout>
