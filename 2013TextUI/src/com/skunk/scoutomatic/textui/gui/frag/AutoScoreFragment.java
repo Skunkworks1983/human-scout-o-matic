@@ -2,12 +2,9 @@ package com.skunk.scoutomatic.textui.gui.frag;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.R;
@@ -23,6 +20,7 @@ public class AutoScoreFragment extends NamedTabFragment implements
 	private int score4Discs = 0;
 	private int score6Discs = 0;
 	private int collectDiscs = 0;
+	private int scoreMissed = 0;
 
 	private final void registerViewWithClickListener(View v, int id) {
 		View found = v.findViewById(id);
@@ -44,6 +42,8 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		registerViewWithClickListener(v, R.id.autoScore4Down);
 		registerViewWithClickListener(v, R.id.autoScore6Up);
 		registerViewWithClickListener(v, R.id.autoScore6Down);
+		registerViewWithClickListener(v, R.id.autoScoreMissUp);
+		registerViewWithClickListener(v, R.id.autoScoreMissDown);
 		return v;
 	}
 
@@ -97,6 +97,14 @@ public class AutoScoreFragment extends NamedTabFragment implements
 				score6Discs--;
 			}
 			break;
+		case R.id.autoScoreMissUp:
+			scoreMissed++;
+			break;
+		case R.id.autoScoreMissDown:
+			if (scoreMissed > 0) {
+				scoreMissed--;
+			}
+			break;
 		}
 		updateScores();
 	}
@@ -118,19 +126,27 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		if (collectDiscs != null && collectDiscs instanceof TextView) {
 			((TextView) collectDiscs).setText(this.collectDiscs + " discs");
 		}
+		View missedDiscs = getView().findViewById(R.id.autoScoreMiss);
+		if (missedDiscs != null && missedDiscs instanceof TextView) {
+			((TextView) missedDiscs).setText(this.scoreMissed + " discs");
+		}
 		View totalScore = getView().findViewById(R.id.autoTotalScore);
 		if (totalScore != null && totalScore instanceof TextView) {
 			((TextView) totalScore).setText(((this.score2Discs * 2)
 					+ (this.score4Discs * 4) + (this.score6Discs * 6))
 					+ " pts");
 		}
-		if (this.score2Discs + this.score4Discs + this.score6Discs - 2 > this.collectDiscs) {
-			View warning = getView().findViewById(R.id.autoScoreWarning);
-			if (warning != null && warning instanceof TextView) {
+		View warning = getView().findViewById(R.id.autoScoreWarning);
+		if (warning != null && warning instanceof TextView) {
+			if (this.score2Discs + this.score4Discs + this.score6Discs
+					+ this.scoreMissed - 2 > this.collectDiscs) {
 				((TextView) warning)
-						.setText("More discs were scored than obtained! ("
-								+ (this.score2Discs + this.score4Discs + this.score6Discs)
+						.setText("More discs were shot than obtained! ("
+								+ (this.score2Discs + this.score4Discs
+										+ this.score6Discs + this.scoreMissed)
 								+ " > " + (2 + this.collectDiscs) + ")");
+			} else {
+				((TextView) warning).setText("");
 			}
 		}
 	}
