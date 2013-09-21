@@ -26,7 +26,7 @@ public class WelcomeFragment extends NamedTabFragment {
 
 	@Override
 	public Class<? extends NamedTabFragment> getNext() {
-		return WelcomeFragment.class;
+		return AutoLocFragment.class;
 	}
 
 	@Override
