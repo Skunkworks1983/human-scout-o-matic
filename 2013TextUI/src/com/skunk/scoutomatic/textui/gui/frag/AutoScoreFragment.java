@@ -54,7 +54,7 @@ public class AutoScoreFragment extends NamedTabFragment implements
 
 	@Override
 	public Class<? extends NamedTabFragment> getNext() {
-		return AutoScoreFragment.class;
+		return TeleScoreFragment.class;
 	}
 
 	@Override

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Disc Collection"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/teleCollectUp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+1 Disc" />
+
+        <TextView
+            android:id="@+id/teleCollect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 discs"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/teleCollectDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-1" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Disc Scoring"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/teleScore1Up"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+1 Score" />
+
+        <TextView
+            android:id="@+id/teleScore1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 discs"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/teleScore1Down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-1" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/teleScore2Up"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+2 Score" />
+
+        <TextView
+            android:id="@+id/teleScore2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 discs"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/teleScore2Down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-2" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/teleScore3Up"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+3 Score" />
+
+        <TextView
+            android:id="@+id/teleScore3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 discs"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/teleScore3Down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-3" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/teleScorePyrUp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+5 Score" />
+
+        <TextView
+            android:id="@+id/teleScorePyr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 discs"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/teleScorePyrDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-5" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/teleScoreMissUp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+1 Missed" />
+
+        <TextView
+            android:id="@+id/teleScoreMiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 discs"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/teleScoreMissDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-1" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="20dp"
+            android:text="Total Points:"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/teleTotalScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 pts"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+
+    <TextView
+        android:id="@+id/teleScoreWarning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FF0000" />
+
+</TableLayout>
