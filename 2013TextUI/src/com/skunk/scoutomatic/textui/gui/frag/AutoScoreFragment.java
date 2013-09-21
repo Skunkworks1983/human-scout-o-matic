@@ -109,45 +109,35 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		updateScores();
 	}
 
+	private final void setText(int id, String val) {
+		View v = getView().findViewById(id);
+		if (v != null && v instanceof TextView) {
+			((TextView) v).setText(val);
+		}
+	}
+
 	private void updateScores() {
-		View score2Discs = getView().findViewById(R.id.autoScore2);
-		if (score2Discs != null && score2Discs instanceof TextView) {
-			((TextView) score2Discs).setText(this.score2Discs + " discs");
-		}
-		View score4Discs = getView().findViewById(R.id.autoScore4);
-		if (score4Discs != null && score4Discs instanceof TextView) {
-			((TextView) score4Discs).setText(this.score4Discs + " discs");
-		}
-		View score6Discs = getView().findViewById(R.id.autoScore6);
-		if (score6Discs != null && score6Discs instanceof TextView) {
-			((TextView) score6Discs).setText(this.score6Discs + " discs");
-		}
-		View collectDiscs = getView().findViewById(R.id.autoCollect);
-		if (collectDiscs != null && collectDiscs instanceof TextView) {
-			((TextView) collectDiscs).setText(this.collectDiscs + " discs");
-		}
-		View missedDiscs = getView().findViewById(R.id.autoScoreMiss);
-		if (missedDiscs != null && missedDiscs instanceof TextView) {
-			((TextView) missedDiscs).setText(this.scoreMissed + " discs");
-		}
-		View totalScore = getView().findViewById(R.id.autoTotalScore);
-		if (totalScore != null && totalScore instanceof TextView) {
-			((TextView) totalScore).setText(((this.score2Discs * 2)
-					+ (this.score4Discs * 4) + (this.score6Discs * 6))
-					+ " pts");
-		}
-		View warning = getView().findViewById(R.id.autoScoreWarning);
-		if (warning != null && warning instanceof TextView) {
-			if (this.score2Discs + this.score4Discs + this.score6Discs
-					+ this.scoreMissed - 2 > this.collectDiscs) {
-				((TextView) warning)
-						.setText("More discs were shot than obtained! ("
-								+ (this.score2Discs + this.score4Discs
-										+ this.score6Discs + this.scoreMissed)
-								+ " > " + (2 + this.collectDiscs) + ")");
-			} else {
-				((TextView) warning).setText("");
-			}
+		setText(R.id.autoCollect, this.collectDiscs + " discs");
+
+		setText(R.id.autoScore2, this.score2Discs + " discs");
+		setText(R.id.autoScore4, this.score4Discs + " discs");
+		setText(R.id.autoScore6, this.score6Discs + " discs");
+
+		setText(R.id.autoScoreMiss, this.scoreMissed + " discs");
+
+		setText(R.id.autoTotalScore, ((this.score2Discs * 2)
+				+ (this.score4Discs * 4) + (this.score6Discs * 6))
+				+ " pts");
+
+		if (this.score2Discs + this.score4Discs + this.score6Discs
+				+ this.scoreMissed - 2 > this.collectDiscs) {
+			setText(R.id.autoScoreWarning,
+					"More discs were shot than obtained! ("
+							+ (this.score2Discs + this.score4Discs
+									+ this.score6Discs + this.scoreMissed)
+							+ " > " + (2 + this.collectDiscs) + ")");
+		} else {
+			setText(R.id.autoScoreWarning, "");
 		}
 	}
 }
