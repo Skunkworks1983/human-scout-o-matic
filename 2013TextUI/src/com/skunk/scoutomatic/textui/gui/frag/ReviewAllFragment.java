@@ -1,0 +1,198 @@
+package com.skunk.scoutomatic.textui.gui.frag;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
+import com.skunk.scoutomatic.textui.R;
+
+/**
+ * Created on: Sep 21, 2013
+ * 
+ * @author "Westin Miller"
+ * 
+ */
+public class ReviewAllFragment extends NamedTabFragment {
+	private static final int MAXIMUM_TELE_SCORE = 1000;
+	private static final int MAXIMUM_AUTO_SCORE = 15;
+	private static final int MAXIMUM_FOULS = 9;
+	private DataCache loadOnCreate;
+
+	@Override
+	public String getName() {
+		return "Review";
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.review_all_fragment, container,
+				false);
+		setNumberRange(v, R.id.reviewAutoCollect, 0, MAXIMUM_AUTO_SCORE);
+		setNumberRange(v, R.id.reviewAutoScore2, 0, MAXIMUM_AUTO_SCORE);
+		setNumberRange(v, R.id.reviewAutoScore4, 0, MAXIMUM_AUTO_SCORE);
+		setNumberRange(v, R.id.reviewAutoScore6, 0, MAXIMUM_AUTO_SCORE);
+		setNumberRange(v, R.id.reviewAutoMiss, 0, MAXIMUM_AUTO_SCORE);
+
+		setNumberRange(v, R.id.reviewTeleCollect, 0, MAXIMUM_TELE_SCORE);
+		setNumberRange(v, R.id.reviewTeleScoreMiss, 0, MAXIMUM_TELE_SCORE);
+		setNumberRange(v, R.id.reviewTeleScore1, 0, MAXIMUM_TELE_SCORE);
+		setNumberRange(v, R.id.reviewTeleScore2, 0, MAXIMUM_TELE_SCORE);
+		setNumberRange(v, R.id.reviewTeleScore3, 0, MAXIMUM_TELE_SCORE);
+		setNumberRange(v, R.id.reviewTeleScorePyr, 0, MAXIMUM_TELE_SCORE);
+
+		setNumberRange(v, R.id.reviewClimbLevel, 0, 3);
+
+		setNumberRange(v, R.id.reviewFoulFoul, 0, MAXIMUM_FOULS);
+		setNumberRange(v, R.id.reviewFoulTechnical, 0, MAXIMUM_FOULS);
+		return v;
+	}
+
+	public void onResume() {
+		super.onResume();
+		if (loadOnCreate != null) {
+			loadInformation(loadOnCreate);
+			loadOnCreate = null;
+		}
+	}
+
+	@Override
+	public Class<? extends NamedTabFragment> getNext() {
+		return null;
+	}
+
+	@Override
+	public Class<? extends NamedTabFragment> getPrevious() {
+		return ReviewFoulsSkillsFragment.class;
+	}
+
+	@Override
+	public void storeInformation(DataCache data) {
+		data.putInteger(DataKeys.MATCH_AUTO_COLLECT,
+				getNumberValue(R.id.reviewAutoCollect));
+		data.putInteger(DataKeys.MATCH_AUTO_SCORE_2,
+				getNumberValue(R.id.reviewAutoScore2));
+		data.putInteger(DataKeys.MATCH_AUTO_SCORE_4,
+				getNumberValue(R.id.reviewAutoScore4));
+		data.putInteger(DataKeys.MATCH_AUTO_SCORE_6,
+				getNumberValue(R.id.reviewAutoScore6));
+		data.putInteger(DataKeys.MATCH_AUTO_SCORE_MISS,
+				getNumberValue(R.id.reviewAutoMiss));
+
+		data.putInteger(DataKeys.MATCH_TELE_COLLECT,
+				getNumberValue(R.id.reviewTeleCollect));
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_MISS,
+				getNumberValue(R.id.reviewTeleScoreMiss));
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_1,
+				getNumberValue(R.id.reviewTeleScore1));
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_2,
+				getNumberValue(R.id.reviewTeleScore2));
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_3,
+				getNumberValue(R.id.reviewTeleScore3));
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_PYRAMID,
+				getNumberValue(R.id.reviewTeleScorePyr));
+
+		data.putInteger(DataKeys.MATCH_TELE_CLIMB_LEVEL,
+				getNumberValue(R.id.reviewClimbLevel));
+		data.putBoolean(DataKeys.MATCH_TELE_CLIMB_ATTEMPTED,
+				getState(R.id.reviewClimbAttempt));
+
+		data.putInteger(DataKeys.MATCH_FOULS_FOULS,
+				getNumberValue(R.id.reviewFoulFoul));
+		data.putInteger(DataKeys.MATCH_FOULS_TECHNICALS,
+				getNumberValue(R.id.reviewFoulTechnical));
+		data.putBoolean(DataKeys.MATCH_FOULS_RED_CARD,
+				getState(R.id.reviewFoulRedCard));
+		data.putBoolean(DataKeys.MATCH_FOULS_YELLOW_CARD,
+				getState(R.id.reviewFoulYellowCard));
+
+		data.putBoolean(DataKeys.MATCH_DEADBOT, getState(R.id.reviewDeadBot));
+		data.putBoolean(DataKeys.MATCH_NO_SHOW, getState(R.id.reviewNoShow));
+
+		data.putString(DataKeys.MATCH_SCOUT,
+				getTextContents(R.id.reviewScoutName).toString());
+		data.putString(DataKeys.MATCH_COMPETITION,
+				getTextContents(R.id.reviewCompName).toString());
+		String teamValue = getTextContents(R.id.reviewTeamID).toString();
+		if (teamValue.length() == 0) {
+			teamValue = "0";
+		}
+		String matchValue = getTextContents(R.id.reviewMatchID).toString();
+		if (matchValue.length() == 0) {
+			matchValue = "0";
+		}
+		data.putInteger(DataKeys.MATCH_TEAM, Integer.valueOf(teamValue));
+		data.putInteger(DataKeys.MATCH_NUMBER, Integer.valueOf(matchValue));
+	}
+
+	@Override
+	public void loadInformation(DataCache data) {
+		if (getView() != null) {
+			setNumberValue(R.id.reviewAutoCollect,
+					data.getInteger(DataKeys.MATCH_AUTO_COLLECT, 0));
+			setNumberValue(R.id.reviewAutoScore2,
+					data.getInteger(DataKeys.MATCH_AUTO_SCORE_2, 0));
+			setNumberValue(R.id.reviewAutoScore4,
+					data.getInteger(DataKeys.MATCH_AUTO_SCORE_4, 0));
+			setNumberValue(R.id.reviewAutoScore6,
+					data.getInteger(DataKeys.MATCH_AUTO_SCORE_6, 0));
+			setNumberValue(R.id.reviewAutoMiss,
+					data.getInteger(DataKeys.MATCH_AUTO_SCORE_MISS, 0));
+
+			setNumberValue(R.id.reviewTeleCollect,
+					data.getInteger(DataKeys.MATCH_TELE_COLLECT, 0));
+			setNumberValue(R.id.reviewTeleScoreMiss,
+					data.getInteger(DataKeys.MATCH_TELE_SCORE_MISS, 0));
+			setNumberValue(R.id.reviewTeleScore1,
+					data.getInteger(DataKeys.MATCH_TELE_SCORE_1, 0));
+			setNumberValue(R.id.reviewTeleScore2,
+					data.getInteger(DataKeys.MATCH_TELE_SCORE_2, 0));
+			setNumberValue(R.id.reviewTeleScore3,
+					data.getInteger(DataKeys.MATCH_TELE_SCORE_3, 0));
+			setNumberValue(R.id.reviewTeleScorePyr,
+					data.getInteger(DataKeys.MATCH_TELE_SCORE_PYRAMID, 0));
+
+			setNumberValue(R.id.reviewClimbLevel,
+					data.getInteger(DataKeys.MATCH_TELE_CLIMB_LEVEL, 0));
+			setState(R.id.reviewClimbAttempt,
+					data.getBoolean(DataKeys.MATCH_TELE_CLIMB_ATTEMPTED, false));
+
+			setNumberValue(R.id.reviewFoulFoul,
+					data.getInteger(DataKeys.MATCH_FOULS_FOULS, 0));
+			setNumberValue(R.id.reviewFoulTechnical,
+					data.getInteger(DataKeys.MATCH_FOULS_TECHNICALS, 0));
+			setState(R.id.reviewFoulRedCard,
+					data.getBoolean(DataKeys.MATCH_FOULS_RED_CARD, false));
+			setState(R.id.reviewFoulYellowCard,
+					data.getBoolean(DataKeys.MATCH_FOULS_YELLOW_CARD, false));
+
+			setState(R.id.reviewDeadBot,
+					data.getBoolean(DataKeys.MATCH_DEADBOT, false));
+			setState(R.id.reviewNoShow,
+					data.getBoolean(DataKeys.MATCH_NO_SHOW, false));
+
+			setText(R.id.reviewStartingPosition,
+					data.getFloat(DataKeys.MATCH_AUTO_LOC_X, 0) + ","
+							+ data.getFloat(DataKeys.MATCH_AUTO_LOC_Y, 0));
+			setText(R.id.reviewShootingPosition,
+					data.getFloat(DataKeys.MATCH_TELE_SHOOT_LOC_X, 0) + ","
+							+ data.getFloat(DataKeys.MATCH_TELE_SHOOT_LOC_Y, 0));
+
+			setTextContents(R.id.reviewScoutName,
+					data.getString(DataKeys.MATCH_SCOUT, ""));
+			setTextContents(R.id.reviewCompName,
+					data.getString(DataKeys.MATCH_COMPETITION, ""));
+			int teamID = data.getInteger(DataKeys.MATCH_TEAM, 0);
+			int matchID = data.getInteger(DataKeys.MATCH_NUMBER, 0);
+			setTextContents(R.id.reviewTeamID,
+					teamID > 0 ? Integer.toString(teamID) : "");
+			setTextContents(R.id.reviewMatchID,
+					matchID > 0 ? Integer.toString(matchID) : "");
+		} else {
+			loadOnCreate = data;
+		}
+	}
+}

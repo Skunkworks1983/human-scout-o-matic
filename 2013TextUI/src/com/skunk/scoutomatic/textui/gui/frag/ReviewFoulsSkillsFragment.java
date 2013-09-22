@@ -62,7 +62,7 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 
 	@Override
 	public Class<? extends NamedTabFragment> getNext() {
-		return AutoLocFragment.class;
+		return ReviewAllFragment.class;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.DataCache;
@@ -45,6 +46,38 @@ public abstract class NamedTabFragment extends Fragment {
 		if (v != null && v instanceof EditText) {
 			((EditText) v).setText(s);
 		}
+	}
+
+	protected final int getNumberValue(int id) {
+		View v = getView().findViewById(id);
+		if (v != null && v instanceof NumberPicker) {
+			return ((NumberPicker) v).getValue();
+		}
+		return 0;
+	}
+
+	protected final void setNumberValue(int id, int value) {
+		View v = getView().findViewById(id);
+		if (v != null && v instanceof NumberPicker) {
+			((NumberPicker) v).setValue(value);
+		}
+	}
+
+	protected final void setNumberRange(View root, int id, int minimum,
+			int maximum) {
+		View v = root.findViewById(id);
+		if (v != null && v instanceof NumberPicker) {
+			((NumberPicker) v).setMinValue(minimum);
+			((NumberPicker) v).setMaxValue(maximum);
+		}
+	}
+
+	protected final boolean getState(int id) {
+		View vv = getView().findViewById(id);
+		if (vv != null && vv instanceof CheckBox) {
+			return ((CheckBox) vv).isChecked();
+		}
+		return false;
 	}
 
 	protected final void setState(int id, boolean state) {
