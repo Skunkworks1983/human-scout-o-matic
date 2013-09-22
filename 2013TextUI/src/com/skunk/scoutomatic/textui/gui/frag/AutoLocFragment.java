@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 
 /**
@@ -56,7 +58,7 @@ public class AutoLocFragment extends NamedTabFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateLocation();	// TODO Restore the marker properly
+		updateLocation(); // TODO Restore the marker properly
 	}
 
 	@Override
@@ -109,5 +111,19 @@ public class AutoLocFragment extends NamedTabFragment implements
 		if (v.getId() == R.id.matchNoShow && v instanceof CheckBox) {
 			noShow = ((CheckBox) v).isChecked();
 		}
+	}
+
+	@Override
+	public void storeInformation(DataCache data) {
+		data.putBoolean(DataKeys.MATCH_NO_SHOW, noShow);
+		data.putFloat(DataKeys.MATCH_AUTO_LOC_X, xPos);
+		data.putFloat(DataKeys.MATCH_AUTO_LOC_Y, yPos);
+	}
+
+	@Override
+	public void loadInformation(DataCache data) {
+		noShow = data.getBoolean(DataKeys.MATCH_NO_SHOW, false);
+		xPos = data.getFloat(DataKeys.MATCH_AUTO_LOC_X, 0);
+		yPos = data.getFloat(DataKeys.MATCH_AUTO_LOC_Y, 0);
 	}
 }

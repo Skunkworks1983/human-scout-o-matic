@@ -7,6 +7,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 
 /**
@@ -29,7 +31,8 @@ public class TeleClimbFragment extends NamedTabFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.tele_climb_fragment, container, false);
+		View v = inflater.inflate(R.layout.tele_climb_fragment, container,
+				false);
 		registerViewWithClickListener(v, R.id.climbAttempted);
 		registerViewWithClickListener(v, R.id.climbLevel1);
 		registerViewWithClickListener(v, R.id.climbLevel2);
@@ -103,5 +106,17 @@ public class TeleClimbFragment extends NamedTabFragment implements
 		setState(R.id.climbLevel1, level >= 1);
 		setState(R.id.climbLevel2, level >= 2);
 		setState(R.id.climbLevel3, level >= 3);
+	}
+
+	@Override
+	public void storeInformation(DataCache data) {
+		data.putInteger(DataKeys.MATCH_TELE_CLIMB_LEVEL, level);
+		data.putBoolean(DataKeys.MATCH_TELE_CLIMB_ATTEMPTED, attempted);
+	}
+
+	@Override
+	public void loadInformation(DataCache data) {
+		level = data.getInteger(DataKeys.MATCH_TELE_CLIMB_LEVEL, 0);
+		attempted = data.getBoolean(DataKeys.MATCH_TELE_CLIMB_ATTEMPTED, false);
 	}
 }

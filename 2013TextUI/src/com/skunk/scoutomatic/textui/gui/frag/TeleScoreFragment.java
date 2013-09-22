@@ -5,10 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 
+import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 
 /**
@@ -152,5 +151,25 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		} else {
 			setText(R.id.teleScoreWarning, "");
 		}
+	}
+
+	@Override
+	public void storeInformation(DataCache data) {
+		data.putInteger(DataKeys.MATCH_TELE_COLLECT, collectDiscs);
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_MISS, scoreMissed);
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_1, score1Discs);
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_2, score2Discs);
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_3, score3Discs);
+		data.putInteger(DataKeys.MATCH_TELE_SCORE_PYRAMID, scorePyrDiscs);
+	}
+
+	@Override
+	public void loadInformation(DataCache data) {
+		collectDiscs = data.getInteger(DataKeys.MATCH_TELE_COLLECT, 0);
+		scoreMissed = data.getInteger(DataKeys.MATCH_TELE_SCORE_MISS, 0);
+		score1Discs = data.getInteger(DataKeys.MATCH_TELE_SCORE_1, 0);
+		score2Discs = data.getInteger(DataKeys.MATCH_TELE_SCORE_2, 0);
+		score3Discs = data.getInteger(DataKeys.MATCH_TELE_SCORE_3, 0);
+		scorePyrDiscs = data.getInteger(DataKeys.MATCH_TELE_SCORE_PYRAMID, 0);
 	}
 }

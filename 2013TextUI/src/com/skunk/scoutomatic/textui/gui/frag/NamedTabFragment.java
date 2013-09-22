@@ -6,6 +6,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.skunk.scoutomatic.textui.DataCache;
+
 /**
  * Created on: Sep 20, 2013
  * 
@@ -18,6 +20,10 @@ public abstract class NamedTabFragment extends Fragment {
 	public abstract Class<? extends NamedTabFragment> getNext();
 
 	public abstract Class<? extends NamedTabFragment> getPrevious();
+
+	public abstract void storeInformation(DataCache data);
+
+	public abstract void loadInformation(DataCache data);
 
 	protected final void setText(int id, String val) {
 		View v = getView().findViewById(id);

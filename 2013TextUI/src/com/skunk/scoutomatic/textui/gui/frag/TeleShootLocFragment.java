@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 
 /**
@@ -92,5 +94,17 @@ public class TeleShootLocFragment extends NamedTabFragment implements
 							- (vv.getHeight() / 2), 0, 0);
 			vv.requestLayout();
 		}
+	}
+
+	@Override
+	public void storeInformation(DataCache data) {
+		data.putFloat(DataKeys.MATCH_TELE_SHOOT_LOC_X, xPos);
+		data.putFloat(DataKeys.MATCH_TELE_SHOOT_LOC_Y, yPos);
+	}
+
+	@Override
+	public void loadInformation(DataCache data) {
+		xPos = data.getFloat(DataKeys.MATCH_TELE_SHOOT_LOC_X, 0);
+		yPos = data.getFloat(DataKeys.MATCH_TELE_SHOOT_LOC_Y, 0);
 	}
 }

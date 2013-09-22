@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
+import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 
 /**
@@ -143,5 +145,27 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 		if (v != null && v instanceof RatingBar) {
 			((RatingBar) v).setRating(driverSkill);
 		}
+	}
+
+	@Override
+	public void storeInformation(DataCache data) {
+		data.putBoolean(DataKeys.MATCH_FOULS_RED_CARD, redCard);
+		data.putBoolean(DataKeys.MATCH_FOULS_YELLOW_CARD, yellowCard);
+		data.putBoolean(DataKeys.MATCH_DEADBOT, deadBot);
+		data.putInteger(DataKeys.MATCH_FOULS_FOULS, foulCount);
+		data.putInteger(DataKeys.MATCH_FOULS_TECHNICALS, techCount);
+		data.putFloat(DataKeys.MATCH_REVIEW_DRIVER_SKILL, driverSkill);
+		data.putString(DataKeys.MATCH_REVIEW_COMMENTS, comments);
+	}
+
+	@Override
+	public void loadInformation(DataCache data) {
+		redCard = data.getBoolean(DataKeys.MATCH_FOULS_RED_CARD, false);
+		yellowCard = data.getBoolean(DataKeys.MATCH_FOULS_YELLOW_CARD, false);
+		deadBot = data.getBoolean(DataKeys.MATCH_DEADBOT, false);
+		foulCount = data.getInteger(DataKeys.MATCH_FOULS_FOULS, 0);
+		techCount = data.getInteger(DataKeys.MATCH_FOULS_TECHNICALS, 0);
+		driverSkill = data.getFloat(DataKeys.MATCH_REVIEW_DRIVER_SKILL, 0);
+		comments = data.getString(DataKeys.MATCH_REVIEW_COMMENTS, "");
 	}
 }

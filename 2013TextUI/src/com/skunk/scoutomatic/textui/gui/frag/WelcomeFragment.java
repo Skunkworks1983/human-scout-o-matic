@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 
 /**
@@ -91,5 +93,21 @@ public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
 			matchID = Integer.valueOf(getTextContents(R.id.matchID));
 		} catch (NumberFormatException ex) {
 		}
+	}
+
+	@Override
+	public void storeInformation(DataCache data) {
+		data.putString(DataKeys.MATCH_SCOUT, scoutName);
+		data.putString(DataKeys.MATCH_COMPETITION, compID);
+		data.putInteger(DataKeys.MATCH_TEAM, robotID);
+		data.putInteger(DataKeys.MATCH_NUMBER, matchID);
+	}
+
+	@Override
+	public void loadInformation(DataCache data) {
+		scoutName = data.getString(DataKeys.MATCH_SCOUT, "");
+		compID = data.getString(DataKeys.MATCH_COMPETITION, "");
+		robotID = data.getInteger(DataKeys.MATCH_TEAM, 0);
+		matchID = data.getInteger(DataKeys.MATCH_NUMBER, 0);
 	}
 }

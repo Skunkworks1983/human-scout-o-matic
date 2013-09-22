@@ -5,8 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 
 /**
@@ -138,5 +139,23 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		} else {
 			setText(R.id.autoScoreWarning, "");
 		}
+	}
+
+	@Override
+	public void storeInformation(DataCache data) {
+		data.putInteger(DataKeys.MATCH_AUTO_COLLECT, collectDiscs);
+		data.putInteger(DataKeys.MATCH_AUTO_SCORE_MISS, scoreMissed);
+		data.putInteger(DataKeys.MATCH_AUTO_SCORE_2, score2Discs);
+		data.putInteger(DataKeys.MATCH_AUTO_SCORE_4, score4Discs);
+		data.putInteger(DataKeys.MATCH_AUTO_SCORE_6, score6Discs);
+	}
+
+	@Override
+	public void loadInformation(DataCache data) {
+		collectDiscs = data.getInteger(DataKeys.MATCH_AUTO_COLLECT, 0);
+		scoreMissed = data.getInteger(DataKeys.MATCH_AUTO_SCORE_MISS, 0);
+		score2Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_2, 0);
+		score4Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_4, 0);
+		score6Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_6, 0);
 	}
 }

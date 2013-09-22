@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.skunk.scoutomatic.textui.DataCache;
 import com.skunk.scoutomatic.textui.R;
 import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragment;
 import com.skunk.scoutomatic.textui.gui.frag.WelcomeFragment;
@@ -30,6 +31,8 @@ import com.skunk.scoutomatic.textui.gui.frag.WelcomeFragment;
 public class MainActivity extends FragmentActivity {
 	private Map<Class<? extends NamedTabFragment>, NamedTabFragment> fragments = new HashMap<Class<? extends NamedTabFragment>, NamedTabFragment>();
 	private NamedTabFragment currentFragment = new WelcomeFragment();
+
+	private DataCache dataHeap = new DataCache(new HashMap<String, Object>());
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,9 @@ public class MainActivity extends FragmentActivity {
 				fragments.put(fragClass, tab);
 			}
 			// Replace it
+			currentFragment.storeInformation(dataHeap);
 			currentFragment = tab;
+			currentFragment.loadInformation(dataHeap);
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.main_fragment_container, currentFragment)
 					.commit();
