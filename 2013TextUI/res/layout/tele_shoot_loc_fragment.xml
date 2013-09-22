@@ -6,19 +6,7 @@
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" >
-
-        <CheckBox
-            android:id="@+id/matchNoShow"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="No Show"
-            android:textAppearance="?android:attr/textAppearanceLarge"  />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:gravity="center" >
 
         <RelativeLayout
@@ -27,21 +15,21 @@
             android:layout_gravity="center" >
 
             <ImageView
-                android:id="@+id/autoScoutSheet"
+                android:id="@+id/telePyramidSheet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#000000"
-                android:contentDescription="Auto scouting sheet"
+                android:contentDescription="Teleoperated pyramid sheet"
                 android:padding="5dp"
-                android:src="@drawable/auto_scout_sheet" />
+                android:src="@drawable/pyramid_scout_sheet" />
 
             <ImageView
-                android:id="@+id/autoFirstRobot"
+                android:id="@+id/teleFirstRobot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
                 android:layout_marginTop="100dp"
-                android:contentDescription="Auto robot position"
+                android:contentDescription="Teleoperated robot position"
                 android:src="@drawable/first_robot"
                 android:visibility="invisible" />
         </RelativeLayout>
@@ -52,7 +40,7 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/autoRobotLocation"
+            android:id="@+id/teleShootLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

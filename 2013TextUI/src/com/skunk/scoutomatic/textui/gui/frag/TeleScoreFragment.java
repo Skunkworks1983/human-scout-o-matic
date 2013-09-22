@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.R;
@@ -63,7 +65,7 @@ public class TeleScoreFragment extends NamedTabFragment implements
 
 	@Override
 	public Class<? extends NamedTabFragment> getNext() {
-		return TeleScoreFragment.class;
+		return TeleClimbFragment.class;
 	}
 
 	@Override
@@ -124,13 +126,6 @@ public class TeleScoreFragment extends NamedTabFragment implements
 			break;
 		}
 		updateScores();
-	}
-
-	private final void setText(int id, String val) {
-		View v = getView().findViewById(id);
-		if (v != null && v instanceof TextView) {
-			((TextView) v).setText(val);
-		}
 	}
 
 	private void updateScores() {

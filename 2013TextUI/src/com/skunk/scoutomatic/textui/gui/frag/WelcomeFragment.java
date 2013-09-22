@@ -54,21 +54,6 @@ public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
 		return null;
 	}
 
-	private final String getTextContents(int id) {
-		View v = getView().findViewById(id);
-		if (v != null && v instanceof EditText) {
-			return ((EditText) v).getText().toString();
-		}
-		return "";
-	}
-
-	private final void setTextContents(int id, String s) {
-		View v = getView().findViewById(id);
-		if (v != null && v instanceof EditText) {
-			((EditText) v).setText(s);
-		}
-	}
-
 	@Override
 	public void onResume() {
 		super.onResume();

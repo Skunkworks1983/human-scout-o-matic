@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <CheckBox
+        android:id="@+id/climbAttempted"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Attempted"
+        android:textSize="40sp" />
+
+    <CheckBox
+        android:id="@+id/climbLevel1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Level 1"
+        android:textSize="40sp" />
+
+    <CheckBox
+        android:id="@+id/climbLevel2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Level 2"
+        android:textSize="40sp" />
+
+    <CheckBox
+        android:id="@+id/climbLevel3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Level 3"
+        android:textSize="40sp" />
+
+</TableLayout>

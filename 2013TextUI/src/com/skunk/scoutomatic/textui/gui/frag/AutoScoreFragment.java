@@ -115,13 +115,6 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		updateScores();
 	}
 
-	private final void setText(int id, String val) {
-		View v = getView().findViewById(id);
-		if (v != null && v instanceof TextView) {
-			((TextView) v).setText(val);
-		}
-	}
-
 	private void updateScores() {
 		setText(R.id.autoCollect, this.collectDiscs + " discs");
 
