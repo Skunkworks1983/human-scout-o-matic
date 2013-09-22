@@ -34,6 +34,10 @@ public class DataCache {
 		data.put(key, Integer.valueOf(value));
 	}
 
+	public void putLong(String key, long value) {
+		data.put(key, Long.valueOf(value));
+	}
+
 	public void putString(String key, String value) {
 		data.put(key, value);
 	}
@@ -62,6 +66,14 @@ public class DataCache {
 		return defaultValue;
 	}
 
+	public long getLong(String key, long defaultValue) {
+		Object o = data.get(key);
+		if (o != null && o instanceof Number) {
+			return ((Number) o).longValue();
+		}
+		return defaultValue;
+	}
+
 	public String getString(String key, String defaultValue) {
 		Object o = data.get(key);
 		if (o != null) {
@@ -71,7 +83,13 @@ public class DataCache {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> List<T> getList(String key) {
+	/**
+	 * 
+	 * @param key The String to fetch
+	 * @param clazz Used to ID the type
+	 * @return
+	 */
+	public <T> List<T> getList(String key, Class<T> clazz) {
 		Object o = data.get(key);
 		ArrayList<T> lst = new ArrayList<T>(0);
 		if (o instanceof List) {

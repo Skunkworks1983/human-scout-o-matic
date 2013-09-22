@@ -1,5 +1,6 @@
 package com.skunk.scoutomatic.textui;
 
+
 /**
  * Created on: Sep 21, 2013
  * 
@@ -24,8 +25,45 @@ public class Action {
 		this(type, result, 0, 0, time);
 	}
 
-	public void setPosition(float x, float y) {
+	public Action setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
+		return this;
+	}
+
+	public ActionType getType() {
+		return type;
+	}
+
+	public boolean equals(Object o) {
+		if (o instanceof Action) {
+			Action a = (Action) o;
+			return a.type == type && a.result.equalsIgnoreCase(result)
+					&& a.time == time && a.y == y && a.x == x;
+		}
+		return false;
+	}
+
+	public Action clone() {
+		return new Action(type, result, x, y, time);
+	}
+
+	public String toString() {
+		return "Action[" + type.name() + ":" + result + "@" + x + "," + y + "@"
+				+ time;
+	}
+
+	public Action setTime(int i) {
+		this.time = i;
+		return this;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public Action setResult(String res) {
+		this.result = res;
+		return this;
 	}
 }

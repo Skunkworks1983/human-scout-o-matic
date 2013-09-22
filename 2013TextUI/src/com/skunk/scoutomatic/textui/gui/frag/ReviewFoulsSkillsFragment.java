@@ -1,5 +1,8 @@
 package com.skunk.scoutomatic.textui.gui.frag;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +14,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
+import com.skunk.scoutomatic.textui.Action;
+import com.skunk.scoutomatic.textui.ActionCacheUtil;
+import com.skunk.scoutomatic.textui.ActionResults;
+import com.skunk.scoutomatic.textui.ActionType;
 import com.skunk.scoutomatic.textui.DataCache;
 import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
@@ -27,6 +34,9 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 	private boolean redCard = false, yellowCard = false;
 	private boolean deadBot = false;
 	private int techCount = 0, foulCount = 0;
+
+	// Actions
+	private List<Action> actionDB = new ArrayList<Action>();
 
 	private final void registerClickListener(View v, int id) {
 		View vv = v.findViewById(id);
@@ -156,6 +166,27 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 		data.putInteger(DataKeys.MATCH_FOULS_TECHNICALS, techCount);
 		data.putFloat(DataKeys.MATCH_REVIEW_DRIVER_SKILL, driverSkill);
 		data.putString(DataKeys.MATCH_REVIEW_COMMENTS, comments);
+
+		// Actions
+		// Cleaning
+		ActionCacheUtil.getInsuredActionByType(actionDB,
+				ActionType.REVIEW_DRIVER_SKILL).setResult(
+				String.valueOf(driverSkill));
+		ActionCacheUtil.dropByType(actionDB, ActionType.REVIEW_COMMENT, null);
+		String[] commentLines = comments.split("\n");
+		for (String s : commentLines) {
+			actionDB.add(new Action(ActionType.REVIEW_COMMENT, s, -1));
+		}
+		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
+				ActionResults.FOUL_GENERIC, foulCount);
+		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
+				ActionResults.FOUL_TECHNICAL, techCount);
+		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
+				ActionResults.FOUL_CARD_YELLOW, yellowCard ? 1 : 0);
+		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
+				ActionResults.FOUL_CARD_RED, redCard ? 1 : 0);
+	
+		data.putList(DataKeys.MATCH_ACTIONS_KEY, actionDB);
 	}
 
 	@Override
@@ -167,5 +198,8 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 		techCount = data.getInteger(DataKeys.MATCH_FOULS_TECHNICALS, 0);
 		driverSkill = data.getFloat(DataKeys.MATCH_REVIEW_DRIVER_SKILL, 0);
 		comments = data.getString(DataKeys.MATCH_REVIEW_COMMENTS, "");
+
+		// Actions
+		actionDB = data.getList(DataKeys.MATCH_ACTIONS_KEY, Action.class);
 	}
 }

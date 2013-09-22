@@ -44,4 +44,8 @@ public interface DataKeys {
 
 	public static final String MATCH_REVIEW_COMMENTS = "match.review.comments";
 	public static final String MATCH_REVIEW_DRIVER_SKILL = "match.review.driverSkill";
+
+	// Actions
+	public static final String MATCH_START_KEY = "match.begin";
+	public static final String MATCH_ACTIONS_KEY = "match.actions";
 }

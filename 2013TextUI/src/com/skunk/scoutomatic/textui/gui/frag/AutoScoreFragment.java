@@ -1,11 +1,18 @@
 package com.skunk.scoutomatic.textui.gui.frag;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+import com.skunk.scoutomatic.textui.Action;
+import com.skunk.scoutomatic.textui.ActionCacheUtil;
+import com.skunk.scoutomatic.textui.ActionResults;
+import com.skunk.scoutomatic.textui.ActionType;
 import com.skunk.scoutomatic.textui.DataCache;
 import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
@@ -22,6 +29,10 @@ public class AutoScoreFragment extends NamedTabFragment implements
 	private int score6Discs = 0;
 	private int collectDiscs = 0;
 	private int scoreMissed = 0;
+
+	// Actions
+	private long matchBegin = -1;
+	private List<Action> actionDB = new ArrayList<Action>();
 
 	private final void registerViewWithClickListener(View v, int id) {
 		View found = v.findViewById(id);
@@ -71,45 +82,73 @@ public class AutoScoreFragment extends NamedTabFragment implements
 
 	@Override
 	public void onClick(View v) {
+		if (matchBegin == -1) {
+			matchBegin = System.currentTimeMillis();
+		}
 		switch (v.getId()) {
 		case R.id.autoCollectUp:
 			collectDiscs++;
+			actionDB.add(new Action(ActionType.AUTO_COLLECT,
+					ActionResults.COLLECT_1, System.currentTimeMillis()
+							- matchBegin));
 			break;
 		case R.id.autoCollectDown:
 			if (collectDiscs > 0) {
 				collectDiscs--;
+				ActionCacheUtil.dropLast(actionDB, ActionType.AUTO_COLLECT,
+						ActionResults.COLLECT_1, 1);
 			}
 			break;
 		case R.id.autoScore2Up:
 			score2Discs++;
+			actionDB.add(new Action(ActionType.AUTO_SHOOT,
+					ActionResults.SHOOT_SCORE2, System.currentTimeMillis()
+							- matchBegin));
 			break;
 		case R.id.autoScore2Down:
 			if (score2Discs > 0) {
 				score2Discs--;
+				ActionCacheUtil.dropLast(actionDB, ActionType.AUTO_SHOOT,
+						ActionResults.SHOOT_SCORE2, 1);
 			}
 			break;
 		case R.id.autoScore4Up:
 			score4Discs++;
+			actionDB.add(new Action(ActionType.AUTO_SHOOT,
+					ActionResults.SHOOT_SCORE4, System.currentTimeMillis()
+							- matchBegin));
 			break;
 		case R.id.autoScore4Down:
 			if (score4Discs > 0) {
 				score4Discs--;
+				ActionCacheUtil.dropLast(actionDB, ActionType.AUTO_SHOOT,
+						ActionResults.SHOOT_SCORE4, 1);
 			}
 			break;
 		case R.id.autoScore6Up:
 			score6Discs++;
+			actionDB.add(new Action(ActionType.AUTO_SHOOT,
+					ActionResults.SHOOT_SCORE6, System.currentTimeMillis()
+							- matchBegin));
 			break;
 		case R.id.autoScore6Down:
 			if (score6Discs > 0) {
 				score6Discs--;
+				ActionCacheUtil.dropLast(actionDB, ActionType.AUTO_SHOOT,
+						ActionResults.SHOOT_SCORE6, 1);
 			}
 			break;
 		case R.id.autoScoreMissUp:
 			scoreMissed++;
+			actionDB.add(new Action(ActionType.AUTO_SHOOT,
+					ActionResults.SHOOT_MISS, System.currentTimeMillis()
+							- matchBegin));
 			break;
 		case R.id.autoScoreMissDown:
 			if (scoreMissed > 0) {
 				scoreMissed--;
+				ActionCacheUtil.dropLast(actionDB, ActionType.AUTO_SHOOT,
+						ActionResults.SHOOT_MISS, 1);
 			}
 			break;
 		}
@@ -148,6 +187,10 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		data.putInteger(DataKeys.MATCH_AUTO_SCORE_2, score2Discs);
 		data.putInteger(DataKeys.MATCH_AUTO_SCORE_4, score4Discs);
 		data.putInteger(DataKeys.MATCH_AUTO_SCORE_6, score6Discs);
+
+		// Actions
+		data.putList(DataKeys.MATCH_ACTIONS_KEY, actionDB);
+		data.putLong(DataKeys.MATCH_START_KEY, matchBegin);
 	}
 
 	@Override
@@ -157,5 +200,9 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		score2Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_2, 0);
 		score4Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_4, 0);
 		score6Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_6, 0);
+
+		// Actions
+		matchBegin = data.getLong(DataKeys.MATCH_START_KEY, -1);
+		actionDB = data.getList(DataKeys.MATCH_ACTIONS_KEY, Action.class);
 	}
 }

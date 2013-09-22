@@ -1,10 +1,19 @@
 package com.skunk.scoutomatic.textui.gui.frag;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.skunk.scoutomatic.textui.Action;
+import com.skunk.scoutomatic.textui.ActionCacheUtil;
+import com.skunk.scoutomatic.textui.ActionResults;
+import com.skunk.scoutomatic.textui.ActionType;
 import com.skunk.scoutomatic.textui.DataCache;
 import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
@@ -20,6 +29,9 @@ public class ReviewAllFragment extends NamedTabFragment {
 	private static final int MAXIMUM_AUTO_SCORE = 15;
 	private static final int MAXIMUM_FOULS = 9;
 	private DataCache loadOnCreate;
+
+	// Actions
+	private List<Action> actionDB = new ArrayList<Action>();
 
 	@Override
 	public String getName() {
@@ -126,6 +138,90 @@ public class ReviewAllFragment extends NamedTabFragment {
 		}
 		data.putInteger(DataKeys.MATCH_TEAM, Integer.valueOf(teamValue));
 		data.putInteger(DataKeys.MATCH_NUMBER, Integer.valueOf(matchValue));
+
+		// Actions
+		// Create actionDB
+		// Autonomous
+		ActionCacheUtil.forceCount(actionDB, ActionType.AUTO_COLLECT,
+				ActionResults.COLLECT_1,
+				data.getInteger(DataKeys.MATCH_AUTO_COLLECT, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.AUTO_SHOOT,
+				ActionResults.SHOOT_SCORE2,
+				data.getInteger(DataKeys.MATCH_AUTO_SCORE_2, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.AUTO_SHOOT,
+				ActionResults.SHOOT_SCORE4,
+				data.getInteger(DataKeys.MATCH_AUTO_SCORE_4, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.AUTO_SHOOT,
+				ActionResults.SHOOT_SCORE6,
+				data.getInteger(DataKeys.MATCH_AUTO_SCORE_6, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.AUTO_SHOOT,
+				ActionResults.SHOOT_MISS,
+				data.getInteger(DataKeys.MATCH_AUTO_SCORE_MISS, 0));
+		ActionCacheUtil.setPositions(actionDB, ActionType.AUTO_SHOOT, null,
+				data.getFloat(DataKeys.MATCH_AUTO_LOC_X, 0),
+				data.getFloat(DataKeys.MATCH_AUTO_LOC_Y, 0));
+
+		// Teleop Shooting
+		ActionCacheUtil.forceCount(actionDB, ActionType.TELE_COLLECT,
+				ActionResults.COLLECT_1,
+				data.getInteger(DataKeys.MATCH_TELE_COLLECT, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.TELE_SHOOT,
+				ActionResults.SHOOT_SCORE1,
+				data.getInteger(DataKeys.MATCH_TELE_SCORE_1, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.TELE_SHOOT,
+				ActionResults.SHOOT_SCORE2,
+				data.getInteger(DataKeys.MATCH_TELE_SCORE_2, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.TELE_SHOOT,
+				ActionResults.SHOOT_SCORE3,
+				data.getInteger(DataKeys.MATCH_TELE_SCORE_3, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.TELE_SHOOT,
+				ActionResults.SHOOT_SCORE5,
+				data.getInteger(DataKeys.MATCH_TELE_SCORE_PYRAMID, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.TELE_SHOOT,
+				ActionResults.SHOOT_MISS,
+				data.getInteger(DataKeys.MATCH_TELE_SCORE_MISS, 0));
+		ActionCacheUtil.setPositions(actionDB, ActionType.TELE_SHOOT, null,
+				data.getFloat(DataKeys.MATCH_TELE_SHOOT_LOC_X, 0),
+				data.getFloat(DataKeys.MATCH_TELE_SHOOT_LOC_Y, 0));
+
+		// Tele Climbing
+		if (data.getBoolean(DataKeys.MATCH_TELE_CLIMB_ATTEMPTED, false)) {
+			Action aa = ActionCacheUtil.getInsuredActionByType(actionDB,
+					ActionType.TELE_CLIMB);
+			switch (data.getInteger(DataKeys.MATCH_TELE_CLIMB_LEVEL, 0)) {
+			case 1:
+				aa.setResult(ActionResults.LEVEL_1);
+				break;
+			case 2:
+				aa.setResult(ActionResults.LEVEL_2);
+				break;
+			case 3:
+				aa.setResult(ActionResults.LEVEL_3);
+				break;
+			default:
+				aa.setResult(ActionResults.LEVEL_0);
+				break;
+			}
+		} else {
+			ActionCacheUtil.dropByType(actionDB, ActionType.TELE_CLIMB, null);
+		}
+
+		// Fouls review
+		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
+				ActionResults.FOUL_GENERIC,
+				data.getInteger(DataKeys.MATCH_FOULS_FOULS, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
+				ActionResults.FOUL_TECHNICAL,
+				data.getInteger(DataKeys.MATCH_FOULS_TECHNICALS, 0));
+		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
+				ActionResults.FOUL_CARD_YELLOW, data.getBoolean(
+						DataKeys.MATCH_FOULS_YELLOW_CARD, false) ? 1 : 0);
+		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
+				ActionResults.FOUL_CARD_RED,
+				data.getBoolean(DataKeys.MATCH_FOULS_RED_CARD, false) ? 1 : 0);
+
+		data.putList(DataKeys.MATCH_ACTIONS_KEY, actionDB);
+		Log.d("DATA", Arrays.toString(actionDB.toArray()));
 	}
 
 	@Override
@@ -191,6 +287,9 @@ public class ReviewAllFragment extends NamedTabFragment {
 					teamID > 0 ? Integer.toString(teamID) : "");
 			setTextContents(R.id.reviewMatchID,
 					matchID > 0 ? Integer.toString(matchID) : "");
+
+			// Actions
+			actionDB = data.getList(DataKeys.MATCH_ACTIONS_KEY, Action.class);
 		} else {
 			loadOnCreate = data;
 		}
