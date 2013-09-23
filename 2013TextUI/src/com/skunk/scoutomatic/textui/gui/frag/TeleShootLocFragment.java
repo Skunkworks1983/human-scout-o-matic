@@ -52,7 +52,8 @@ public class TeleShootLocFragment extends NamedTabFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateContents(); // TODO Restore the marker properly
+		updateContents();
+		postUpdate();
 	}
 
 	@Override
