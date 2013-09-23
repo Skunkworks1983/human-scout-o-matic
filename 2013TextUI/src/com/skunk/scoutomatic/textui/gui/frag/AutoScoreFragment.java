@@ -44,7 +44,7 @@ public class AutoScoreFragment extends NamedTabFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateScores();
+		updateContents();
 	}
 
 	@Override
@@ -152,10 +152,10 @@ public class AutoScoreFragment extends NamedTabFragment implements
 			}
 			break;
 		}
-		updateScores();
+		updateContents();
 	}
 
-	private void updateScores() {
+	protected void updateContents() {
 		setText(R.id.autoCollect, this.collectDiscs + " discs");
 
 		setText(R.id.autoScore2, this.score2Discs + " discs");

@@ -52,7 +52,7 @@ public class TeleShootLocFragment extends NamedTabFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateLocation(); // TODO Restore the marker properly
+		updateContents(); // TODO Restore the marker properly
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class TeleShootLocFragment extends NamedTabFragment implements
 			case R.id.telePyramidSheet:
 				xPos = (event.getX() / v.getWidth()) * 100;
 				yPos = (event.getY() / v.getHeight()) * 100;
-				updateLocation();
+				updateContents();
 				break;
 			}
 			return true;
@@ -70,7 +70,7 @@ public class TeleShootLocFragment extends NamedTabFragment implements
 		return true;
 	}
 
-	private void updateLocation() {
+	protected void updateContents() {
 		if (xPos == 0.0f && yPos == 0.0f) {
 			return;
 		}

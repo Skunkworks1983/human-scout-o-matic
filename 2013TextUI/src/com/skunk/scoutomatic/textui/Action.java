@@ -1,6 +1,5 @@
 package com.skunk.scoutomatic.textui;
 
-
 /**
  * Created on: Sep 21, 2013
  * 
@@ -49,8 +48,9 @@ public class Action {
 	}
 
 	public String toString() {
-		return "Action[" + type.name() + ":" + result + "@" + x + "," + y + "@"
-				+ time;
+		return "{\"time\":\"" + time + "\",\"action\":\"" + type
+				+ "\",\"result\":\"" + result + "\",\"x\":\"" + x
+				+ "\",\"y\":\"" + y + "\"}";
 	}
 
 	public Action setTime(int i) {

@@ -134,16 +134,16 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 			}
 			break;
 		}
-		updateScores();
+		updateContents();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateScores();
+		updateContents();
 	}
 
-	private void updateScores() {
+	protected void updateContents() {
 		setText(R.id.foulFouls, this.foulCount + " fouls");
 		setText(R.id.foulTechs, this.techCount + " technicals");
 		setState(R.id.foulRedCard, this.redCard);

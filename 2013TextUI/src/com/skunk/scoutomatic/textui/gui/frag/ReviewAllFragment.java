@@ -67,13 +67,12 @@ public class ReviewAllFragment extends NamedTabFragment {
 		super.onResume();
 		if (loadOnCreate != null) {
 			loadInformation(loadOnCreate);
-			loadOnCreate = null;
 		}
 	}
 
 	@Override
 	public Class<? extends NamedTabFragment> getNext() {
-		return null;
+		return SubmitFragment.class;
 	}
 
 	@Override
@@ -292,6 +291,13 @@ public class ReviewAllFragment extends NamedTabFragment {
 			actionDB = data.getList(DataKeys.MATCH_ACTIONS_KEY, Action.class);
 		} else {
 			loadOnCreate = data;
+		}
+	}
+
+	@Override
+	protected void updateContents() {
+		if (loadOnCreate != null) {
+			loadInformation(loadOnCreate);// TODO This loading directly is janky
 		}
 	}
 }

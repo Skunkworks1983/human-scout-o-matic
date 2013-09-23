@@ -58,7 +58,7 @@ public class AutoLocFragment extends NamedTabFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateLocation(); // TODO Restore the marker properly
+		updateContents(); // TODO Restore the marker properly
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class AutoLocFragment extends NamedTabFragment implements
 			case R.id.autoScoutSheet:
 				xPos = (event.getX() / v.getWidth()) * 100;
 				yPos = (event.getY() / v.getHeight()) * 100;
-				updateLocation();
+				updateContents();
 				break;
 			}
 			return true;
@@ -76,7 +76,7 @@ public class AutoLocFragment extends NamedTabFragment implements
 		return true;
 	}
 
-	private void updateLocation() {
+	protected void updateContents() {
 		View check = getView().findViewById(R.id.matchNoShow);
 		if (check != null && check instanceof CheckBox) {
 			((CheckBox) check).setChecked(noShow);

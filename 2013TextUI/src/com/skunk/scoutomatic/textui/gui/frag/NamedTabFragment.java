@@ -26,6 +26,17 @@ public abstract class NamedTabFragment extends Fragment {
 
 	public abstract void loadInformation(DataCache data);
 
+	protected abstract void updateContents();
+
+	public void postUpdate() {
+		getView().post(new Runnable() {
+			public void run() {
+				updateContents();
+			}
+		});
+		getView().postInvalidate();
+	}
+
 	protected final void setText(int id, String val) {
 		View v = getView().findViewById(id);
 		if (v != null && v instanceof TextView) {

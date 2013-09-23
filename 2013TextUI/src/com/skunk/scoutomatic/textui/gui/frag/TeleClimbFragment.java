@@ -59,7 +59,7 @@ public class TeleClimbFragment extends NamedTabFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateLevel();
+		updateContents();
 	}
 
 	@Override
@@ -112,10 +112,10 @@ public class TeleClimbFragment extends NamedTabFragment implements
 				break;
 			}
 		}
-		updateLevel();
+		updateContents();
 	}
 
-	private void updateLevel() {
+	protected void updateContents() {
 		setState(R.id.climbAttempted, attempted);
 		setState(R.id.climbLevel1, level >= 1);
 		setState(R.id.climbLevel2, level >= 2);

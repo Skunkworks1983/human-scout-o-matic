@@ -62,13 +62,17 @@ public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
 		updateContents();
 	}
 
-	private void updateContents() {
-		setTextContents(R.id.scoutName, scoutName);
-		setTextContents(R.id.competitionID, compID);
-		setTextContents(R.id.matchID, matchID > 0 ? Integer.toString(matchID)
-				: "");
-		setTextContents(R.id.teamID, robotID > 0 ? Integer.toString(robotID)
-				: "");
+	protected void updateContents() {
+		try {
+			setTextContents(R.id.scoutName, scoutName);
+			setTextContents(R.id.competitionID, compID);
+			setTextContents(R.id.matchID,
+					matchID > 0 ? Integer.toString(matchID) : "");
+			setTextContents(R.id.teamID,
+					robotID > 0 ? Integer.toString(robotID) : "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -81,17 +85,22 @@ public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
 	}
 
 	@Override
-	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-		// Just update cache
-		scoutName = getTextContents(R.id.scoutName);
-		compID = getTextContents(R.id.competitionID);
-		try {
-			robotID = Integer.valueOf(getTextContents(R.id.teamID));
-		} catch (NumberFormatException ex) {
-		}
-		try {
-			matchID = Integer.valueOf(getTextContents(R.id.matchID));
-		} catch (NumberFormatException ex) {
+	public void onTextChanged(CharSequence sq, int arg1, int arg2, int arg3) {
+		String s = sq.toString();
+		if (getTextContents(R.id.scoutName).equalsIgnoreCase(s)) {
+			scoutName = s;
+		} else if (getTextContents(R.id.competitionID).equalsIgnoreCase(s)) {
+			compID = s;
+		} else if (getTextContents(R.id.teamID).equalsIgnoreCase(s)) {
+			try {
+				robotID = Integer.valueOf(s);
+			} catch (NumberFormatException ex) {
+			}
+		} else if (getTextContents(R.id.matchID).equalsIgnoreCase(s)) {
+			try {
+				matchID = Integer.valueOf(s);
+			} catch (NumberFormatException ex) {
+			}
 		}
 	}
 

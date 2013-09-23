@@ -20,17 +20,24 @@ import java.util.Map;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragment;
+import com.skunk.scoutomatic.textui.gui.frag.SubmitFragment;
 import com.skunk.scoutomatic.textui.gui.frag.WelcomeFragment;
+import com.skunk.scoutomatic.textui.net.BackendInterface;
+import com.skunk.scoutomatic.textui.net.FutureProcessor;
+import com.skunk.scoutomatic.textui.net.ScoutableMatch;
 
 public class MainActivity extends FragmentActivity {
 	private Map<Class<? extends NamedTabFragment>, NamedTabFragment> fragments = new HashMap<Class<? extends NamedTabFragment>, NamedTabFragment>();
 	private NamedTabFragment currentFragment = new WelcomeFragment();
+	private BackendInterface backend;
 
 	private DataCache dataHeap = new DataCache(new HashMap<String, Object>());
 
@@ -38,10 +45,8 @@ public class MainActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		backend = new BackendInterface();
 		if (findViewById(R.id.main_fragment_container) != null) {
-			if (savedInstanceState != null) {
-				return;
-			}
 			fragments.put(currentFragment.getClass(), currentFragment);
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.main_fragment_container, currentFragment)
@@ -59,18 +64,41 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	public void proceedToNextMatch() {
+		backend.popScoutingQueue(new FutureProcessor<ScoutableMatch>() {
+			@Override
+			public void run(ScoutableMatch mm) {
+				Log.d("NET", "Scouting match: " + mm.getMatchID());
+				currentFragment.storeInformation(dataHeap);
+				dataHeap.putInteger(DataKeys.MATCH_NUMBER, mm.getMatchID());
+				dataHeap.putInteger(DataKeys.MATCH_TEAM, mm.getRobotID());
+				currentFragment.loadInformation(dataHeap);
+				currentFragment.postUpdate();
+			}
+		});
+	}
+
 	private void setFragment(Class<? extends NamedTabFragment> fragClass) {
 		if (fragClass == null) {
 			return;
 		}
 		try {
+			boolean initWelcome = currentFragment == null
+					|| currentFragment.getClass().equals(fragClass);
+			if (fragClass == SubmitFragment.class) {
+				submitData();
+				initWelcome = true;
+				fragClass = WelcomeFragment.class;
+			}
 			NamedTabFragment tab = fragments.get(fragClass);
 			if (tab == null) {
 				tab = fragClass.newInstance();
 				fragments.put(fragClass, tab);
 			}
 			// Replace it
-			currentFragment.storeInformation(dataHeap);
+			if (currentFragment != null && !initWelcome) {
+				currentFragment.storeInformation(dataHeap);
+			}
 			currentFragment = tab;
 			currentFragment.loadInformation(dataHeap);
 			getSupportFragmentManager().beginTransaction()
@@ -92,8 +120,21 @@ public class MainActivity extends FragmentActivity {
 				right.setVisibility(tab.getNext() != null ? View.VISIBLE
 						: View.INVISIBLE);
 			}
+			if (initWelcome) {
+				proceedToNextMatch();
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private void submitData() {
+		backend.pushMatchInformation(dataHeap);
+		// Now clear the cache except for small stuff
+		String compID = dataHeap.getString(DataKeys.MATCH_COMPETITION, "");
+		String scoutName = dataHeap.getString(DataKeys.MATCH_SCOUT, "");
+		dataHeap.getData().clear();
+		dataHeap.putString(DataKeys.MATCH_COMPETITION, compID);
+		dataHeap.putString(DataKeys.MATCH_SCOUT, scoutName);
 	}
 }

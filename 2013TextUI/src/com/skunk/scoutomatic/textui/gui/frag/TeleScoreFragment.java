@@ -45,7 +45,7 @@ public class TeleScoreFragment extends NamedTabFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateScores();
+		updateContents();
 	}
 
 	@Override
@@ -168,10 +168,10 @@ public class TeleScoreFragment extends NamedTabFragment implements
 			}
 			break;
 		}
-		updateScores();
+		updateContents();
 	}
 
-	private void updateScores() {
+	protected void updateContents() {
 		setText(R.id.teleCollect, this.collectDiscs + " discs");
 
 		setText(R.id.teleScore1, this.score1Discs + " discs");
