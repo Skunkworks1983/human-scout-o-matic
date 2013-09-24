@@ -5,8 +5,9 @@
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp" >
+        android:layout_height="0dp"
+        android:layout_marginTop="25dp"
+        android:layout_weight="1" >
 
         <TextView
             android:layout_width="0dp"
@@ -19,12 +20,13 @@
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/teleCollectUp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+1 Disc" />
 
@@ -38,14 +40,15 @@
         <Button
             android:id="@+id/teleCollectDown"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-1" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp" >
+        android:layout_height="0dp"
+        android:layout_marginTop="25dp"
+        android:layout_weight="1" >
 
         <TextView
             android:layout_width="0dp"
@@ -58,12 +61,13 @@
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/teleScore1Up"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+1 Score" />
 
@@ -77,18 +81,19 @@
         <Button
             android:id="@+id/teleScore1Down"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-1" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/teleScore2Up"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+2 Score" />
 
@@ -102,18 +107,19 @@
         <Button
             android:id="@+id/teleScore2Down"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-2" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/teleScore3Up"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+3 Score" />
 
@@ -127,18 +133,19 @@
         <Button
             android:id="@+id/teleScore3Down"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-3" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/teleScorePyrUp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+5 Score" />
 
@@ -152,18 +159,19 @@
         <Button
             android:id="@+id/teleScorePyrDown"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-5" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/teleScoreMissUp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+1 Missed" />
 
@@ -177,13 +185,14 @@
         <Button
             android:id="@+id/teleScoreMissDown"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-1" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -211,7 +220,8 @@
     <TextView
         android:id="@+id/teleScoreWarning"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FF0000" />

@@ -5,8 +5,9 @@
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp" >
+        android:layout_height="0dp"
+        android:layout_marginTop="25dp"
+        android:layout_weight="1" >
 
         <TextView
             android:layout_width="0dp"
@@ -19,12 +20,13 @@
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/autoCollectUp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+1 Disc" />
 
@@ -38,14 +40,15 @@
         <Button
             android:id="@+id/autoCollectDown"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-1" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp" >
+        android:layout_height="0dp"
+        android:layout_marginTop="25dp"
+        android:layout_weight="1" >
 
         <TextView
             android:layout_width="0dp"
@@ -58,12 +61,13 @@
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/autoScore2Up"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+2 Score" />
 
@@ -77,18 +81,19 @@
         <Button
             android:id="@+id/autoScore2Down"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-2" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/autoScore4Up"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+4 Score" />
 
@@ -102,18 +107,19 @@
         <Button
             android:id="@+id/autoScore4Down"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-4" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/autoScore6Up"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+6 Score" />
 
@@ -127,18 +133,19 @@
         <Button
             android:id="@+id/autoScore6Down"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-6" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="2" >
 
         <Button
             android:id="@+id/autoScoreMissUp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="+1 Missed" />
 
@@ -152,13 +159,14 @@
         <Button
             android:id="@+id/autoScoreMissDown"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="-1" />
     </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -186,7 +194,8 @@
     <TextView
         android:id="@+id/autoScoreWarning"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FF0000" />

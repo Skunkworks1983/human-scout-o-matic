@@ -43,7 +43,7 @@ public class BackendInterface {
 	private static final int SCOUT_ID = 0;
 	private static final String EVENT_ID = "2013wase";
 
-	private static final String API_SERVER = "http://10.0.2.2:9292";
+	private static final String API_SERVER = "http://machpi.org:9292";
 	private static final String API_MATCHES = "/api/scout/register";
 	private static final String API_POST_MATCH_DATA = "/api/scout/match";
 
