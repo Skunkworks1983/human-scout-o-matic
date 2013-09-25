@@ -46,6 +46,8 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		backend = new BackendInterface();
+		dataHeap.putString(DataKeys.MATCH_COMPETITION,
+				BackendInterface.EVENT_ID);
 		if (findViewById(R.id.main_fragment_container) != null) {
 			fragments.put(currentFragment.getClass(), currentFragment);
 			getSupportFragmentManager().beginTransaction()
