@@ -108,4 +108,9 @@ public class TeleShootLocFragment extends NamedTabFragment implements
 		xPos = data.getFloat(DataKeys.MATCH_TELE_SHOOT_LOC_X, 0);
 		yPos = data.getFloat(DataKeys.MATCH_TELE_SHOOT_LOC_Y, 0);
 	}
+
+	@Override
+	public boolean needsKeyboard() {
+		return false;
+	}
 }

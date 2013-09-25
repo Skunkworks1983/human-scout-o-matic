@@ -300,4 +300,9 @@ public class ReviewAllFragment extends NamedTabFragment {
 			loadInformation(loadOnCreate);// TODO This loading directly is janky
 		}
 	}
+
+	@Override
+	public boolean needsKeyboard() {
+		return true;
+	}
 }

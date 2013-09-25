@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.DataCache;
@@ -125,6 +126,11 @@ public class MainActivity extends FragmentActivity {
 			if (initWelcome) {
 				proceedToNextMatch();
 			}
+
+			getWindow()
+					.setSoftInputMode(
+							currentFragment.needsKeyboard() ? WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+									: WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

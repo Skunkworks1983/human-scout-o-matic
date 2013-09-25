@@ -127,4 +127,9 @@ public class AutoLocFragment extends NamedTabFragment implements
 		xPos = data.getFloat(DataKeys.MATCH_AUTO_LOC_X, 0);
 		yPos = data.getFloat(DataKeys.MATCH_AUTO_LOC_Y, 0);
 	}
+	
+	@Override
+	public boolean needsKeyboard() {
+		return false;
+	}
 }

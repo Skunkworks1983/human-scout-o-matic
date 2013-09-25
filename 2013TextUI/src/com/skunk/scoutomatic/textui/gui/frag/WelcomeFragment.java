@@ -119,4 +119,9 @@ public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
 		robotID = data.getInteger(DataKeys.MATCH_TEAM, 0);
 		matchID = data.getInteger(DataKeys.MATCH_NUMBER, 0);
 	}
+
+	@Override
+	public boolean needsKeyboard() {
+		return true;
+	}
 }

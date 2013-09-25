@@ -185,7 +185,7 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 				ActionResults.FOUL_CARD_YELLOW, yellowCard ? 1 : 0);
 		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
 				ActionResults.FOUL_CARD_RED, redCard ? 1 : 0);
-	
+
 		data.putList(DataKeys.MATCH_ACTIONS_KEY, actionDB);
 	}
 
@@ -201,5 +201,10 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 
 		// Actions
 		actionDB = data.getList(DataKeys.MATCH_ACTIONS_KEY, Action.class);
+	}
+
+	@Override
+	public boolean needsKeyboard() {
+		return true;
 	}
 }

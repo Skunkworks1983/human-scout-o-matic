@@ -97,4 +97,6 @@ public abstract class NamedTabFragment extends Fragment {
 			((CheckBox) vv).setChecked(state);
 		}
 	}
+
+	public abstract boolean needsKeyboard();
 }

@@ -224,4 +224,9 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		matchBegin = data.getLong(DataKeys.MATCH_START_KEY, -1);
 		actionDB = data.getList(DataKeys.MATCH_ACTIONS_KEY, Action.class);
 	}
+
+	@Override
+	public boolean needsKeyboard() {
+		return false;
+	}
 }

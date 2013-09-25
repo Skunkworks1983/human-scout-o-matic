@@ -3,8 +3,8 @@ package com.skunk.scoutomatic.textui.gui.frag;
 import com.skunk.scoutomatic.textui.DataCache;
 
 /**
- * It's a dummy!  (Maybe it will have network stuffs later)
- * Created on: Sep 22, 2013
+ * It's a dummy! (Maybe it will have network stuffs later) Created on: Sep 22,
+ * 2013
  * 
  * @author "Westin Miller"
  * 
@@ -35,6 +35,11 @@ public class SubmitFragment extends NamedTabFragment {
 
 	@Override
 	protected void updateContents() {
+	}
+
+	@Override
+	public boolean needsKeyboard() {
+		return false;
 	}
 
 }
