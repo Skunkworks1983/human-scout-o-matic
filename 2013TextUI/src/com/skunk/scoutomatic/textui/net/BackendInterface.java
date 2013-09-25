@@ -41,7 +41,7 @@ import com.skunk.scoutomatic.textui.DataCache;
  */
 public class BackendInterface {
 	private static final int SCOUT_ID = 0;
-	private static final String EVENT_ID = "2013wase";
+	public static final String EVENT_ID = "2013wase";
 
 	private static final String API_SERVER = "http://machpi.org:9292";
 	private static final String API_MATCHES = "/api/scout/register";
