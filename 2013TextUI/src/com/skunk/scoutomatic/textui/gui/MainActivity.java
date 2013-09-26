@@ -17,13 +17,18 @@ package com.skunk.scoutomatic.textui.gui;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnLayoutChangeListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.DataCache;
@@ -36,10 +41,12 @@ import com.skunk.scoutomatic.textui.net.BackendInterface;
 import com.skunk.scoutomatic.textui.net.FutureProcessor;
 import com.skunk.scoutomatic.textui.net.ScoutableMatch;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements
+		OnLayoutChangeListener {
 	private Map<Class<? extends NamedTabFragment>, NamedTabFragment> fragments = new HashMap<Class<? extends NamedTabFragment>, NamedTabFragment>();
 	private NamedTabFragment currentFragment = new WelcomeFragment();
 	private BackendInterface backend;
+	private Stack<Class<? extends NamedTabFragment>> history = new Stack<Class<? extends NamedTabFragment>>();
 
 	private DataCache dataHeap = new DataCache(new HashMap<String, Object>());
 
@@ -47,6 +54,12 @@ public class MainActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+		View v = findViewById(R.id.main_fragment_scroll);
+		v.addOnLayoutChangeListener(this);
+
 		backend = new BackendInterface();
 		dataHeap.putString(DataKeys.MATCH_COMPETITION,
 				BackendInterface.EVENT_ID);
@@ -102,11 +115,16 @@ public class MainActivity extends FragmentActivity {
 			// Replace it
 			if (currentFragment != null && !initWelcome) {
 				currentFragment.storeInformation(dataHeap);
+
+				// Hide keyboard if needed
 				if (getCurrentFocus() != null && !tab.needsKeyboard()) {
 					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					System.out.println(imm.hideSoftInputFromWindow(
-							getCurrentFocus().getWindowToken(), 0));
+					imm.hideSoftInputFromWindow(getCurrentFocus()
+							.getWindowToken(), 0);
 				}
+			}
+			if (currentFragment != tab && currentFragment != null) {
+				history.add(currentFragment.getClass());
 			}
 			currentFragment = tab;
 			currentFragment.loadInformation(dataHeap);
@@ -145,5 +163,54 @@ public class MainActivity extends FragmentActivity {
 		dataHeap.getData().clear();
 		dataHeap.putString(DataKeys.MATCH_COMPETITION, compID);
 		dataHeap.putString(DataKeys.MATCH_SCOUT, scoutName);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && history.size() > 0) {
+			int size = history.size();
+			setFragment(history.pop());
+			if (size == history.size()) {
+				// Remove the new one we added
+				history.pop();
+			}
+			return false;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void onLayoutChange(View v, int left, final int top, int right,
+			final int bottom, int oldLeft, int oldTop, int oldRight,
+			int oldBottom) {// v.invalidate();
+		if (currentFragment.getView() != null) {
+			final View fragView = currentFragment.getView();
+			if (fragView.getMinimumHeight() != (bottom - top)
+					|| fragView.getHeight() < fragView.getMinimumHeight()) {
+				fragView.post(new Runnable() {
+					public void run() {
+						fragView.setMinimumHeight(bottom - top);
+
+						if (fragView.getHeight() < fragView.getMinimumHeight()) {
+							FrameLayout.LayoutParams pp = new FrameLayout.LayoutParams(
+									fragView.getLayoutParams());
+							pp.height = fragView.getMinimumHeight();
+							fragView.setLayoutParams(pp);
+						} else if (fragView.getHeight() > fragView
+								.getMinimumHeight()) {
+							FrameLayout.LayoutParams pp = new FrameLayout.LayoutParams(
+									fragView.getLayoutParams());
+							if (pp.height != FrameLayout.LayoutParams.MATCH_PARENT) {
+								pp.height = FrameLayout.LayoutParams.WRAP_CONTENT;
+							}
+							fragView.setLayoutParams(pp);
+						}
+
+						fragView.requestLayout();
+						System.out.println("MIN HEIGHT: " + (bottom - top));
+					}
+				});
+			}
+		}
 	}
 }
