@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 
 import com.skunk.scoutomatic.textui.Action;
 import com.skunk.scoutomatic.textui.ActionCacheUtil;
@@ -28,7 +29,7 @@ import com.skunk.scoutomatic.textui.R;
  * @author Westin Miller
  */
 public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
-		OnClickListener, TextWatcher {
+		OnClickListener, TextWatcher, OnRatingBarChangeListener {
 	private float driverSkill = 0;
 	private String comments = "";
 	private boolean redCard = false, yellowCard = false;
@@ -60,8 +61,12 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 		registerClickListener(v, R.id.foulTechUp);
 		registerClickListener(v, R.id.foulRedCard);
 		registerClickListener(v, R.id.foulYellowCard);
-		registerClickListener(v, R.id.driverSkill);
 		registerClickListener(v, R.id.deadBot);
+
+		View dSkill = v.findViewById(R.id.driverSkill);
+		if (dSkill != null && dSkill instanceof RatingBar) {
+			((RatingBar) dSkill).setOnRatingBarChangeListener(this);
+		}
 		return v;
 	}
 
@@ -128,10 +133,15 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 				deadBot = ((CheckBox) e).isChecked();
 			}
 			break;
+		}
+		updateContents();
+	}
+
+	@Override
+	public void onRatingChanged(RatingBar v, float rating, boolean fromUser) {
+		switch (v.getId()) {
 		case R.id.driverSkill:
-			if (e instanceof RatingBar) {
-				driverSkill = ((RatingBar) e).getRating();
-			}
+			driverSkill = rating;
 			break;
 		}
 		updateContents();
@@ -153,6 +163,7 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 
 		View v = getView().findViewById(R.id.driverSkill);
 		if (v != null && v instanceof RatingBar) {
+			System.out.println(driverSkill);
 			((RatingBar) v).setRating(driverSkill);
 		}
 	}
