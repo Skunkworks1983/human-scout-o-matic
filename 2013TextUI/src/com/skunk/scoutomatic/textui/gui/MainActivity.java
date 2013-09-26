@@ -18,11 +18,12 @@ package com.skunk.scoutomatic.textui.gui;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.DataCache;
@@ -101,6 +102,11 @@ public class MainActivity extends FragmentActivity {
 			// Replace it
 			if (currentFragment != null && !initWelcome) {
 				currentFragment.storeInformation(dataHeap);
+				if (getCurrentFocus() != null && !tab.needsKeyboard()) {
+					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					System.out.println(imm.hideSoftInputFromWindow(
+							getCurrentFocus().getWindowToken(), 0));
+				}
 			}
 			currentFragment = tab;
 			currentFragment.loadInformation(dataHeap);
@@ -126,11 +132,6 @@ public class MainActivity extends FragmentActivity {
 			if (initWelcome) {
 				proceedToNextMatch();
 			}
-
-			getWindow()
-					.setSoftInputMode(
-							currentFragment.needsKeyboard() ? WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-									: WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
