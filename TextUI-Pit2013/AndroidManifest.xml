@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.skunk.scoutomatic.textui"
+    package="com.skunk.scoutomatic.textui.pit"
     android:versionCode="1"
     android:versionName="1.0" >
 
