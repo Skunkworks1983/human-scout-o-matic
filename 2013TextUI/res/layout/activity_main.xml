@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_act"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main_act" >
+    android:layout_height="match_parent" >
 
     <ScrollView
         android:id="@+id/main_fragment_scroll"
@@ -18,16 +18,18 @@
     </ScrollView>
 
     <TableRow
+        android:id="@+id/mainActNav"
         android:layout_width="match_parent"
         android:layout_height="0dp" >
 
         <Button
             android:id="@+id/buttonLeft"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="changeFragment"
-            android:text="Back" />
+            android:text="Back"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/fragmentCurrent"
@@ -36,15 +38,16 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Current Fragment"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
             android:id="@+id/buttonRight"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="changeFragment"
-            android:text="Forward" />
+            android:text="Forward"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </TableRow>
 
 </TableLayout>

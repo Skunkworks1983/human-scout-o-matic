@@ -59,6 +59,8 @@ public class MainActivity extends FragmentActivity implements
 
 		View v = findViewById(R.id.main_fragment_scroll);
 		v.addOnLayoutChangeListener(this);
+		v = findViewById(R.id.mainActNav);
+		v.setMinimumHeight(100);
 
 		backend = new BackendInterface();
 		dataHeap.putString(DataKeys.MATCH_COMPETITION,

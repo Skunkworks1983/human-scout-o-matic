@@ -124,7 +124,7 @@ public class TeleClimbFragment extends NamedTabFragment implements
 		setState(R.id.climbLevel2, level >= 2);
 		setBackground(R.id.climbLevel2, level >= 2 ? Color.GREEN : Color.RED);
 		setState(R.id.climbLevel3, level >= 3);
-		setBackground(R.id.climbLevel3, level >= 2 ? Color.GREEN : Color.RED);
+		setBackground(R.id.climbLevel3, level >= 3 ? Color.GREEN : Color.RED);
 	}
 
 	@Override
