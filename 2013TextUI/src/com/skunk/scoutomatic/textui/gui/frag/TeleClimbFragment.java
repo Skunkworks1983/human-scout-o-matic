@@ -3,6 +3,7 @@ package com.skunk.scoutomatic.textui.gui.frag;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -117,9 +118,13 @@ public class TeleClimbFragment extends NamedTabFragment implements
 
 	protected void updateContents() {
 		setState(R.id.climbAttempted, attempted);
+		setBackground(R.id.climbAttempted, attempted ? Color.GREEN : Color.RED);
 		setState(R.id.climbLevel1, level >= 1);
+		setBackground(R.id.climbLevel1, level >= 1 ? Color.GREEN : Color.RED);
 		setState(R.id.climbLevel2, level >= 2);
+		setBackground(R.id.climbLevel2, level >= 2 ? Color.GREEN : Color.RED);
 		setState(R.id.climbLevel3, level >= 3);
+		setBackground(R.id.climbLevel3, level >= 2 ? Color.GREEN : Color.RED);
 	}
 
 	@Override

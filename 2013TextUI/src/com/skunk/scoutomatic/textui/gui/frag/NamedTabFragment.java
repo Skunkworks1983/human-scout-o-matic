@@ -1,7 +1,9 @@
 package com.skunk.scoutomatic.textui.gui.frag;
 
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -94,8 +96,19 @@ public abstract class NamedTabFragment extends Fragment {
 
 	protected final void setState(int id, boolean state) {
 		View vv = getView().findViewById(id);
-		if (vv != null && vv instanceof CheckBox) {
-			((CheckBox) vv).setChecked(state);
+		if (vv != null) {
+			if (vv instanceof CheckBox) {
+				((CheckBox) vv).setChecked(state);
+			} else if (vv instanceof Button) {
+				((Button) vv).setSelected(state);
+			}
+		}
+	}
+
+	protected final void setBackground(int id, int background) {
+		View vv = getView().findViewById(id);
+		if (vv != null) {
+			vv.setBackgroundColor(background);
 		}
 	}
 
