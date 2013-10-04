@@ -80,6 +80,7 @@ public abstract class NamedTabFragment extends Fragment {
 		if (v != null && v instanceof NumberPicker) {
 			((NumberPicker) v).setMinValue(minimum);
 			((NumberPicker) v).setMaxValue(maximum);
+			((NumberPicker) v).setWrapSelectorWheel(false);
 		}
 	}
 
