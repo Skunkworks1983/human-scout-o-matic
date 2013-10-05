@@ -22,6 +22,14 @@ import com.skunk.scoutomatic.textui.R;
  */
 public class AutoLocFragment extends NamedTabFragment implements
 		OnTouchListener, OnClickListener {
+	public static final float MIN_TRIPLE_Y = 62.5f;
+	public static final float MAX_TRIPLE_Y = 100;
+
+	private static final float minX = 25;
+	private static final float minY = 30;
+	private static final float maxX = 75;
+	private static final float maxY = 75;
+
 	private float xPos = 0, yPos = 0;
 	private boolean noShow = false;
 
@@ -67,9 +75,14 @@ public class AutoLocFragment extends NamedTabFragment implements
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			switch (v.getId()) {
 			case R.id.autoScoutSheet:
-				xPos = (event.getX() / v.getWidth()) * 100;
-				yPos = (event.getY() / v.getHeight()) * 100;
-				updateContents();
+				float txPos = (event.getX() / v.getWidth()) * 100;
+				float tyPos = (event.getY() / v.getHeight()) * 100;
+				if (txPos >= minX && tyPos >= minY && txPos < maxX
+						&& tyPos < maxY) {
+					xPos = txPos;
+					yPos = tyPos;
+					updateContents();
+				}
 				break;
 			}
 			return true;
@@ -89,13 +102,9 @@ public class AutoLocFragment extends NamedTabFragment implements
 		View vv = getView().findViewById(R.id.autoFirstRobot);
 		View textView = getView().findViewById(R.id.autoRobotLocation);
 		if (textView != null && textView instanceof TextView) {
-			((TextView) textView)
-					.setText(xPos
-							+ ","
-							+ yPos
-							+ ","
-							+ ((RelativeLayout.LayoutParams) vv
-									.getLayoutParams()).leftMargin);
+			((TextView) textView).setText(xPos + "," + yPos + "\n" + "Loading "
+					+ (yPos >= MIN_TRIPLE_Y && yPos < MAX_TRIPLE_Y ? 3 : 2)
+					+ " discs");
 		}
 		if (v != null && vv != null) {
 			vv.setVisibility(View.VISIBLE);
@@ -119,6 +128,8 @@ public class AutoLocFragment extends NamedTabFragment implements
 		data.putBoolean(DataKeys.MATCH_NO_SHOW, noShow);
 		data.putFloat(DataKeys.MATCH_AUTO_LOC_X, xPos);
 		data.putFloat(DataKeys.MATCH_AUTO_LOC_Y, yPos);
+		data.putInteger(DataKeys.MATCH_AUTO_STARTING_DISCS,
+				yPos >= MIN_TRIPLE_Y && yPos < MAX_TRIPLE_Y ? 3 : 2);
 	}
 
 	@Override
@@ -127,7 +138,7 @@ public class AutoLocFragment extends NamedTabFragment implements
 		xPos = data.getFloat(DataKeys.MATCH_AUTO_LOC_X, 0);
 		yPos = data.getFloat(DataKeys.MATCH_AUTO_LOC_Y, 0);
 	}
-	
+
 	@Override
 	public boolean needsKeyboard() {
 		return false;

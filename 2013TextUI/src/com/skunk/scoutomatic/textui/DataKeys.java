@@ -17,6 +17,7 @@ public interface DataKeys {
 
 	public static final String MATCH_AUTO_LOC_X = "match.auto.startX";
 	public static final String MATCH_AUTO_LOC_Y = "match.auto.startY";
+	public static final String MATCH_AUTO_STARTING_DISCS = "match.auto.startingDiscs";
 
 	public static final String MATCH_AUTO_SCORE_2 = "match.auto.score.2";
 	public static final String MATCH_AUTO_SCORE_4 = "match.auto.score.4";
