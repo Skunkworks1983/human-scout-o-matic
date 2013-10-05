@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
+import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.Action;
 import com.skunk.scoutomatic.textui.ActionCacheUtil;
@@ -23,13 +28,20 @@ import com.skunk.scoutomatic.textui.R;
  * @author Westin Miller
  */
 public class TeleScoreFragment extends NamedTabFragment implements
-		OnClickListener {
+		OnClickListener, TextWatcher {
+	private static final long TELE_END = 105000;
+
+	private static final int MAX_COLLECTED_DISCS = 200;
+
+	private static final int MAX_HOLDING_DISCS = 4;
+
 	private int score1Discs = 0;
 	private int score2Discs = 0;
 	private int score3Discs = 0;
 	private int scorePyrDiscs = 0;
 	private int collectDiscs = 0;
 	private int scoreMissed = 0;
+	private int startingWithDiscs = 2;
 
 	// Actions
 	private long matchBegin = -1;
@@ -45,7 +57,28 @@ public class TeleScoreFragment extends NamedTabFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		View v = getView().findViewById(R.id.teleCurrentTime);
+		if (v != null && v instanceof Chronometer) {
+			if (matchBegin > 0) {
+				((Chronometer) v).setBase(matchBegin);
+				((Chronometer) v).start();
+			} else {
+				((Chronometer) v).setText("Waiting to start...");
+			}
+		}
+
 		updateContents();
+	}
+
+	@Override
+	public void onPause() {
+		super.onResume();
+
+		View v = getView().findViewById(R.id.teleCurrentTime);
+		if (v != null && v instanceof Chronometer) {
+			((Chronometer) v).stop();
+		}
 	}
 
 	@Override
@@ -65,6 +98,12 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		registerViewWithClickListener(v, R.id.teleScorePyrDown);
 		registerViewWithClickListener(v, R.id.teleScoreMissUp);
 		registerViewWithClickListener(v, R.id.teleScoreMissDown);
+
+		registerViewWithClickListener(v, R.id.teleCurrentTime);
+		View vv = v.findViewById(R.id.teleCurrentTime);
+		if (vv != null && vv instanceof TextView) {
+			((TextView) vv).addTextChangedListener(this);
+		}
 		return v;
 	}
 
@@ -86,13 +125,18 @@ public class TeleScoreFragment extends NamedTabFragment implements
 	@Override
 	public void onClick(View v) {
 		if (matchBegin == -1) {
-			matchBegin = System.currentTimeMillis();
+			matchBegin = SystemClock.elapsedRealtime();
+			View vv = getView().findViewById(R.id.teleCurrentTime);
+			if (vv != null && vv instanceof Chronometer) {
+				((Chronometer) vv).setBase(matchBegin);
+				((Chronometer) vv).start();
+			}
 		}
 		switch (v.getId()) {
 		case R.id.teleCollectUp:
 			collectDiscs++;
 			actionDB.add(new Action(ActionType.TELE_COLLECT,
-					ActionResults.COLLECT_1, System.currentTimeMillis()
+					ActionResults.COLLECT_1, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.teleCollectDown:
@@ -105,7 +149,7 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		case R.id.teleScore1Up:
 			score1Discs++;
 			actionDB.add(new Action(ActionType.TELE_SHOOT,
-					ActionResults.SHOOT_SCORE1, System.currentTimeMillis()
+					ActionResults.SHOOT_SCORE1, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.teleScore1Down:
@@ -118,7 +162,7 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		case R.id.teleScore2Up:
 			score2Discs++;
 			actionDB.add(new Action(ActionType.TELE_SHOOT,
-					ActionResults.SHOOT_SCORE2, System.currentTimeMillis()
+					ActionResults.SHOOT_SCORE2, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.teleScore2Down:
@@ -131,7 +175,7 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		case R.id.teleScore3Up:
 			score3Discs++;
 			actionDB.add(new Action(ActionType.TELE_SHOOT,
-					ActionResults.SHOOT_SCORE3, System.currentTimeMillis()
+					ActionResults.SHOOT_SCORE3, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.teleScore3Down:
@@ -144,7 +188,7 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		case R.id.teleScorePyrUp:
 			scorePyrDiscs++;
 			actionDB.add(new Action(ActionType.TELE_SHOOT,
-					ActionResults.SHOOT_SCORE5, System.currentTimeMillis()
+					ActionResults.SHOOT_SCORE5, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.teleScorePyrDown:
@@ -157,7 +201,7 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		case R.id.teleScoreMissUp:
 			scoreMissed++;
 			actionDB.add(new Action(ActionType.TELE_SHOOT,
-					ActionResults.SHOOT_MISS, System.currentTimeMillis()
+					ActionResults.SHOOT_MISS, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.teleScoreMissDown:
@@ -185,16 +229,31 @@ public class TeleScoreFragment extends NamedTabFragment implements
 				+ (this.score2Discs * 4) + (this.score3Discs * 6))
 				+ " pts");
 
-		if (this.score1Discs + this.score2Discs + this.score3Discs
-				+ this.scorePyrDiscs + this.scoreMissed - 2 > this.collectDiscs) {
-			setText(R.id.teleScoreWarning,
-					"More discs were shot than obtained! ("
-							+ (this.score1Discs + this.score2Discs
-									+ this.score3Discs + this.scorePyrDiscs + this.scoreMissed)
-							+ " > " + (2 + this.collectDiscs) + ")");
-		} else {
-			setText(R.id.teleScoreWarning, "");
+		StringBuilder warnings = new StringBuilder();
+		
+		int shotDiscs = this.score1Discs + this.score2Discs + this.score3Discs
+				+ this.scorePyrDiscs + this.scoreMissed;
+		int touchedDiscs = startingWithDiscs + this.collectDiscs;
+		if (shotDiscs > touchedDiscs) {
+			warnings.append("More discs were shot than obtained! (" + shotDiscs
+					+ " > " + touchedDiscs + ")");
+			warnings.append("\n");
 		}
+		if ((touchedDiscs - shotDiscs) > MAX_HOLDING_DISCS) {
+			warnings.append("The robot appears to be holding "
+					+ (touchedDiscs - shotDiscs) + " discs.\n");
+		}
+		if (this.collectDiscs > MAX_COLLECTED_DISCS) {
+			warnings.append("More discs were collected than reasonable.\n");
+		}
+		if (matchBegin > 0) {
+			long elapsed = SystemClock.elapsedRealtime() - matchBegin;
+			if (elapsed > TELE_END) {
+				warnings.append("This period has likely ended!");
+				warnings.append("\n");
+			}
+		}
+		setText(R.id.teleScoreWarning, warnings.toString());
 	}
 
 	@Override
@@ -219,6 +278,13 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		score2Discs = data.getInteger(DataKeys.MATCH_TELE_SCORE_2, 0);
 		score3Discs = data.getInteger(DataKeys.MATCH_TELE_SCORE_3, 0);
 		scorePyrDiscs = data.getInteger(DataKeys.MATCH_TELE_SCORE_PYRAMID, 0);
+		startingWithDiscs = data.getInteger(DataKeys.MATCH_AUTO_STARTING_DISCS,
+				2)
+				+ data.getInteger(DataKeys.MATCH_AUTO_COLLECT, 0)
+				- data.getInteger(DataKeys.MATCH_AUTO_SCORE_2, 0)
+				- data.getInteger(DataKeys.MATCH_AUTO_SCORE_4, 0)
+				- data.getInteger(DataKeys.MATCH_AUTO_SCORE_6, 0)
+				- data.getInteger(DataKeys.MATCH_AUTO_SCORE_MISS, 0);
 
 		// Actions
 		matchBegin = data.getLong(DataKeys.MATCH_START_KEY, -1);
@@ -228,5 +294,24 @@ public class TeleScoreFragment extends NamedTabFragment implements
 	@Override
 	public boolean needsKeyboard() {
 		return false;
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		if (matchBegin > 0) {
+			long elapsed = SystemClock.elapsedRealtime() - matchBegin;
+			if (elapsed > TELE_END) {
+				updateContents();
+			}
+		}
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
 	}
 }

@@ -1,6 +1,5 @@
 package com.skunk.scoutomatic.textui.gui.frag;
 
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +16,7 @@ import com.skunk.scoutomatic.textui.DataCache;
  * @author "Westin Miller"
  * 
  */
-public abstract class NamedTabFragment extends Fragment {
+public abstract class NamedTabFragment extends Fragment {	
 	public abstract String getName();
 
 	public abstract Class<? extends NamedTabFragment> getNext();

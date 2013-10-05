@@ -30,7 +30,6 @@ public class TeleClimbFragment extends NamedTabFragment implements
 	private boolean attempted = false;
 
 	// Actions
-	private long matchBegin = -1;
 	private List<Action> actionDB = new ArrayList<Action>();
 
 	private final void registerViewWithClickListener(View v, int id) {
@@ -75,9 +74,6 @@ public class TeleClimbFragment extends NamedTabFragment implements
 
 	@Override
 	public void onClick(View v) {
-		if (matchBegin == -1) {
-			matchBegin = System.currentTimeMillis();
-		}
 		if (v instanceof CheckBox) {
 			CheckBox cc = ((CheckBox) v);
 			switch (v.getId()) {
@@ -155,7 +151,6 @@ public class TeleClimbFragment extends NamedTabFragment implements
 		}
 
 		data.putList(DataKeys.MATCH_ACTIONS_KEY, actionDB);
-		data.putLong(DataKeys.MATCH_START_KEY, matchBegin);
 	}
 
 	@Override
@@ -164,7 +159,6 @@ public class TeleClimbFragment extends NamedTabFragment implements
 		attempted = data.getBoolean(DataKeys.MATCH_TELE_CLIMB_ATTEMPTED, false);
 
 		// Actions
-		matchBegin = data.getLong(DataKeys.MATCH_START_KEY, -1);
 		actionDB = data.getList(DataKeys.MATCH_ACTIONS_KEY, Action.class);
 	}
 

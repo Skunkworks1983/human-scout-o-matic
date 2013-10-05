@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
+import android.widget.TextView;
 
 import com.skunk.scoutomatic.textui.Action;
 import com.skunk.scoutomatic.textui.ActionCacheUtil;
@@ -23,29 +28,22 @@ import com.skunk.scoutomatic.textui.R;
  * @author Westin Miller
  */
 public class AutoScoreFragment extends NamedTabFragment implements
-		OnClickListener {
+		OnClickListener, TextWatcher {
+	private static final long AUTO_END = 15000;
+	private static final int MAX_COLLECTED_DISCS = 6;
+	private static final int MAX_HOLDING_DISCS = 4;
+
 	private int score2Discs = 0;
 	private int score4Discs = 0;
 	private int score6Discs = 0;
 	private int collectDiscs = 0;
 	private int scoreMissed = 0;
 
+	private int startingWithDiscs = 2;
+
 	// Actions
 	private long matchBegin = -1;
 	private List<Action> actionDB = new ArrayList<Action>();
-
-	private final void registerViewWithClickListener(View v, int id) {
-		View found = v.findViewById(id);
-		if (found != null) {
-			found.setOnClickListener(this);
-		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateContents();
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +60,47 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		registerViewWithClickListener(v, R.id.autoScore6Down);
 		registerViewWithClickListener(v, R.id.autoScoreMissUp);
 		registerViewWithClickListener(v, R.id.autoScoreMissDown);
+
+		registerViewWithClickListener(v, R.id.autoCurrentTime);
+		View vv = v.findViewById(R.id.autoCurrentTime);
+		if (vv != null && vv instanceof TextView) {
+			((TextView) vv).addTextChangedListener(this);
+		}
 		return v;
+	}
+
+	private final void registerViewWithClickListener(View v, int id) {
+		View found = v.findViewById(id);
+		if (found != null) {
+			found.setOnClickListener(this);
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		View v = getView().findViewById(R.id.autoCurrentTime);
+		if (v != null && v instanceof Chronometer) {
+			if (matchBegin >= 0) {
+				((Chronometer) v).setBase(matchBegin);
+				((Chronometer) v).start();
+			} else {
+				((Chronometer) v).setText("Waiting to start...");
+			}
+		}
+
+		updateContents();
+	}
+
+	@Override
+	public void onPause() {
+		super.onResume();
+
+		View v = getView().findViewById(R.id.autoCurrentTime);
+		if (v != null && v instanceof Chronometer) {
+			((Chronometer) v).stop();
+		}
 	}
 
 	@Override
@@ -83,13 +121,18 @@ public class AutoScoreFragment extends NamedTabFragment implements
 	@Override
 	public void onClick(View v) {
 		if (matchBegin == -1) {
-			matchBegin = System.currentTimeMillis();
+			matchBegin = SystemClock.elapsedRealtime();
+			View vv = getView().findViewById(R.id.autoCurrentTime);
+			if (vv != null && vv instanceof Chronometer) {
+				((Chronometer) vv).setBase(matchBegin);
+				((Chronometer) vv).start();
+			}
 		}
 		switch (v.getId()) {
 		case R.id.autoCollectUp:
 			collectDiscs++;
 			actionDB.add(new Action(ActionType.AUTO_COLLECT,
-					ActionResults.COLLECT_1, System.currentTimeMillis()
+					ActionResults.COLLECT_1, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.autoCollectDown:
@@ -102,7 +145,7 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		case R.id.autoScore2Up:
 			score2Discs++;
 			actionDB.add(new Action(ActionType.AUTO_SHOOT,
-					ActionResults.SHOOT_SCORE2, System.currentTimeMillis()
+					ActionResults.SHOOT_SCORE2, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.autoScore2Down:
@@ -115,7 +158,7 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		case R.id.autoScore4Up:
 			score4Discs++;
 			actionDB.add(new Action(ActionType.AUTO_SHOOT,
-					ActionResults.SHOOT_SCORE4, System.currentTimeMillis()
+					ActionResults.SHOOT_SCORE4, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.autoScore4Down:
@@ -128,7 +171,7 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		case R.id.autoScore6Up:
 			score6Discs++;
 			actionDB.add(new Action(ActionType.AUTO_SHOOT,
-					ActionResults.SHOOT_SCORE6, System.currentTimeMillis()
+					ActionResults.SHOOT_SCORE6, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.autoScore6Down:
@@ -141,7 +184,7 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		case R.id.autoScoreMissUp:
 			scoreMissed++;
 			actionDB.add(new Action(ActionType.AUTO_SHOOT,
-					ActionResults.SHOOT_MISS, System.currentTimeMillis()
+					ActionResults.SHOOT_MISS, SystemClock.elapsedRealtime()
 							- matchBegin));
 			break;
 		case R.id.autoScoreMissDown:
@@ -168,16 +211,31 @@ public class AutoScoreFragment extends NamedTabFragment implements
 				+ (this.score4Discs * 4) + (this.score6Discs * 6))
 				+ " pts");
 
-		if (this.score2Discs + this.score4Discs + this.score6Discs
-				+ this.scoreMissed - 2 > this.collectDiscs) {
-			setText(R.id.autoScoreWarning,
-					"More discs were shot than obtained! ("
-							+ (this.score2Discs + this.score4Discs
-									+ this.score6Discs + this.scoreMissed)
-							+ " > " + (2 + this.collectDiscs) + ")");
-		} else {
-			setText(R.id.autoScoreWarning, "");
+		StringBuilder warnings = new StringBuilder();
+
+		int shotDiscs = this.score2Discs + this.score4Discs + this.score6Discs
+				+ this.scoreMissed;
+		int touchedDiscs = startingWithDiscs + this.collectDiscs;
+		if (shotDiscs > touchedDiscs) {
+			warnings.append("More discs were shot than obtained! (" + shotDiscs
+					+ " > " + touchedDiscs + ")");
+			warnings.append("\n");
 		}
+		if ((touchedDiscs - shotDiscs) > MAX_HOLDING_DISCS) {
+			warnings.append("The robot appears to be holding "
+					+ (touchedDiscs - shotDiscs) + " discs.\n");
+		}
+		if (this.collectDiscs > MAX_COLLECTED_DISCS) {
+			warnings.append("More discs were collected than reasonable.\n");
+		}
+		if (matchBegin > 0) {
+			long elapsed = SystemClock.elapsedRealtime() - matchBegin;
+			if (elapsed > AUTO_END) {
+				warnings.append("This period has likely ended!");
+				warnings.append("\n");
+			}
+		}
+		setText(R.id.autoScoreWarning, warnings.toString());
 	}
 
 	@Override
@@ -200,6 +258,8 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		score2Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_2, 0);
 		score4Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_4, 0);
 		score6Discs = data.getInteger(DataKeys.MATCH_AUTO_SCORE_6, 0);
+		startingWithDiscs = data.getInteger(DataKeys.MATCH_AUTO_STARTING_DISCS,
+				2);
 
 		// Actions
 		matchBegin = data.getLong(DataKeys.MATCH_START_KEY, -1);
@@ -209,5 +269,24 @@ public class AutoScoreFragment extends NamedTabFragment implements
 	@Override
 	public boolean needsKeyboard() {
 		return false;
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		if (matchBegin > 0) {
+			long elapsed = SystemClock.elapsedRealtime() - matchBegin;
+			if (elapsed > AUTO_END) {
+				updateContents();
+			}
+		}
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
 	}
 }

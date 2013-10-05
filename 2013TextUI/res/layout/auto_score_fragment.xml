@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-     >
+    android:layout_height="match_parent" >
 
     <TableRow
         android:layout_width="wrap_content"
@@ -166,8 +165,7 @@
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="wrap_content" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -195,10 +193,28 @@
     <TextView
         android:id="@+id/autoScoreWarning"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:text=""
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FF0000" />
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Current Time: "
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Chronometer
+            android:id="@+id/autoCurrentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format="%s"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
 
 </TableLayout>
