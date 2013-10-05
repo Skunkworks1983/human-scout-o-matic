@@ -130,6 +130,11 @@ public class MainActivity extends FragmentActivity implements
 			}
 			currentFragment = tab;
 			currentFragment.loadInformation(dataHeap);
+
+			// Recolor
+			findViewById(R.id.main_act).setBackgroundColor(
+					currentFragment.getColor());
+
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.main_fragment_container, currentFragment)
 					.commit();

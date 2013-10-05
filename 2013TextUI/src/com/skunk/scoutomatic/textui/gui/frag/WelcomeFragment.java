@@ -29,6 +29,10 @@ public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
 			((EditText) vv).addTextChangedListener(this);
 		}
 	}
+	
+	public int getColor() {
+		return 0x3300FF00;  // Pale Green
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

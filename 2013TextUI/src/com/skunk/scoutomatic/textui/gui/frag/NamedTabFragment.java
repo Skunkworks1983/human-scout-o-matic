@@ -16,8 +16,12 @@ import com.skunk.scoutomatic.textui.DataCache;
  * @author "Westin Miller"
  * 
  */
-public abstract class NamedTabFragment extends Fragment {	
+public abstract class NamedTabFragment extends Fragment {
 	public abstract String getName();
+
+	public int getColor() {
+		return 0x00000000;
+	}
 
 	public abstract Class<? extends NamedTabFragment> getNext();
 
@@ -82,6 +86,8 @@ public abstract class NamedTabFragment extends Fragment {
 			((NumberPicker) v).setMinValue(minimum);
 			((NumberPicker) v).setMaxValue(maximum);
 			((NumberPicker) v).setWrapSelectorWheel(false);
+			((NumberPicker) v)
+					.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 		}
 	}
 

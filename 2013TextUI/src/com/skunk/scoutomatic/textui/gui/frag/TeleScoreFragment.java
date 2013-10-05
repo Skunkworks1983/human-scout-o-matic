@@ -54,6 +54,10 @@ public class TeleScoreFragment extends NamedTabFragment implements
 		}
 	}
 
+	public int getColor() {
+		return 0x440000FF;
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();

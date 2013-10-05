@@ -62,31 +62,31 @@
         <NumberPicker
             android:id="@+id/reviewAutoScore2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewAutoScore4"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewAutoScore6"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewAutoMiss"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewAutoCollect"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
     </TableRow>
 
@@ -156,37 +156,37 @@
         <NumberPicker
             android:id="@+id/reviewTeleScore1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewTeleScore2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewTeleScore3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewTeleScorePyr"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewTeleScoreMiss"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewTeleCollect"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
     </TableRow>
 
@@ -314,7 +314,7 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <TextView
             android:layout_width="0dp"
@@ -343,12 +343,14 @@
             android:layout_weight="1"
             android:text="Ending"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Position"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -365,13 +367,13 @@
         <NumberPicker
             android:id="@+id/reviewFoulFoul"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/reviewFoulTechnical"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <LinearLayout

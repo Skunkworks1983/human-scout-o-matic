@@ -45,6 +45,10 @@ public class AutoScoreFragment extends NamedTabFragment implements
 	private long matchBegin = -1;
 	private List<Action> actionDB = new ArrayList<Action>();
 
+	public int getColor() {
+		return 0x44FF0000;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

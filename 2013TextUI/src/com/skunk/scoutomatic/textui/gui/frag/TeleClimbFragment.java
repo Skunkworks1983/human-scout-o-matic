@@ -39,6 +39,10 @@ public class TeleClimbFragment extends NamedTabFragment implements
 		}
 	}
 
+	public int getColor() {
+		return 0x33FFFF00;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

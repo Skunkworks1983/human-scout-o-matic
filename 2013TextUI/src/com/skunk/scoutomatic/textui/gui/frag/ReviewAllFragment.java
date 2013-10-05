@@ -38,6 +38,10 @@ public class ReviewAllFragment extends NamedTabFragment {
 		return "Review";
 	}
 
+	public int getColor() {
+		return 0x99556B2F;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

@@ -22,6 +22,10 @@ public class TeleShootLocFragment extends NamedTabFragment implements
 		OnTouchListener {
 	private float xPos = 0, yPos = 0;
 
+	public int getColor() {
+		return 0x33EE00EE;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

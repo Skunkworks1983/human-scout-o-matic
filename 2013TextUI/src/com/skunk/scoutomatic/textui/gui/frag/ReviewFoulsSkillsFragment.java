@@ -47,6 +47,10 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 		}
 	}
 
+	public int getColor() {
+		return 0xAA8E3A59;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

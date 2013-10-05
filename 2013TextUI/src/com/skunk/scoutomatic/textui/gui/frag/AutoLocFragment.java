@@ -33,6 +33,10 @@ public class AutoLocFragment extends NamedTabFragment implements
 	private float xPos = 0, yPos = 0;
 	private boolean noShow = false;
 
+	public int getColor() {
+		return 0x33FFA500;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
