@@ -30,6 +30,7 @@ import com.skunk.scoutomatic.textui.R;
  */
 public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 		OnClickListener, TextWatcher, OnRatingBarChangeListener {
+	private static final int MAX_FOULS = 3;
 	private float driverSkill = 0;
 	private String comments = "";
 	private boolean redCard = false, yellowCard = false;
@@ -163,9 +164,21 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 
 		View v = getView().findViewById(R.id.driverSkill);
 		if (v != null && v instanceof RatingBar) {
-			System.out.println(driverSkill);
 			((RatingBar) v).setRating(driverSkill);
 		}
+
+		StringBuilder warnings = new StringBuilder();
+		if (this.foulCount > MAX_FOULS) {
+			warnings.append("Unreasonable amount of fouls. ("
+					+ (this.foulCount) + ">" + MAX_FOULS + ")\n");
+		}
+		if (this.techCount > 0) {
+			warnings.append("A technical foul has been selected!\n");
+		}
+		if (this.redCard || this.yellowCard) {
+			warnings.append("A card has been selected.\n");
+		}
+		setText(R.id.reviewFoulsWarning, warnings.toString());
 	}
 
 	@Override
@@ -178,8 +191,7 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 		data.putFloat(DataKeys.MATCH_REVIEW_DRIVER_SKILL, driverSkill);
 		data.putString(DataKeys.MATCH_REVIEW_COMMENTS, comments);
 
-		// Actions
-		// Cleaning
+		// Actions Cleaning
 		ActionCacheUtil.getInsuredActionByType(actionDB,
 				ActionType.REVIEW_DRIVER_SKILL).setResult(
 				String.valueOf(driverSkill));

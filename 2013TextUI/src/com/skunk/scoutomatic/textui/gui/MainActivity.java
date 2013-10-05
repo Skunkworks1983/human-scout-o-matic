@@ -209,7 +209,6 @@ public class MainActivity extends FragmentActivity implements
 						}
 
 						fragView.requestLayout();
-						System.out.println("MIN HEIGHT: " + (bottom - top));
 					}
 				});
 			}
