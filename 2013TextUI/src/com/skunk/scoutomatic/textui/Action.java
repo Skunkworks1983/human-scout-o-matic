@@ -1,5 +1,7 @@
 package com.skunk.scoutomatic.textui;
 
+import android.util.Log;
+
 /**
  * Created on: Sep 21, 2013
  * 
@@ -13,6 +15,16 @@ public class Action {
 	private float x, y;
 
 	public Action(ActionType type, String result, float x, float y, long time) {
+		if (result == null || result.length() == 0) {
+			result = "null";
+			Log.w("DB", "Action with null result was created!");
+		} else if (result.equals("0.0")) {
+			result = "0.01"; // Safety
+			Log.w("DB", "Action with zero result was created!");
+		} else if (result.equals("0")) {
+			result = "0.01"; // Safety
+			Log.w("DB", "Action with zero result was created!");
+		}
 		this.type = type;
 		this.result = result;
 		this.x = x;

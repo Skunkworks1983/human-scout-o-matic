@@ -146,7 +146,7 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 	public void onRatingChanged(RatingBar v, float rating, boolean fromUser) {
 		switch (v.getId()) {
 		case R.id.driverSkill:
-			driverSkill = rating;
+			driverSkill = (rating <= 0.0f ? 1.0f : rating);
 			break;
 		}
 		updateContents();
