@@ -33,22 +33,24 @@ public class JSONNetwork {
 			NameValuePair... getParams) {
 		InputStream is = null;
 		String json = null;
-		try {// .setHeader("Accept", "application/json");
+		try {
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpUriRequest httpPost;
 
 			StringBuilder fullURL = new StringBuilder();
 			fullURL.append(url);
-			fullURL.append('?');
-			for (int i = 0; i < getParams.length; i++) {
-				if (i != 0) {
-					fullURL.append('&');
+			if (getParams.length > 0) {
+				fullURL.append('?');
+				for (int i = 0; i < getParams.length; i++) {
+					if (i != 0) {
+						fullURL.append('&');
+					}
+					fullURL.append(URLEncoder.encode(getParams[i].getName(),
+							"UTF-8"));
+					fullURL.append('=');
+					fullURL.append(URLEncoder.encode(getParams[i].getValue(),
+							"UTF-8"));
 				}
-				fullURL.append(URLEncoder.encode(getParams[i].getName(),
-						"UTF-8"));
-				fullURL.append('=');
-				fullURL.append(URLEncoder.encode(getParams[i].getValue(),
-						"UTF-8"));
 			}
 			if (postData == null) {
 				httpPost = new HttpGet(fullURL.toString());

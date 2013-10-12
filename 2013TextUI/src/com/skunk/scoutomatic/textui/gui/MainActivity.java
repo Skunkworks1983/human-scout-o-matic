@@ -30,9 +30,11 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.skunk.scoutomatic.textui.DataCache;
 import com.skunk.scoutomatic.textui.DataKeys;
+import com.skunk.scoutomatic.textui.MessageReciever;
 import com.skunk.scoutomatic.textui.R;
 import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragment;
 import com.skunk.scoutomatic.textui.gui.frag.SubmitFragment;
@@ -42,7 +44,7 @@ import com.skunk.scoutomatic.textui.net.FutureProcessor;
 import com.skunk.scoutomatic.textui.net.ScoutableMatch;
 
 public class MainActivity extends FragmentActivity implements
-		OnLayoutChangeListener {
+		OnLayoutChangeListener, MessageReciever {
 	private Map<Class<? extends NamedTabFragment>, NamedTabFragment> fragments = new HashMap<Class<? extends NamedTabFragment>, NamedTabFragment>();
 	private NamedTabFragment currentFragment = new WelcomeFragment();
 	private BackendInterface backend;
@@ -62,7 +64,7 @@ public class MainActivity extends FragmentActivity implements
 		v = findViewById(R.id.mainActNav);
 		v.setMinimumHeight(100);
 
-		backend = new BackendInterface();
+		backend = new BackendInterface(this);
 		dataHeap.putString(DataKeys.MATCH_COMPETITION,
 				BackendInterface.EVENT_ID);
 		if (findViewById(R.id.main_fragment_container) != null) {
@@ -217,6 +219,20 @@ public class MainActivity extends FragmentActivity implements
 					}
 				});
 			}
+		}
+	}
+
+	@Override
+	public void onMessage(final Class<?> src, final String message) {
+		View vv = findViewById(R.id.main_act);
+		if (vv != null) {
+			vv.post(new Runnable() {
+				public void run() {
+					Log.i("TOAST", src.getSimpleName() + ": " + message);
+					Toast.makeText(MainActivity.super.getApplicationContext(),
+							message, Toast.LENGTH_LONG).show();
+				}
+			});
 		}
 	}
 }

@@ -14,11 +14,13 @@ import java.util.concurrent.TimeUnit;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 import com.skunk.scoutomatic.textui.CollectedData;
 import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.MessageReciever;
 
 /**
  * Created on: Sep 22, 2013
@@ -51,26 +53,33 @@ public class BackendInterface implements Runnable {
 		}
 
 		private boolean tryNetworkAction() {
-			tries++;
-			String s = JSONNetwork.getJSONFromUrl(url, postData, varsGET);
-			if (s == null) {
+			try {
+				tries++;
+				String s = JSONNetwork.getJSONFromUrl(url, postData, varsGET);
+				if (s == null) {
+					return false;
+				}
+				if (futureProcessor != null) {
+					futureProcessor.run(s);
+				}
+				return true;
+			} catch (Exception e) {
+				Log.e("NET", e.toString());
 				return false;
 			}
-			if (futureProcessor != null) {
-				futureProcessor.run(s);
-			}
-			return true;
 		}
 	}
 
 	private Queue<ScoutableMatch> scoutingQueue = new LinkedBlockingQueue<ScoutableMatch>();
 	private final ScheduledExecutorService networkPool;
+	private final MessageReciever broadcast;
 
 	private List<NetworkAction> deferredNetworkActions = Collections
 			.synchronizedList(new ArrayList<NetworkAction>());
 
-	public BackendInterface() {
+	public BackendInterface(MessageReciever broadcaster) {
 		networkPool = Executors.newScheduledThreadPool(1);
+		broadcast = broadcaster;
 		networkPool.scheduleAtFixedRate(this, NETWORK_TRY_SPEED_MILLIS,
 				NETWORK_TRY_SPEED_MILLIS, TimeUnit.MILLISECONDS);
 	}
@@ -123,6 +132,11 @@ public class BackendInterface implements Runnable {
 							int mID;
 							try {
 								mID = matchData.getInt("match_number");
+
+								// Message!
+								broadcast.onMessage(BackendInterface.class,
+										"Match " + mID + "'s data is off!");
+
 								fetchScoutingQueue();
 								while (scoutingQueue.size() > 0) {
 									if (scoutingQueue.peek().getMatchID() < mID) {
@@ -131,7 +145,9 @@ public class BackendInterface implements Runnable {
 										break;
 									}
 								}
-							} catch (JSONException e) {
+							} catch (Exception e) {
+								e.printStackTrace();
+								Log.e("NET", e.toString());
 							}
 						}
 					}, new NameValuePair[0]);
@@ -147,7 +163,9 @@ public class BackendInterface implements Runnable {
 		// Try network actions; if we manage remove it
 		Iterator<NetworkAction> iterator = deferredNetworkActions.iterator();
 		while (iterator.hasNext()) {
-			if (iterator.next().tryNetworkAction()) {
+			NetworkAction action = iterator.next();
+			boolean returnVal = action.tryNetworkAction();
+			if (returnVal) {
 				iterator.remove();
 			}
 		}
