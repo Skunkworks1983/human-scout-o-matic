@@ -1,6 +1,6 @@
 package com.skunk.scoutomatic.textui.gui.frag;
 
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,30 +10,19 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import com.skunk.scoutomatic.textui.DataCache;
-
 /**
  * Created on: Sep 20, 2013
  * 
  * @author "Westin Miller"
  * 
  */
-public abstract class NamedTabFragment extends Fragment {
-	public abstract String getName();
+public abstract class NamedTabFragmentImpl extends Fragment implements
+		INamedTabFragment {
+	protected abstract void updateContents();
 
 	public int getColor() {
 		return 0x00000000;
 	}
-
-	public abstract Class<? extends NamedTabFragment> getNext();
-
-	public abstract Class<? extends NamedTabFragment> getPrevious();
-
-	public abstract void storeInformation(DataCache data);
-
-	public abstract void loadInformation(DataCache data);
-
-	protected abstract void updateContents();
 
 	public void postUpdate() {
 		getView().post(new Runnable() {
@@ -120,6 +109,4 @@ public abstract class NamedTabFragment extends Fragment {
 			vv.setBackgroundColor(background);
 		}
 	}
-
-	public abstract boolean needsKeyboard();
 }

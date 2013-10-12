@@ -24,7 +24,7 @@ import com.skunk.scoutomatic.textui.R;
  * 
  * @author Westin Miller
  */
-public class TeleClimbFragment extends NamedTabFragment implements
+public class TeleClimbFragment extends NamedTabFragmentImpl implements
 		OnClickListener {
 	private int level = 0;
 	private boolean attempted = false;
@@ -67,12 +67,12 @@ public class TeleClimbFragment extends NamedTabFragment implements
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends NamedTabFragmentImpl> getNext() {
 		return TeleShootLocFragment.class;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends NamedTabFragmentImpl> getPrevious() {
 		return TeleScoreFragment.class;
 	}
 

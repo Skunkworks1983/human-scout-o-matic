@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <EditTextPreference
+        android:defaultValue="http://machpi.org:9292"
+        android:key="backend-address"
+        android:summary="The access URI of the backend."
+        android:title="Server Address" />
+    <EditTextPreference
+        android:defaultValue="30"
+        android:enabled="true"
+        android:inputType="number"
+        android:key="backend-poll-speed"
+        android:summary="The delay between synchronization retries in seconds."
+        android:title="Network Poll Rate" />
+    <EditTextPreference
+        android:defaultValue="2013ggwa"
+        android:key="pref-competition-id"
+        android:summary="The competition ID this tablet will be scouting at."
+        android:title="Competition ID" />
+    <EditTextPreference
+        android:defaultValue="0"
+        android:enabled="true"
+        android:inputType="number"
+        android:key="pref-tablet-id"
+        android:summary="The number that identifies this tablet."
+        android:title="Tablet Identifier" />
+
+</PreferenceScreen>

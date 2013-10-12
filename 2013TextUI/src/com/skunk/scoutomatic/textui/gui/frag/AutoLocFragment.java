@@ -21,7 +21,7 @@ import com.skunk.scoutomatic.textui.R;
  * 
  * @author Westin Miller
  */
-public class AutoLocFragment extends NamedTabFragment implements
+public class AutoLocFragment extends NamedTabFragmentImpl implements
 		OnTouchListener, OnClickListener {
 	public static final float MIN_TRIPLE_Y = 62.5f;
 	public static final float MAX_TRIPLE_Y = 100;
@@ -67,12 +67,12 @@ public class AutoLocFragment extends NamedTabFragment implements
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends NamedTabFragmentImpl> getNext() {
 		return AutoScoreFragment.class;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends NamedTabFragmentImpl> getPrevious() {
 		return WelcomeFragment.class;
 	}
 

@@ -17,7 +17,7 @@ import com.skunk.scoutomatic.textui.R;
  * 
  * @author Westin Miller
  */
-public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
+public class WelcomeFragment extends NamedTabFragmentImpl implements TextWatcher {
 	private String scoutName;
 	private String compID;
 	private int robotID;
@@ -51,12 +51,12 @@ public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends NamedTabFragmentImpl> getNext() {
 		return AutoLocFragment.class;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends NamedTabFragmentImpl> getPrevious() {
 		return null;
 	}
 

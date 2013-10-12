@@ -17,6 +17,7 @@ import com.skunk.scoutomatic.textui.ActionType;
 import com.skunk.scoutomatic.textui.DataCache;
 import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
+import com.skunk.scoutomatic.textui.gui.frag.dummy.SubmitFragment;
 
 /**
  * Created on: Sep 21, 2013
@@ -24,7 +25,7 @@ import com.skunk.scoutomatic.textui.R;
  * @author "Westin Miller"
  * 
  */
-public class ReviewAllFragment extends NamedTabFragment {
+public class ReviewAllFragment extends NamedTabFragmentImpl {
 	private static final int MAXIMUM_TELE_SCORE = 1000;
 	private static final int MAXIMUM_AUTO_SCORE = 15;
 	private static final int MAXIMUM_FOULS = 9;
@@ -75,12 +76,12 @@ public class ReviewAllFragment extends NamedTabFragment {
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends NamedTabFragmentImpl> getNext() {
 		return SubmitFragment.class;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends NamedTabFragmentImpl> getPrevious() {
 		return ReviewFoulsSkillsFragment.class;
 	}
 

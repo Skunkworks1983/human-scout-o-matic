@@ -19,11 +19,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLayoutChangeListener;
 import android.view.WindowManager;
@@ -36,19 +41,22 @@ import com.skunk.scoutomatic.textui.DataCache;
 import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.MessageReciever;
 import com.skunk.scoutomatic.textui.R;
-import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragment;
-import com.skunk.scoutomatic.textui.gui.frag.SubmitFragment;
+import com.skunk.scoutomatic.textui.SettingsKeys;
+import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
 import com.skunk.scoutomatic.textui.gui.frag.WelcomeFragment;
+import com.skunk.scoutomatic.textui.gui.frag.dummy.GoBackFragment;
+import com.skunk.scoutomatic.textui.gui.frag.dummy.SubmitFragment;
+import com.skunk.scoutomatic.textui.gui.frag.support.SettingsFragment;
 import com.skunk.scoutomatic.textui.net.BackendInterface;
 import com.skunk.scoutomatic.textui.net.FutureProcessor;
 import com.skunk.scoutomatic.textui.net.ScoutableMatch;
 
 public class MainActivity extends FragmentActivity implements
 		OnLayoutChangeListener, MessageReciever {
-	private Map<Class<? extends NamedTabFragment>, NamedTabFragment> fragments = new HashMap<Class<? extends NamedTabFragment>, NamedTabFragment>();
-	private NamedTabFragment currentFragment = new WelcomeFragment();
+	private Map<Class<? extends INamedTabFragment>, INamedTabFragment> fragments = new HashMap<Class<? extends INamedTabFragment>, INamedTabFragment>();
+	private INamedTabFragment currentFragment = new WelcomeFragment();
 	private BackendInterface backend;
-	private Stack<Class<? extends NamedTabFragment>> history = new Stack<Class<? extends NamedTabFragment>>();
+	private Stack<Class<? extends INamedTabFragment>> history = new Stack<Class<? extends INamedTabFragment>>();
 
 	private DataCache dataHeap = new DataCache(new HashMap<String, Object>());
 
@@ -65,15 +73,33 @@ public class MainActivity extends FragmentActivity implements
 		v.setMinimumHeight(100);
 
 		backend = new BackendInterface(this);
-		dataHeap.putString(DataKeys.MATCH_COMPETITION,
-				BackendInterface.EVENT_ID);
+		dataHeap.putString(
+				DataKeys.MATCH_COMPETITION,
+				PreferenceManager.getDefaultSharedPreferences(
+						getApplicationContext()).getString(
+						SettingsKeys.PREF_COMPETITION_ID,
+						BackendInterface.DEFAULT_EVENT_ID));
+		PreferenceManager.setDefaultValues(getApplicationContext(),
+				R.xml.scouting_preferences, false);
 		if (findViewById(R.id.main_fragment_container) != null) {
 			fragments.put(currentFragment.getClass(), currentFragment);
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.main_fragment_container, currentFragment)
-					.commit();
+			getFragmentManager()
+					.beginTransaction()
+					.add(R.id.main_fragment_container,
+							(Fragment) currentFragment).commit();
 			setFragment(currentFragment.getClass());
 		}
+	}
+
+	public final long getLongPreference(String key, long defacto) {
+		try {
+			String data = PreferenceManager.getDefaultSharedPreferences(
+					getApplicationContext()).getString(key,
+					String.valueOf(defacto));
+			return Long.valueOf(data);
+		} catch (Exception e) {
+		}
+		return defacto;
 	}
 
 	public void changeFragment(View v) {
@@ -99,7 +125,28 @@ public class MainActivity extends FragmentActivity implements
 		});
 	}
 
-	private void setFragment(Class<? extends NamedTabFragment> fragClass) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.action_bar, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menuConfig:
+			setFragment(SettingsFragment.class);
+			return true;
+		case R.id.menuNetState:
+			// Do stuff
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void setFragment(Class<? extends INamedTabFragment> fragClass) {
 		if (fragClass == null) {
 			return;
 		}
@@ -110,8 +157,20 @@ public class MainActivity extends FragmentActivity implements
 				submitData();
 				initWelcome = true;
 				fragClass = WelcomeFragment.class;
+			} else if (fragClass == GoBackFragment.class) {
+				if (history.size() > 0) {
+					int size = history.size();
+					setFragment(history.pop());
+					if (size == history.size()) {
+						// Remove the new one we added
+						history.pop();
+					}
+				} else {
+					setFragment(WelcomeFragment.class);
+				}
+				return;
 			}
-			NamedTabFragment tab = fragments.get(fragClass);
+			INamedTabFragment tab = fragments.get(fragClass);
 			if (tab == null) {
 				tab = fragClass.newInstance();
 				fragments.put(fragClass, tab);
@@ -137,9 +196,10 @@ public class MainActivity extends FragmentActivity implements
 			findViewById(R.id.main_act).setBackgroundColor(
 					currentFragment.getColor());
 
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.main_fragment_container, currentFragment)
-					.commit();
+			getFragmentManager()
+					.beginTransaction()
+					.replace(R.id.main_fragment_container,
+							(Fragment) currentFragment).commit();
 
 			// Update NAV
 			View label = findViewById(R.id.fragmentCurrent);
@@ -167,10 +227,14 @@ public class MainActivity extends FragmentActivity implements
 	private void submitData() {
 		backend.pushMatchInformation(dataHeap);
 		// Now clear the cache except for small stuff
-		String compID = dataHeap.getString(DataKeys.MATCH_COMPETITION, "");
 		String scoutName = dataHeap.getString(DataKeys.MATCH_SCOUT, "");
 		dataHeap.getData().clear();
-		dataHeap.putString(DataKeys.MATCH_COMPETITION, compID);
+		dataHeap.putString(
+				DataKeys.MATCH_COMPETITION,
+				PreferenceManager.getDefaultSharedPreferences(
+						getApplicationContext()).getString(
+						SettingsKeys.PREF_COMPETITION_ID,
+						BackendInterface.DEFAULT_EVENT_ID));
 		dataHeap.putString(DataKeys.MATCH_SCOUT, scoutName);
 	}
 

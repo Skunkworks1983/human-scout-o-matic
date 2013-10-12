@@ -27,7 +27,7 @@ import com.skunk.scoutomatic.textui.R;
  * 
  * @author Westin Miller
  */
-public class AutoScoreFragment extends NamedTabFragment implements
+public class AutoScoreFragment extends NamedTabFragmentImpl implements
 		OnClickListener, TextWatcher {
 	private static final long AUTO_END = 15000;
 	private static final int MAX_COLLECTED_DISCS = 6;
@@ -113,12 +113,12 @@ public class AutoScoreFragment extends NamedTabFragment implements
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends NamedTabFragmentImpl> getNext() {
 		return TeleScoreFragment.class;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends NamedTabFragmentImpl> getPrevious() {
 		return AutoLocFragment.class;
 	}
 
@@ -202,7 +202,7 @@ public class AutoScoreFragment extends NamedTabFragment implements
 		updateContents();
 	}
 
-	protected void updateContents() {
+	public void updateContents() {
 		setText(R.id.autoCollect, this.collectDiscs + " discs");
 
 		setText(R.id.autoScore2, this.score2Discs + " discs");

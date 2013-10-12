@@ -16,11 +16,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.skunk.scoutomatic.textui.CollectedData;
 import com.skunk.scoutomatic.textui.DataCache;
-import com.skunk.scoutomatic.textui.MessageReciever;
+import com.skunk.scoutomatic.textui.SettingsKeys;
+import com.skunk.scoutomatic.textui.gui.MainActivity;
 
 /**
  * Created on: Sep 22, 2013
@@ -29,13 +31,14 @@ import com.skunk.scoutomatic.textui.MessageReciever;
  * 
  */
 public class BackendInterface implements Runnable {
-	private static final long NETWORK_TRY_SPEED_MILLIS = 30000; // 30 seconds
-	private static final int SCOUT_ID = 0;
-	public static final String EVENT_ID = "2013wase";
-
-	private static final String API_SERVER = "http://machpi.org:9292";
 	private static final String API_MATCHES = "/api/scout/register";
 	private static final String API_POST_MATCH_DATA = "/api/scout/match";
+
+	private static final long DEFAULT_NETWORK_TRY_SPEED = 30; // 30
+																// seconds
+	private static final String DEFAULT_API_SERVER = "http://machpi.org:9292";
+	private static final int DEFAULT_SCOUT_ID = 0;
+	public static final String DEFAULT_EVENT_ID = "2013wase";
 
 	private static class NetworkAction {
 		private JSONObject postData;
@@ -72,16 +75,35 @@ public class BackendInterface implements Runnable {
 
 	private Queue<ScoutableMatch> scoutingQueue = new LinkedBlockingQueue<ScoutableMatch>();
 	private final ScheduledExecutorService networkPool;
-	private final MessageReciever broadcast;
+	private final MainActivity activity;
 
 	private List<NetworkAction> deferredNetworkActions = Collections
 			.synchronizedList(new ArrayList<NetworkAction>());
 
-	public BackendInterface(MessageReciever broadcaster) {
+	public BackendInterface(MainActivity act) {
 		networkPool = Executors.newScheduledThreadPool(1);
-		broadcast = broadcaster;
-		networkPool.scheduleAtFixedRate(this, NETWORK_TRY_SPEED_MILLIS,
-				NETWORK_TRY_SPEED_MILLIS, TimeUnit.MILLISECONDS);
+		activity = act;
+		networkPool.scheduleAtFixedRate(this, activity.getLongPreference(
+				SettingsKeys.BACKEND_POLL_SPEED, DEFAULT_NETWORK_TRY_SPEED),
+				activity.getLongPreference(SettingsKeys.BACKEND_POLL_SPEED,
+						DEFAULT_NETWORK_TRY_SPEED), TimeUnit.SECONDS);
+	}
+
+	private final String getAPIServer() {
+		return PreferenceManager.getDefaultSharedPreferences(
+				activity.getApplicationContext()).getString(
+				SettingsKeys.BACKEND_URI, DEFAULT_API_SERVER);
+	}
+
+	private final String getEventID() {
+		return PreferenceManager.getDefaultSharedPreferences(
+				activity.getApplicationContext()).getString(
+				SettingsKeys.PREF_COMPETITION_ID, DEFAULT_EVENT_ID);
+	}
+
+	private final int getScoutID() {
+		return (int) activity.getLongPreference(SettingsKeys.PREF_TABLET_ID,
+				DEFAULT_SCOUT_ID);
 	}
 
 	private void fetchScoutingQueue() {
@@ -89,10 +111,12 @@ public class BackendInterface implements Runnable {
 			// Grab it
 			try {
 				JSONArray thingsToScout = new JSONArray(
-						JSONNetwork.getJSONFromUrl(API_SERVER + API_MATCHES,
-								null, new BasicNameValuePair("event_id",
-										EVENT_ID), new BasicNameValuePair(
-										"scout_id", String.valueOf(SCOUT_ID))));
+						JSONNetwork
+								.getJSONFromUrl(getAPIServer() + API_MATCHES,
+										null, new BasicNameValuePair(
+												"event_id", getEventID()),
+										new BasicNameValuePair("scout_id",
+												String.valueOf(getScoutID()))));
 				for (int i = 0; i < thingsToScout.length(); i++) {
 					scoutingQueue.add(new ScoutableMatch(thingsToScout
 							.getJSONObject(i)));
@@ -124,7 +148,7 @@ public class BackendInterface implements Runnable {
 	public void pushMatchInformation(final DataCache cache) {
 		try {
 			final JSONObject matchData = CollectedData.createMatchData(cache);
-			NetworkAction action = new NetworkAction(API_SERVER
+			NetworkAction action = new NetworkAction(getAPIServer()
 					+ API_POST_MATCH_DATA, matchData,
 					new FutureProcessor<String>() {
 						@Override
@@ -134,7 +158,7 @@ public class BackendInterface implements Runnable {
 								mID = matchData.getInt("match_number");
 
 								// Message!
-								broadcast.onMessage(BackendInterface.class,
+								activity.onMessage(BackendInterface.class,
 										"Match " + mID + "'s data is off!");
 
 								fetchScoutingQueue();
@@ -160,14 +184,18 @@ public class BackendInterface implements Runnable {
 
 	@Override
 	public void run() {
-		// Try network actions; if we manage remove it
-		Iterator<NetworkAction> iterator = deferredNetworkActions.iterator();
-		while (iterator.hasNext()) {
-			NetworkAction action = iterator.next();
-			boolean returnVal = action.tryNetworkAction();
-			if (returnVal) {
-				iterator.remove();
+		try {
+			// Try network actions; if we manage remove it
+			Iterator<NetworkAction> iterator = deferredNetworkActions
+					.iterator();
+			while (iterator.hasNext()) {
+				NetworkAction action = iterator.next();
+				boolean returnVal = action.tryNetworkAction();
+				if (returnVal) {
+					iterator.remove();
+				}
 			}
+		} catch (RuntimeException e) {
 		}
 	}
 }

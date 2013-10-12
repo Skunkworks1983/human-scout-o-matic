@@ -27,7 +27,7 @@ import com.skunk.scoutomatic.textui.R;
  * 
  * @author Westin Miller
  */
-public class TeleScoreFragment extends NamedTabFragment implements
+public class TeleScoreFragment extends NamedTabFragmentImpl implements
 		OnClickListener, TextWatcher {
 	private static final long TELE_END = 105000;
 
@@ -117,12 +117,12 @@ public class TeleScoreFragment extends NamedTabFragment implements
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends NamedTabFragmentImpl> getNext() {
 		return TeleClimbFragment.class;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends NamedTabFragmentImpl> getPrevious() {
 		return AutoScoreFragment.class;
 	}
 

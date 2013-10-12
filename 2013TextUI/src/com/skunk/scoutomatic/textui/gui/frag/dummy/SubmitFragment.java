@@ -1,6 +1,7 @@
-package com.skunk.scoutomatic.textui.gui.frag;
+package com.skunk.scoutomatic.textui.gui.frag.dummy;
 
 import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragmentImpl;
 
 /**
  * It's a dummy! (Maybe it will have network stuffs later) Created on: Sep 22,
@@ -9,19 +10,19 @@ import com.skunk.scoutomatic.textui.DataCache;
  * @author "Westin Miller"
  * 
  */
-public class SubmitFragment extends NamedTabFragment {
+public class SubmitFragment extends NamedTabFragmentImpl {
 	@Override
 	public String getName() {
 		return null;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends NamedTabFragmentImpl> getNext() {
 		return null;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends NamedTabFragmentImpl> getPrevious() {
 		return null;
 	}
 
@@ -41,5 +42,4 @@ public class SubmitFragment extends NamedTabFragment {
 	public boolean needsKeyboard() {
 		return false;
 	}
-
 }

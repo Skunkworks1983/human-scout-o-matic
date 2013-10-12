@@ -28,7 +28,7 @@ import com.skunk.scoutomatic.textui.R;
  * 
  * @author Westin Miller
  */
-public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
+public class ReviewFoulsSkillsFragment extends NamedTabFragmentImpl implements
 		OnClickListener, TextWatcher, OnRatingBarChangeListener {
 	private static final int MAX_FOULS = 3;
 	private float driverSkill = 0;
@@ -81,12 +81,12 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends NamedTabFragmentImpl> getNext() {
 		return ReviewAllFragment.class;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends NamedTabFragmentImpl> getPrevious() {
 		return TeleShootLocFragment.class;
 	}
 
