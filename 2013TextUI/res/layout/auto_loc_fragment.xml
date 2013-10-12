@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="No Show"
-            android:textAppearance="?android:attr/textAppearanceLarge"  />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </TableRow>
 
     <TableRow
@@ -45,6 +45,35 @@
                 android:src="@drawable/first_robot"
                 android:visibility="invisible" />
         </RelativeLayout>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:id="@+id/autoLoad2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Loading 2 Discs" />
+
+        <RadioButton
+            android:id="@+id/autoLoad3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Loading 3 Discs" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
     </TableRow>
 
     <TableRow

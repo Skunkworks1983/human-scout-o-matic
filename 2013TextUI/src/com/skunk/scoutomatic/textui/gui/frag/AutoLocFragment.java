@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,8 +34,17 @@ public class AutoLocFragment extends NamedTabFragment implements
 	private float xPos = 0, yPos = 0;
 	private boolean noShow = false;
 
+	private int loadingDiscs = 2;
+
 	public int getColor() {
 		return 0x33FFA500;
+	}
+
+	private final void registerClickListener(View v, int id) {
+		View vv = v.findViewById(id);
+		if (vv != null) {
+			vv.setOnClickListener(this);
+		}
 	}
 
 	@Override
@@ -45,10 +55,9 @@ public class AutoLocFragment extends NamedTabFragment implements
 		if (autoSheet != null) {
 			autoSheet.setOnTouchListener(this);
 		}
-		View noShow = v.findViewById(R.id.matchNoShow);
-		if (noShow != null) {
-			noShow.setOnClickListener(this);
-		}
+		registerClickListener(v, R.id.matchNoShow);
+		registerClickListener(v, R.id.autoLoad2);
+		registerClickListener(v, R.id.autoLoad3);
 		return v;
 	}
 
@@ -85,6 +94,8 @@ public class AutoLocFragment extends NamedTabFragment implements
 						&& tyPos < maxY) {
 					xPos = txPos;
 					yPos = tyPos;
+					loadingDiscs = yPos >= MIN_TRIPLE_Y && yPos < MAX_TRIPLE_Y ? 3
+							: 2;
 					updateContents();
 				}
 				break;
@@ -95,10 +106,10 @@ public class AutoLocFragment extends NamedTabFragment implements
 	}
 
 	protected void updateContents() {
-		View check = getView().findViewById(R.id.matchNoShow);
-		if (check != null && check instanceof CheckBox) {
-			((CheckBox) check).setChecked(noShow);
-		}
+		setState(R.id.matchNoShow, noShow);
+		setState(R.id.autoLoad2, loadingDiscs == 2);
+		setState(R.id.autoLoad3, loadingDiscs == 3);
+
 		if (xPos == 0.0f && yPos == 0.0f) {
 			return;
 		}
@@ -107,8 +118,7 @@ public class AutoLocFragment extends NamedTabFragment implements
 		View textView = getView().findViewById(R.id.autoRobotLocation);
 		if (textView != null && textView instanceof TextView) {
 			((TextView) textView).setText(xPos + "," + yPos + "\n" + "Loading "
-					+ (yPos >= MIN_TRIPLE_Y && yPos < MAX_TRIPLE_Y ? 3 : 2)
-					+ " discs");
+					+ loadingDiscs + " discs");
 		}
 		if (v != null && vv != null) {
 			vv.setVisibility(View.VISIBLE);
@@ -124,7 +134,12 @@ public class AutoLocFragment extends NamedTabFragment implements
 	public void onClick(View v) {
 		if (v.getId() == R.id.matchNoShow && v instanceof CheckBox) {
 			noShow = ((CheckBox) v).isChecked();
+		} else if (v.getId() == R.id.autoLoad2 && v instanceof RadioButton) {
+			loadingDiscs = ((RadioButton) v).isChecked() ? 2 : 3;
+		} else if (v.getId() == R.id.autoLoad3 && v instanceof RadioButton) {
+			loadingDiscs = ((RadioButton) v).isChecked() ? 3 : 2;
 		}
+		updateContents();
 	}
 
 	@Override
@@ -132,8 +147,7 @@ public class AutoLocFragment extends NamedTabFragment implements
 		data.putBoolean(DataKeys.MATCH_NO_SHOW, noShow);
 		data.putFloat(DataKeys.MATCH_AUTO_LOC_X, xPos);
 		data.putFloat(DataKeys.MATCH_AUTO_LOC_Y, yPos);
-		data.putInteger(DataKeys.MATCH_AUTO_STARTING_DISCS,
-				yPos >= MIN_TRIPLE_Y && yPos < MAX_TRIPLE_Y ? 3 : 2);
+		data.putInteger(DataKeys.MATCH_AUTO_STARTING_DISCS, loadingDiscs);
 	}
 
 	@Override
@@ -141,6 +155,7 @@ public class AutoLocFragment extends NamedTabFragment implements
 		noShow = data.getBoolean(DataKeys.MATCH_NO_SHOW, false);
 		xPos = data.getFloat(DataKeys.MATCH_AUTO_LOC_X, 0);
 		yPos = data.getFloat(DataKeys.MATCH_AUTO_LOC_Y, 0);
+		loadingDiscs = data.getInteger(DataKeys.MATCH_AUTO_STARTING_DISCS, 2);
 	}
 
 	@Override

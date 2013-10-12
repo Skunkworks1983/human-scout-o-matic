@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -102,8 +104,10 @@ public abstract class NamedTabFragment extends Fragment {
 	protected final void setState(int id, boolean state) {
 		View vv = getView().findViewById(id);
 		if (vv != null) {
-			if (vv instanceof CheckBox) {
-				((CheckBox) vv).setChecked(state);
+			if (vv instanceof CompoundButton) {
+				((CompoundButton) vv).setChecked(state);
+			} else if (vv instanceof Checkable) {
+				((Checkable) vv).setChecked(state);
 			} else if (vv instanceof Button) {
 				((Button) vv).setSelected(state);
 			}
