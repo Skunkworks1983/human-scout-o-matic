@@ -125,6 +125,16 @@ public class MainActivity extends FragmentActivity implements
 		});
 	}
 
+	public void onResume() {
+		super.onResume();
+		backend.beginQueue();
+	}
+
+	public void onPause() {
+		super.onPause();
+		backend.shutdownQueue();
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();

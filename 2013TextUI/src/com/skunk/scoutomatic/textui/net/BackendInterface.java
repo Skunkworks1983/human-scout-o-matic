@@ -198,4 +198,20 @@ public class BackendInterface implements Runnable {
 		} catch (RuntimeException e) {
 		}
 	}
+
+	public void shutdownQueue() {
+		networkPool.shutdown();
+	}
+
+	public void beginQueue() {
+		shutdownQueue();
+		try {
+			networkPool.awaitTermination(2000, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+		}
+		networkPool.scheduleAtFixedRate(this, activity.getLongPreference(
+				SettingsKeys.BACKEND_POLL_SPEED, DEFAULT_NETWORK_TRY_SPEED),
+				activity.getLongPreference(SettingsKeys.BACKEND_POLL_SPEED,
+						DEFAULT_NETWORK_TRY_SPEED), TimeUnit.SECONDS);
+	}
 }
