@@ -30,7 +30,7 @@ import android.util.Log;
  */
 public class JSONNetwork {
 	public static String getJSONFromUrl(String url, JSONObject postData,
-			NameValuePair... getParams) {
+			NameValuePair... getParams) throws Exception {
 		InputStream is = null;
 		String json = null;
 		try {
@@ -70,14 +70,11 @@ public class JSONNetwork {
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		}
 
 		try {

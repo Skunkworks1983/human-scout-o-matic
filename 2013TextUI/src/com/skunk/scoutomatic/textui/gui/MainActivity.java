@@ -46,6 +46,7 @@ import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
 import com.skunk.scoutomatic.textui.gui.frag.WelcomeFragment;
 import com.skunk.scoutomatic.textui.gui.frag.dummy.GoBackFragment;
 import com.skunk.scoutomatic.textui.gui.frag.dummy.SubmitFragment;
+import com.skunk.scoutomatic.textui.gui.frag.support.NetworkManagementFragment;
 import com.skunk.scoutomatic.textui.gui.frag.support.SettingsFragment;
 import com.skunk.scoutomatic.textui.net.BackendInterface;
 import com.skunk.scoutomatic.textui.net.FutureProcessor;
@@ -132,7 +133,7 @@ public class MainActivity extends FragmentActivity implements
 
 	public void onPause() {
 		super.onPause();
-		backend.shutdownQueue();
+		backend.shutdownQueue(100L);
 	}
 
 	@Override
@@ -150,6 +151,7 @@ public class MainActivity extends FragmentActivity implements
 			return true;
 		case R.id.menuNetState:
 			// Do stuff
+			setFragment(NetworkManagementFragment.class);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -308,5 +310,9 @@ public class MainActivity extends FragmentActivity implements
 				}
 			});
 		}
+	}
+
+	public BackendInterface getBackend() {
+		return backend;
 	}
 }

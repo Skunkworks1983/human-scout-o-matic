@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.NameValuePair;
@@ -21,6 +22,7 @@ import android.util.Log;
 
 import com.skunk.scoutomatic.textui.CollectedData;
 import com.skunk.scoutomatic.textui.DataCache;
+import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.SettingsKeys;
 import com.skunk.scoutomatic.textui.gui.MainActivity;
 
@@ -40,19 +42,34 @@ public class BackendInterface implements Runnable {
 	private static final int DEFAULT_SCOUT_ID = 0;
 	public static final String DEFAULT_EVENT_ID = "2013wase";
 
-	private static class NetworkAction {
+	public static class NetworkAction {
+		private String id;
 		private JSONObject postData;
 		private FutureProcessor<String> futureProcessor;
 		private String url;
 		private NameValuePair[] varsGET;
 		private int tries = 0;
+		private String error = "";
 
-		public NetworkAction(String url, JSONObject postData,
+		private NetworkAction(String id, String url, JSONObject postData,
 				FutureProcessor<String> callback, NameValuePair[] getVars) {
+			this.id = id;
 			this.url = url;
 			this.postData = postData;
 			this.futureProcessor = callback;
 			this.varsGET = getVars;
+		}
+
+		public String getError() {
+			return error;
+		}
+
+		public String getID() {
+			return id;
+		}
+
+		public int getTries() {
+			return tries;
 		}
 
 		private boolean tryNetworkAction() {
@@ -65,8 +82,10 @@ public class BackendInterface implements Runnable {
 				if (futureProcessor != null) {
 					futureProcessor.run(s);
 				}
+				error = "";
 				return true;
 			} catch (Exception e) {
+				error = "Error: " + e.getMessage();
 				Log.e("NET", e.toString());
 				return false;
 			}
@@ -74,19 +93,21 @@ public class BackendInterface implements Runnable {
 	}
 
 	private Queue<ScoutableMatch> scoutingQueue = new LinkedBlockingQueue<ScoutableMatch>();
-	private final ScheduledExecutorService networkPool;
+	private ScheduledExecutorService networkPool;
 	private final MainActivity activity;
 
 	private List<NetworkAction> deferredNetworkActions = Collections
 			.synchronizedList(new ArrayList<NetworkAction>());
+	private ScheduledFuture<?> defferedProcessor;
 
 	public BackendInterface(MainActivity act) {
 		networkPool = Executors.newScheduledThreadPool(1);
 		activity = act;
-		networkPool.scheduleAtFixedRate(this, activity.getLongPreference(
+		defferedProcessor = networkPool.scheduleAtFixedRate(this, activity
+				.getLongPreference(SettingsKeys.BACKEND_POLL_SPEED,
+						DEFAULT_NETWORK_TRY_SPEED), activity.getLongPreference(
 				SettingsKeys.BACKEND_POLL_SPEED, DEFAULT_NETWORK_TRY_SPEED),
-				activity.getLongPreference(SettingsKeys.BACKEND_POLL_SPEED,
-						DEFAULT_NETWORK_TRY_SPEED), TimeUnit.SECONDS);
+				TimeUnit.SECONDS);
 	}
 
 	private final String getAPIServer() {
@@ -122,7 +143,7 @@ public class BackendInterface implements Runnable {
 							.getJSONObject(i)));
 				}
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -148,8 +169,11 @@ public class BackendInterface implements Runnable {
 	public void pushMatchInformation(final DataCache cache) {
 		try {
 			final JSONObject matchData = CollectedData.createMatchData(cache);
-			NetworkAction action = new NetworkAction(getAPIServer()
-					+ API_POST_MATCH_DATA, matchData,
+			NetworkAction action = new NetworkAction("Robot "
+					+ cache.getInteger(DataKeys.MATCH_TEAM, -1) + " in match "
+					+ cache.getInteger(DataKeys.MATCH_NUMBER, -1) + " of "
+					+ cache.getString(DataKeys.MATCH_COMPETITION, "null"),
+					getAPIServer() + API_POST_MATCH_DATA, matchData,
 					new FutureProcessor<String>() {
 						@Override
 						public void run(String o) {
@@ -188,6 +212,7 @@ public class BackendInterface implements Runnable {
 			// Try network actions; if we manage remove it
 			Iterator<NetworkAction> iterator = deferredNetworkActions
 					.iterator();
+
 			while (iterator.hasNext()) {
 				NetworkAction action = iterator.next();
 				boolean returnVal = action.tryNetworkAction();
@@ -195,23 +220,33 @@ public class BackendInterface implements Runnable {
 					iterator.remove();
 				}
 			}
+
 		} catch (RuntimeException e) {
 		}
 	}
 
-	public void shutdownQueue() {
-		networkPool.shutdown();
+	public List<NetworkAction> getBacklog() {
+		return deferredNetworkActions;
+	}
+
+	public void shutdownQueue(long wait) {
+		if (defferedProcessor != null && !defferedProcessor.isCancelled()) {
+			defferedProcessor.cancel(false);
+			if (wait > 0) {
+				try {
+					defferedProcessor.get(wait, TimeUnit.MILLISECONDS);
+				} catch (Exception e) {
+				}
+			}
+		}
 	}
 
 	public void beginQueue() {
-		shutdownQueue();
-		try {
-			networkPool.awaitTermination(2000, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-		}
-		networkPool.scheduleAtFixedRate(this, activity.getLongPreference(
+		shutdownQueue(2000L);
+		defferedProcessor = networkPool.scheduleAtFixedRate(this, activity
+				.getLongPreference(SettingsKeys.BACKEND_POLL_SPEED,
+						DEFAULT_NETWORK_TRY_SPEED), activity.getLongPreference(
 				SettingsKeys.BACKEND_POLL_SPEED, DEFAULT_NETWORK_TRY_SPEED),
-				activity.getLongPreference(SettingsKeys.BACKEND_POLL_SPEED,
-						DEFAULT_NETWORK_TRY_SPEED), TimeUnit.SECONDS);
+				TimeUnit.SECONDS);
 	}
 }
