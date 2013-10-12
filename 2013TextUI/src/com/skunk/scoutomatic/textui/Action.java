@@ -17,13 +17,13 @@ public class Action {
 	public Action(ActionType type, String result, float x, float y, long time) {
 		if (result == null || result.length() == 0) {
 			result = "null";
-			Log.w("DB", "Action with null result was created!");
+			Log.w("DB", "Action with null result was created! (" + type.name() + ")");
 		} else if (result.equals("0.0")) {
 			result = "0.01"; // Safety
-			Log.w("DB", "Action with zero result was created!");
+			Log.w("DB", "Action with zero result was created! (" + type.name() + ")");
 		} else if (result.equals("0")) {
 			result = "0.01"; // Safety
-			Log.w("DB", "Action with zero result was created!");
+			Log.w("DB", "Action with zero result was created! (" + type.name() + ")");
 		}
 		this.type = type;
 		this.result = result;

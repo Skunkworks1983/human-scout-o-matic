@@ -202,7 +202,9 @@ public class ReviewFoulsSkillsFragment extends NamedTabFragment implements
 		ActionCacheUtil.dropByType(actionDB, ActionType.REVIEW_COMMENT, null);
 		String[] commentLines = comments.split("\n");
 		for (String s : commentLines) {
-			actionDB.add(new Action(ActionType.REVIEW_COMMENT, s, -1));
+			if (s != null && s.length() > 0) {
+				actionDB.add(new Action(ActionType.REVIEW_COMMENT, s, -1));
+			}
 		}
 		ActionCacheUtil.forceCount(actionDB, ActionType.FOUL,
 				ActionResults.FOUL_GENERIC, foulCount);
