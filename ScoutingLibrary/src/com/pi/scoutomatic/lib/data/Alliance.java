@@ -1,4 +1,5 @@
-package com.skunk.scoutomatic.textui;
+package com.pi.scoutomatic.lib.data;
+
 
 /**
  * Created on: Sep 22, 2013

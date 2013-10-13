@@ -1,4 +1,4 @@
-package com.skunk.scoutomatic.textui;
+package com.skunk.scoutomatic.textui.gui;
 
 /**
  * Created on: Oct 9, 2013

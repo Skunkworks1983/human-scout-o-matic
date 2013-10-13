@@ -3,8 +3,8 @@ package com.skunk.scoutomatic.textui.gui.frag.support;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
-import com.skunk.scoutomatic.textui.DataCache;
-import com.skunk.scoutomatic.textui.R;
+import com.pi.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.R;
 import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
 import com.skunk.scoutomatic.textui.gui.frag.dummy.GoBackFragment;
 

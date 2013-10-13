@@ -25,12 +25,14 @@ public abstract class NamedTabFragmentImpl extends Fragment implements
 	}
 
 	public void postUpdate() {
-		getView().post(new Runnable() {
-			public void run() {
-				updateContents();
-			}
-		});
-		getView().postInvalidate();
+		if (getView() != null) {
+			getView().post(new Runnable() {
+				public void run() {
+					updateContents();
+				}
+			});
+			getView().postInvalidate();
+		}
 	}
 
 	protected final void setText(int id, String val) {

@@ -1,4 +1,4 @@
-package com.skunk.scoutomatic.textui.net;
+package com.pi.scoutomatic.lib.net;
 
 /**
  * Created on: Sep 22, 2013

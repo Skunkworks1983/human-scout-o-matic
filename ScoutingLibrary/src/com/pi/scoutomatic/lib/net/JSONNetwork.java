@@ -1,4 +1,4 @@
-package com.skunk.scoutomatic.textui.net;
+package com.pi.scoutomatic.lib.net;
 
 import java.io.BufferedReader;
 import java.io.IOException;

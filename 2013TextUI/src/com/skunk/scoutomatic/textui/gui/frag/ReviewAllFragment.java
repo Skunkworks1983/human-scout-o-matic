@@ -10,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.pi.scoutomatic.lib.data.DataCache;
 import com.skunk.scoutomatic.textui.Action;
 import com.skunk.scoutomatic.textui.ActionCacheUtil;
 import com.skunk.scoutomatic.textui.ActionResults;
 import com.skunk.scoutomatic.textui.ActionType;
-import com.skunk.scoutomatic.textui.DataCache;
 import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
 import com.skunk.scoutomatic.textui.gui.frag.dummy.SubmitFragment;
@@ -225,7 +225,6 @@ public class ReviewAllFragment extends NamedTabFragmentImpl {
 				data.getBoolean(DataKeys.MATCH_FOULS_RED_CARD, false) ? 1 : 0);
 
 		data.putList(DataKeys.MATCH_ACTIONS_KEY, actionDB);
-		Log.d("DATA", Arrays.toString(actionDB.toArray()));
 	}
 
 	@Override

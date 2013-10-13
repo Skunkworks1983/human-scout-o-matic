@@ -1,4 +1,4 @@
-package com.skunk.scoutomatic.textui;
+package com.pi.scoutomatic.lib.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;

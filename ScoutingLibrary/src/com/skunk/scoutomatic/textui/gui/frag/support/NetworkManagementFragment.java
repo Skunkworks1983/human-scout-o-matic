@@ -9,14 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.skunk.scoutomatic.textui.DataCache;
-import com.skunk.scoutomatic.textui.R;
-import com.skunk.scoutomatic.textui.gui.MainActivity;
+import com.pi.scoutomatic.lib.data.DataCache;
+import com.pi.scoutomatic.lib.net.BackendInterface;
+import com.pi.scoutomatic.lib.net.NetworkAction;
+import com.skunk.scoutomatic.lib.R;
+import com.skunk.scoutomatic.textui.gui.ScoutingActivity;
 import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
 import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragmentImpl;
 import com.skunk.scoutomatic.textui.gui.frag.dummy.GoBackFragment;
-import com.skunk.scoutomatic.textui.net.BackendInterface;
-import com.skunk.scoutomatic.textui.net.BackendInterface.NetworkAction;
 
 /**
  * Created on: Oct 11, 2013
@@ -75,8 +75,9 @@ public class NetworkManagementFragment extends NamedTabFragmentImpl {
 		@Override
 		public int getCount() {
 			Activity act = getActivity();
-			if (act != null && act instanceof MainActivity) {
-				BackendInterface backend = ((MainActivity) act).getBackend();
+			if (act != null && act instanceof ScoutingActivity) {
+				BackendInterface backend = ((ScoutingActivity) act)
+						.getBackend();
 				return backend.getBacklog().size();
 			}
 			return 0;
@@ -100,8 +101,9 @@ public class NetworkManagementFragment extends NamedTabFragmentImpl {
 			}
 			String value = "";
 			Activity act = getActivity();
-			if (act != null && act instanceof MainActivity) {
-				BackendInterface backend = ((MainActivity) act).getBackend();
+			if (act != null && act instanceof ScoutingActivity) {
+				BackendInterface backend = ((ScoutingActivity) act)
+						.getBackend();
 				if (backend.getBacklog().size() > position && position >= 0) {
 					NetworkAction nact = backend.getBacklog().get(position);
 					if (nact != null) {

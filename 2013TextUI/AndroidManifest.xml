@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".gui.MainActivity"
+            android:name=".gui.Text2013Activity"
             android:label="Scout-o-Matic-TextUI" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

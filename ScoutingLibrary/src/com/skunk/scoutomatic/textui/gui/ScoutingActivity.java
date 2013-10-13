@@ -16,6 +16,7 @@
 package com.skunk.scoutomatic.textui.gui;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -26,9 +27,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLayoutChangeListener;
 import android.view.WindowManager;
@@ -37,32 +35,77 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.skunk.scoutomatic.textui.DataCache;
-import com.skunk.scoutomatic.textui.DataKeys;
-import com.skunk.scoutomatic.textui.MessageReciever;
-import com.skunk.scoutomatic.textui.R;
-import com.skunk.scoutomatic.textui.SettingsKeys;
+import com.pi.scoutomatic.lib.data.DataCache;
+import com.pi.scoutomatic.lib.data.Pair;
+import com.pi.scoutomatic.lib.net.BackendInterface;
+import com.skunk.scoutomatic.lib.R;
 import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
-import com.skunk.scoutomatic.textui.gui.frag.WelcomeFragment;
 import com.skunk.scoutomatic.textui.gui.frag.dummy.GoBackFragment;
 import com.skunk.scoutomatic.textui.gui.frag.dummy.SubmitFragment;
-import com.skunk.scoutomatic.textui.gui.frag.support.NetworkManagementFragment;
-import com.skunk.scoutomatic.textui.gui.frag.support.SettingsFragment;
-import com.skunk.scoutomatic.textui.net.BackendInterface;
-import com.skunk.scoutomatic.textui.net.FutureProcessor;
-import com.skunk.scoutomatic.textui.net.ScoutableMatch;
 
-public class MainActivity extends FragmentActivity implements
+public abstract class ScoutingActivity extends FragmentActivity implements
 		OnLayoutChangeListener, MessageReciever {
 	private Map<Class<? extends INamedTabFragment>, INamedTabFragment> fragments = new HashMap<Class<? extends INamedTabFragment>, INamedTabFragment>();
-	private INamedTabFragment currentFragment = new WelcomeFragment();
-	private BackendInterface backend;
+	private INamedTabFragment currentFragment;
 	private Stack<Class<? extends INamedTabFragment>> history = new Stack<Class<? extends INamedTabFragment>>();
 
 	private DataCache dataHeap = new DataCache(new HashMap<String, Object>());
+	private Class<? extends INamedTabFragment> startingFragment;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	/**
+	 * When this sees a null argument it will clear the heap.
+	 * 
+	 * @param commitables
+	 */
+	public void commitDataHeap(Pair... commitables) {
+		if (currentFragment != null) {
+			currentFragment.storeInformation(dataHeap);
+		}
+		for (int i = 0; i < commitables.length; i++) {
+			Pair commit = commitables[i];
+			if (commit == null || commit.getKey() == null
+					|| commit.getValue() == null) {
+				dataHeap.getData().clear();
+			} else if (commit.getValue() instanceof Integer) {
+				dataHeap.putInteger(commit.getKey(),
+						((Integer) commit.getValue()).intValue());
+			} else if (commit.getValue() instanceof Float) {
+				dataHeap.putFloat(commit.getKey(),
+						((Float) commit.getValue()).floatValue());
+			} else if (commit.getValue() instanceof Long) {
+				dataHeap.putLong(commit.getKey(),
+						((Long) commit.getValue()).longValue());
+			} else if (commit.getValue() instanceof Boolean) {
+				dataHeap.putBoolean(commit.getKey(),
+						((Boolean) commit.getValue()).booleanValue());
+			} else if (commit.getValue() instanceof List) {
+				dataHeap.putList(commit.getKey(), (List<?>) commit.getValue());
+			} else if (commit.getValue() != null) {
+				dataHeap.putString(commit.getKey(), commit.getValue()
+						.toString());
+			}
+		}
+		if (currentFragment != null) {
+			currentFragment.loadInformation(dataHeap);
+			currentFragment.postUpdate();
+		}
+	}
+
+	/**
+	 * Gets a DataHeap that can be read from.
+	 * 
+	 * Note: Don't WRITE to this data heap. It will cause unexpected stuff to
+	 * happen.
+	 * 
+	 * @return the data heap
+	 */
+	public DataCache getDataHeap() {
+		return dataHeap;
+	}
+
+	public void onCreate(Bundle savedInstanceState,
+			Class<? extends INamedTabFragment> startingFragment) {
+		this.startingFragment = startingFragment;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		getWindow().setSoftInputMode(
@@ -73,22 +116,10 @@ public class MainActivity extends FragmentActivity implements
 		v = findViewById(R.id.mainActNav);
 		v.setMinimumHeight(100);
 
-		backend = new BackendInterface(this);
-		dataHeap.putString(
-				DataKeys.MATCH_COMPETITION,
-				PreferenceManager.getDefaultSharedPreferences(
-						getApplicationContext()).getString(
-						SettingsKeys.PREF_COMPETITION_ID,
-						BackendInterface.DEFAULT_EVENT_ID));
 		PreferenceManager.setDefaultValues(getApplicationContext(),
 				R.xml.scouting_preferences, false);
 		if (findViewById(R.id.main_fragment_container) != null) {
-			fragments.put(currentFragment.getClass(), currentFragment);
-			getFragmentManager()
-					.beginTransaction()
-					.add(R.id.main_fragment_container,
-							(Fragment) currentFragment).commit();
-			setFragment(currentFragment.getClass());
+			setFragment(startingFragment);
 		}
 	}
 
@@ -112,69 +143,36 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
-	public void proceedToNextMatch() {
-		backend.popScoutingQueue(new FutureProcessor<ScoutableMatch>() {
-			@Override
-			public void run(ScoutableMatch mm) {
-				Log.d("NET", "Scouting match: " + mm.getMatchID());
-				currentFragment.storeInformation(dataHeap);
-				dataHeap.putInteger(DataKeys.MATCH_NUMBER, mm.getMatchID());
-				dataHeap.putInteger(DataKeys.MATCH_TEAM, mm.getRobotID());
-				currentFragment.loadInformation(dataHeap);
-				currentFragment.postUpdate();
-			}
-		});
-	}
+	protected abstract void onSubmit();
 
 	public void onResume() {
 		super.onResume();
-		backend.beginQueue();
+		getBackend().beginQueue();
 	}
 
 	public void onPause() {
 		super.onPause();
-		backend.shutdownQueue(100L);
+		getBackend().shutdownQueue(100L);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.action_bar, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menuConfig:
-			setFragment(SettingsFragment.class);
-			return true;
-		case R.id.menuNetState:
-			// Do stuff
-			setFragment(NetworkManagementFragment.class);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	private void setFragment(Class<? extends INamedTabFragment> fragClass) {
+	protected void setFragment(Class<? extends INamedTabFragment> fragClass) {
 		if (fragClass == null) {
 			return;
 		}
 		try {
-			boolean initWelcome = currentFragment == null
-					|| currentFragment.getClass().equals(fragClass);
-
-			if (currentFragment != null && !initWelcome) {
+			if (currentFragment != null) {
 				currentFragment.storeInformation(dataHeap);
 			}
 
 			if (fragClass == SubmitFragment.class) {
-				submitData();
-				initWelcome = true;
-				fragClass = WelcomeFragment.class;
+				onTabChanged(
+						currentFragment != null ? currentFragment.getClass()
+								: null, SubmitFragment.class);
+				fragClass = startingFragment;
 			} else if (fragClass == GoBackFragment.class) {
+				onTabChanged(
+						currentFragment != null ? currentFragment.getClass()
+								: null, GoBackFragment.class);
 				if (history.size() > 0) {
 					int size = history.size();
 					setFragment(history.pop());
@@ -183,18 +181,18 @@ public class MainActivity extends FragmentActivity implements
 						history.pop();
 					}
 				} else {
-					setFragment(WelcomeFragment.class);
+					setFragment(startingFragment);
 				}
 				return;
 			}
-			
+
 			INamedTabFragment tab = fragments.get(fragClass);
 			if (tab == null) {
 				tab = fragClass.newInstance();
 				fragments.put(fragClass, tab);
 			}
 			// Replace it
-			if (currentFragment != null && !initWelcome) {
+			if (currentFragment != null) {
 				// Hide keyboard if needed
 				if (getCurrentFocus() != null && !tab.needsKeyboard()) {
 					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -205,6 +203,7 @@ public class MainActivity extends FragmentActivity implements
 			if (currentFragment != tab && currentFragment != null) {
 				history.add(currentFragment.getClass());
 			}
+			INamedTabFragment lastFragment = currentFragment;
 			currentFragment = tab;
 			currentFragment.loadInformation(dataHeap);
 
@@ -232,29 +231,16 @@ public class MainActivity extends FragmentActivity implements
 				right.setVisibility(tab.getNext() != null ? View.VISIBLE
 						: View.INVISIBLE);
 			}
-			if (initWelcome) {
-				proceedToNextMatch();
-			}
+			onTabChanged(lastFragment != null ? lastFragment.getClass() : null,
+					currentFragment != null ? currentFragment.getClass() : null);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void submitData() {
-		backend.pushMatchInformation(dataHeap);
-		// Now clear the cache except for small stuff
-		String scoutName = dataHeap.getString(DataKeys.MATCH_SCOUT, "");
-		int nextMatch = dataHeap.getInteger(DataKeys.MATCH_NUMBER, 0) + 1;
-		dataHeap.getData().clear();
-		dataHeap.putString(
-				DataKeys.MATCH_COMPETITION,
-				PreferenceManager.getDefaultSharedPreferences(
-						getApplicationContext()).getString(
-						SettingsKeys.PREF_COMPETITION_ID,
-						BackendInterface.DEFAULT_EVENT_ID));
-		dataHeap.putInteger(DataKeys.MATCH_NUMBER, nextMatch);
-		dataHeap.putString(DataKeys.MATCH_SCOUT, scoutName);
-	}
+	protected abstract void onTabChanged(
+			Class<? extends INamedTabFragment> from,
+			Class<? extends INamedTabFragment> to);
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -311,14 +297,13 @@ public class MainActivity extends FragmentActivity implements
 			vv.post(new Runnable() {
 				public void run() {
 					Log.i("TOAST", src.getSimpleName() + ": " + message);
-					Toast.makeText(MainActivity.super.getApplicationContext(),
+					Toast.makeText(
+							ScoutingActivity.super.getApplicationContext(),
 							message, Toast.LENGTH_LONG).show();
 				}
 			});
 		}
 	}
 
-	public BackendInterface getBackend() {
-		return backend;
-	}
+	public abstract BackendInterface getBackend();
 }
