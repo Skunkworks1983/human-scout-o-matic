@@ -165,6 +165,11 @@ public class MainActivity extends FragmentActivity implements
 		try {
 			boolean initWelcome = currentFragment == null
 					|| currentFragment.getClass().equals(fragClass);
+
+			if (currentFragment != null && !initWelcome) {
+				currentFragment.storeInformation(dataHeap);
+			}
+
 			if (fragClass == SubmitFragment.class) {
 				submitData();
 				initWelcome = true;
@@ -182,6 +187,7 @@ public class MainActivity extends FragmentActivity implements
 				}
 				return;
 			}
+			
 			INamedTabFragment tab = fragments.get(fragClass);
 			if (tab == null) {
 				tab = fragClass.newInstance();
@@ -189,8 +195,6 @@ public class MainActivity extends FragmentActivity implements
 			}
 			// Replace it
 			if (currentFragment != null && !initWelcome) {
-				currentFragment.storeInformation(dataHeap);
-
 				// Hide keyboard if needed
 				if (getCurrentFocus() != null && !tab.needsKeyboard()) {
 					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -240,6 +244,7 @@ public class MainActivity extends FragmentActivity implements
 		backend.pushMatchInformation(dataHeap);
 		// Now clear the cache except for small stuff
 		String scoutName = dataHeap.getString(DataKeys.MATCH_SCOUT, "");
+		int nextMatch = dataHeap.getInteger(DataKeys.MATCH_NUMBER, 0) + 1;
 		dataHeap.getData().clear();
 		dataHeap.putString(
 				DataKeys.MATCH_COMPETITION,
@@ -247,6 +252,7 @@ public class MainActivity extends FragmentActivity implements
 						getApplicationContext()).getString(
 						SettingsKeys.PREF_COMPETITION_ID,
 						BackendInterface.DEFAULT_EVENT_ID));
+		dataHeap.putInteger(DataKeys.MATCH_NUMBER, nextMatch);
 		dataHeap.putString(DataKeys.MATCH_SCOUT, scoutName);
 	}
 

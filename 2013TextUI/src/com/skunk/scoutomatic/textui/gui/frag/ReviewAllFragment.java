@@ -308,6 +308,6 @@ public class ReviewAllFragment extends NamedTabFragmentImpl {
 
 	@Override
 	public boolean needsKeyboard() {
-		return true;
+		return false;
 	}
 }

@@ -143,7 +143,8 @@ public class BackendInterface implements Runnable {
 							.getJSONObject(i)));
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.e("NET", "Couldn't get scouting queue.  (" + e.getMessage()
+						+ ")");
 			}
 		}
 	}
