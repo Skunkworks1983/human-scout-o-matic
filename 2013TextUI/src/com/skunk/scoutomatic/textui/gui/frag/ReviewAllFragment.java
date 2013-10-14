@@ -8,14 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pi.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.gui.frag.NamedTabFragmentImpl;
+import com.skunk.scoutomatic.lib.gui.frag.dummy.SubmitFragment;
 import com.skunk.scoutomatic.textui.Action;
 import com.skunk.scoutomatic.textui.ActionCacheUtil;
 import com.skunk.scoutomatic.textui.ActionResults;
 import com.skunk.scoutomatic.textui.ActionType;
 import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
-import com.skunk.scoutomatic.textui.gui.frag.dummy.SubmitFragment;
 
 /**
  * Created on: Sep 21, 2013

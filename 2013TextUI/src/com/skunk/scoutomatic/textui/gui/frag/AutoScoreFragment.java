@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
-import com.pi.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.gui.frag.NamedTabFragmentImpl;
 import com.skunk.scoutomatic.textui.Action;
 import com.skunk.scoutomatic.textui.ActionCacheUtil;
 import com.skunk.scoutomatic.textui.ActionResults;

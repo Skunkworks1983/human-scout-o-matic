@@ -11,7 +11,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
-import com.pi.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.gui.frag.NamedTabFragmentImpl;
 import com.skunk.scoutomatic.textui.Action;
 import com.skunk.scoutomatic.textui.ActionCacheUtil;
 import com.skunk.scoutomatic.textui.ActionResults;

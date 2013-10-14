@@ -1,4 +1,4 @@
-package com.pi.scoutomatic.lib.net;
+package com.skunk.scoutomatic.lib.net;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONObject;

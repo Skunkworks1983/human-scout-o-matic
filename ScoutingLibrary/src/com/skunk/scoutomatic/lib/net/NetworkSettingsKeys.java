@@ -1,4 +1,4 @@
-package com.pi.scoutomatic.lib.net;
+package com.skunk.scoutomatic.lib.net;
 
 public class NetworkSettingsKeys {
 	public static final String BACKEND_URI = "backend-address";

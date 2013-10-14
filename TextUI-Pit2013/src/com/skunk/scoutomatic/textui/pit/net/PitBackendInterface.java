@@ -11,10 +11,10 @@ import org.json.JSONArray;
 import android.content.Context;
 import android.util.Log;
 
-import com.pi.scoutomatic.lib.data.DataCache;
-import com.pi.scoutomatic.lib.net.BackendInterface;
-import com.pi.scoutomatic.lib.net.FutureProcessor;
-import com.pi.scoutomatic.lib.net.NetworkAction;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.net.BackendInterface;
+import com.skunk.scoutomatic.lib.net.FutureProcessor;
+import com.skunk.scoutomatic.lib.net.NetworkAction;
 import com.skunk.scoutomatic.textui.pit.gui.PitMainActivity;
 
 /**

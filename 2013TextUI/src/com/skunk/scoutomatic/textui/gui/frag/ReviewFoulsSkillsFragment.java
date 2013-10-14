@@ -15,7 +15,8 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 
-import com.pi.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.gui.frag.NamedTabFragmentImpl;
 import com.skunk.scoutomatic.textui.Action;
 import com.skunk.scoutomatic.textui.ActionCacheUtil;
 import com.skunk.scoutomatic.textui.ActionResults;

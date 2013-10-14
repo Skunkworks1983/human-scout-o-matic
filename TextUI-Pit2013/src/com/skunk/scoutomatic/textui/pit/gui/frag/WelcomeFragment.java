@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.pi.scoutomatic.lib.data.DataCache;
-import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
-import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragmentImpl;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.gui.frag.INamedTabFragment;
+import com.skunk.scoutomatic.lib.gui.frag.NamedTabFragmentImpl;
 import com.skunk.scoutomatic.textui.pit.DataKeys;
 import com.skunk.scoutomatic.textui.pit.R;
 

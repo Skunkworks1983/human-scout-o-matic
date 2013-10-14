@@ -1,12 +1,12 @@
-package com.skunk.scoutomatic.textui.gui.frag.support;
+package com.skunk.scoutomatic.lib.gui.frag.support;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
-import com.pi.scoutomatic.lib.data.DataCache;
 import com.skunk.scoutomatic.lib.R;
-import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
-import com.skunk.scoutomatic.textui.gui.frag.dummy.GoBackFragment;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.gui.frag.INamedTabFragment;
+import com.skunk.scoutomatic.lib.gui.frag.dummy.GoBackFragment;
 
 /**
  * Created on: Oct 11, 2013

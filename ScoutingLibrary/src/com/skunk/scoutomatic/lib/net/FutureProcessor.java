@@ -1,4 +1,4 @@
-package com.pi.scoutomatic.lib.net;
+package com.skunk.scoutomatic.lib.net;
 
 /**
  * Created on: Sep 22, 2013

@@ -1,7 +1,7 @@
-package com.skunk.scoutomatic.textui.gui.frag.dummy;
+package com.skunk.scoutomatic.lib.gui.frag.dummy;
 
-import com.pi.scoutomatic.lib.data.DataCache;
-import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragmentImpl;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.gui.frag.NamedTabFragmentImpl;
 
 /**
  * It's a dummy! (Maybe it will have network stuffs later) Created on: Sep 22,

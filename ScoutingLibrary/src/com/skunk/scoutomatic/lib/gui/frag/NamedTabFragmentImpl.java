@@ -1,4 +1,4 @@
-package com.skunk.scoutomatic.textui.gui.frag;
+package com.skunk.scoutomatic.lib.gui.frag;
 
 import android.app.Fragment;
 import android.view.View;

@@ -3,7 +3,7 @@ package com.skunk.scoutomatic.textui.net;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.pi.scoutomatic.lib.data.Alliance;
+import com.skunk.scoutomatic.lib.data.Alliance;
 
 /**
  * Created on: Sep 22, 2013

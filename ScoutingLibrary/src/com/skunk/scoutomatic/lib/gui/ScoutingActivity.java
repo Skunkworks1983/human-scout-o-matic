@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.skunk.scoutomatic.textui.gui;
+package com.skunk.scoutomatic.lib.gui;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,13 +35,13 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pi.scoutomatic.lib.data.DataCache;
-import com.pi.scoutomatic.lib.data.Pair;
-import com.pi.scoutomatic.lib.net.BackendInterface;
 import com.skunk.scoutomatic.lib.R;
-import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
-import com.skunk.scoutomatic.textui.gui.frag.dummy.GoBackFragment;
-import com.skunk.scoutomatic.textui.gui.frag.dummy.SubmitFragment;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.data.Pair;
+import com.skunk.scoutomatic.lib.gui.frag.INamedTabFragment;
+import com.skunk.scoutomatic.lib.gui.frag.dummy.GoBackFragment;
+import com.skunk.scoutomatic.lib.gui.frag.dummy.SubmitFragment;
+import com.skunk.scoutomatic.lib.net.BackendInterface;
 
 public abstract class ScoutingActivity extends FragmentActivity implements
 		OnLayoutChangeListener, MessageReciever {

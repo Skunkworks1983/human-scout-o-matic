@@ -1,4 +1,4 @@
-package com.pi.scoutomatic.lib.data;
+package com.skunk.scoutomatic.lib.data;
 
 public class Pair {
 	private String key;

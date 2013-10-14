@@ -1,4 +1,4 @@
-package com.skunk.scoutomatic.textui.gui.frag.support;
+package com.skunk.scoutomatic.lib.gui.frag.support;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,14 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.pi.scoutomatic.lib.data.DataCache;
-import com.pi.scoutomatic.lib.net.BackendInterface;
-import com.pi.scoutomatic.lib.net.NetworkAction;
 import com.skunk.scoutomatic.lib.R;
-import com.skunk.scoutomatic.textui.gui.ScoutingActivity;
-import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
-import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragmentImpl;
-import com.skunk.scoutomatic.textui.gui.frag.dummy.GoBackFragment;
+import com.skunk.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.gui.ScoutingActivity;
+import com.skunk.scoutomatic.lib.gui.frag.INamedTabFragment;
+import com.skunk.scoutomatic.lib.gui.frag.NamedTabFragmentImpl;
+import com.skunk.scoutomatic.lib.gui.frag.dummy.GoBackFragment;
+import com.skunk.scoutomatic.lib.net.BackendInterface;
+import com.skunk.scoutomatic.lib.net.NetworkAction;
 
 /**
  * Created on: Oct 11, 2013

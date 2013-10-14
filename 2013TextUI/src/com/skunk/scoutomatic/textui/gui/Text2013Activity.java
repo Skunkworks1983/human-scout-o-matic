@@ -22,17 +22,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.pi.scoutomatic.lib.data.Pair;
-import com.pi.scoutomatic.lib.net.BackendInterface;
-import com.pi.scoutomatic.lib.net.FutureProcessor;
-import com.pi.scoutomatic.lib.net.NetworkSettingsKeys;
+import com.skunk.scoutomatic.lib.data.Pair;
+import com.skunk.scoutomatic.lib.gui.ScoutingActivity;
+import com.skunk.scoutomatic.lib.gui.frag.INamedTabFragment;
+import com.skunk.scoutomatic.lib.gui.frag.dummy.SubmitFragment;
+import com.skunk.scoutomatic.lib.gui.frag.support.NetworkManagementFragment;
+import com.skunk.scoutomatic.lib.gui.frag.support.SettingsFragment;
+import com.skunk.scoutomatic.lib.net.BackendInterface;
+import com.skunk.scoutomatic.lib.net.FutureProcessor;
+import com.skunk.scoutomatic.lib.net.NetworkSettingsKeys;
 import com.skunk.scoutomatic.textui.DataKeys;
 import com.skunk.scoutomatic.textui.R;
-import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
 import com.skunk.scoutomatic.textui.gui.frag.WelcomeFragment;
-import com.skunk.scoutomatic.textui.gui.frag.dummy.SubmitFragment;
-import com.skunk.scoutomatic.textui.gui.frag.support.NetworkManagementFragment;
-import com.skunk.scoutomatic.textui.gui.frag.support.SettingsFragment;
 import com.skunk.scoutomatic.textui.net.ScoutableMatch;
 import com.skunk.scoutomatic.textui.net.Text2013BackendInterface;
 

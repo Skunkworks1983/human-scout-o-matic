@@ -1,8 +1,8 @@
-package com.skunk.scoutomatic.textui.gui.frag;
+package com.skunk.scoutomatic.lib.gui.frag;
 
 import android.view.View;
 
-import com.pi.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.lib.data.DataCache;
 
 /**
  * Created on: Oct 11, 2013
