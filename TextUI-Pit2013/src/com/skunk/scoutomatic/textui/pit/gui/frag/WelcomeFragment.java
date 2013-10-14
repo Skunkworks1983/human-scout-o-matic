@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.skunk.scoutomatic.textui.pit.DataCache;
+import com.pi.scoutomatic.lib.data.DataCache;
+import com.skunk.scoutomatic.textui.gui.frag.INamedTabFragment;
+import com.skunk.scoutomatic.textui.gui.frag.NamedTabFragmentImpl;
 import com.skunk.scoutomatic.textui.pit.DataKeys;
 import com.skunk.scoutomatic.textui.pit.R;
 
@@ -17,7 +19,8 @@ import com.skunk.scoutomatic.textui.pit.R;
  * 
  * @author Westin Miller
  */
-public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
+public class WelcomeFragment extends NamedTabFragmentImpl implements
+		TextWatcher {
 	private String scoutName;
 	private String compID;
 	private int robotID;
@@ -45,12 +48,12 @@ public class WelcomeFragment extends NamedTabFragment implements TextWatcher {
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getNext() {
+	public Class<? extends INamedTabFragment> getNext() {
 		return null;
 	}
 
 	@Override
-	public Class<? extends NamedTabFragment> getPrevious() {
+	public Class<? extends INamedTabFragment> getPrevious() {
 		return null;
 	}
 

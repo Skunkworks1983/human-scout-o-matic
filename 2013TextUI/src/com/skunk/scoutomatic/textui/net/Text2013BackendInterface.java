@@ -15,7 +15,6 @@ import android.util.Log;
 import com.pi.scoutomatic.lib.data.DataCache;
 import com.pi.scoutomatic.lib.net.BackendInterface;
 import com.pi.scoutomatic.lib.net.FutureProcessor;
-import com.pi.scoutomatic.lib.net.JSONNetwork;
 import com.pi.scoutomatic.lib.net.NetworkAction;
 import com.skunk.scoutomatic.textui.CollectedData;
 import com.skunk.scoutomatic.textui.DataKeys;
@@ -36,28 +35,6 @@ public class Text2013BackendInterface extends BackendInterface {
 	public Text2013BackendInterface(Text2013Activity act) {
 		super();
 		this.activity = act;
-	}
-
-	private void fetchScoutingQueue() {
-		if (scoutingQueue.size() == 0) {
-			// Grab it
-			try {
-				JSONArray thingsToScout = new JSONArray(
-						JSONNetwork
-								.getJSONFromUrl(getAPIServer() + API_MATCHES,
-										null, new BasicNameValuePair(
-												"event_id", getEventID()),
-										new BasicNameValuePair("scout_id",
-												String.valueOf(getTabletID()))));
-				for (int i = 0; i < thingsToScout.length(); i++) {
-					scoutingQueue.add(new ScoutableMatch(thingsToScout
-							.getJSONObject(i)));
-				}
-			} catch (Exception e) {
-				Log.e("NET", "Couldn't get scouting queue.  (" + e.getMessage()
-						+ ")");
-			}
-		}
 	}
 
 	public Future<?> pollScoutingQueue(
@@ -106,7 +83,6 @@ public class Text2013BackendInterface extends BackendInterface {
 							activity.onMessage(BackendInterface.class, "Match "
 									+ mID + "'s data is off!");
 
-							fetchScoutingQueue();
 							while (scoutingQueue.size() > 0) {
 								if (scoutingQueue.peek().getMatchID() < mID) {
 									scoutingQueue.poll();
