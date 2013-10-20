@@ -7,13 +7,16 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 public class VertexObject {
-	private FloatBuffer mVertexBuffer;
-	private FloatBuffer mColorBuffer;
-	private FloatBuffer mTextureBuffer;
-	private ByteBuffer mIndexBuffer;
+	protected FloatBuffer mVertexBuffer;
+	protected FloatBuffer mColorBuffer;
+	protected FloatBuffer mTextureBuffer;
+	protected ByteBuffer mIndexBuffer;
 
-	public VertexObject(float vertices[], float colors[], float[] texture,
-			byte[] indices) {
+	private final int primitiveType;
+
+	public VertexObject(int primitiveType, float vertices[], float colors[],
+			float[] texture, byte[] indices) {
+		this.primitiveType = primitiveType;
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
 		mVertexBuffer = vbb.asFloatBuffer();
@@ -58,9 +61,8 @@ public class VertexObject {
 		if (mTextureBuffer != null) {
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
 		}
-		gl.glDrawElements(GL10.GL_TRIANGLES,
-				((int) mIndexBuffer.limit() / 3) * 3, GL10.GL_UNSIGNED_BYTE,
-				mIndexBuffer);
+		gl.glDrawElements(primitiveType, mIndexBuffer.limit(),
+				GL10.GL_UNSIGNED_BYTE, mIndexBuffer);
 
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 

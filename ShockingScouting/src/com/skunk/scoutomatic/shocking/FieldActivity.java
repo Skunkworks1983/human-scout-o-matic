@@ -68,6 +68,7 @@ public class FieldActivity extends Activity {
 		final FrameLayout contentView = (FrameLayout) findViewById(R.id.fullscreen_content);
 		contentView.addView(glSurf);
 		glSurf.setRenderer(fieldRenderer);
+		glSurf.setOnTouchListener(fieldRenderer);
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
 
