@@ -49,7 +49,7 @@ public class WelcomeFragment extends NamedTabFragmentImpl implements
 
 	@Override
 	public Class<? extends INamedTabFragment> getNext() {
-		return null;
+		return DrivebaseFragment.class;
 	}
 
 	@Override
