@@ -13,19 +13,18 @@ import com.skunk.scoutomatic.shocking.R;
 import com.skunk.scoutomatic.shocking.gl.Texture;
 
 public class FieldRenderer implements Renderer, OnTouchListener {
-	private static final float ROBOT_SIZE = 0.05f;
+	private static final float ROBOT_SIZE = 50f;
 
 	private FieldActivity fieldActivity;
 
-	private VertexObject fieldObject;
+	private RectangularVertexObject fieldObject;
 	private Texture fieldTexture;
 
-	private VertexObject robotObject;
+	private RectangularVertexObject robotObject;
 	private Texture robotTexture;
 
 	private PathVertexObject pathObject;
 
-	private float worldsPerPixel = 1;
 	private float worldX = 0.5f, worldY = 0.5f;
 
 	public FieldRenderer(FieldActivity fieldActivity) {
@@ -34,19 +33,12 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 		this.fieldTexture = new Texture(fieldActivity.getApplicationContext(),
 				R.drawable.field);
 		this.fieldTexture.getBitmap();
-		fieldObject = new VertexObject(GL10.GL_TRIANGLES, new float[] { 0, 0,
-				0, 1, 0, 0, 1, 1, 0, 0, 1, 0 }, new float[] { 1, 1, 1, 1, 1, 1,
-				1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, new float[] { 1, 0, 1, 1, 0, 1,
-				0, 0 }, new byte[] { 0, 1, 2, 3, 2, 0 });
+		fieldObject = new RectangularVertexObject(0, 0, 1, 1);
 
 		this.robotTexture = new Texture(fieldActivity.getApplicationContext(),
 				R.drawable.first_robot);
 		this.robotTexture.getBitmap();
-		robotObject = new VertexObject(GL10.GL_TRIANGLES, new float[] { 0, 0,
-				0, ROBOT_SIZE, 0, 0, ROBOT_SIZE, ROBOT_SIZE, 0, 0, ROBOT_SIZE,
-				0 }, new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-				1 }, new float[] { 1, 0, 1, 1, 0, 1, 0, 0 }, new byte[] { 0, 1,
-				2, 3, 2, 0 });
+		robotObject = new RectangularVertexObject(0, 0, ROBOT_SIZE, ROBOT_SIZE);
 
 		pathObject = new PathVertexObject(worldX, worldY, 0, 10, 0xffff0000,
 				0x990000ff);
@@ -74,8 +66,24 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		worldsPerPixel = (1f / (float) width);
-		gl.glOrthof(0, 1f, (height / (float) width), 0, 0, 10);
+		gl.glOrthof(0, width, height, 0, 0, 10);
+
+		// Update field object
+		{
+			float ySize = width / fieldTexture.getWidth()
+					* fieldTexture.getHeight();
+			float xSize = height / fieldTexture.getHeight()
+					* fieldTexture.getWidth();
+			if (ySize < height) {
+				// Fill X
+				float yOff = (height / 2) - (ySize / 2);
+				fieldObject.setLocation(0, yOff, width, yOff + ySize);
+			} else {
+				// Fill Y
+				float xOff = (width / 2) - (xSize / 2);
+				fieldObject.setLocation(xOff, 0, xOff + xSize, height);
+			}
+		}
 	}
 
 	@Override
@@ -104,8 +112,8 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_MOVE:
-			worldX = event.getX() * worldsPerPixel;
-			worldY = event.getY() * worldsPerPixel;
+			worldX = event.getX();
+			worldY = event.getY();
 			break;
 		}
 		return true;

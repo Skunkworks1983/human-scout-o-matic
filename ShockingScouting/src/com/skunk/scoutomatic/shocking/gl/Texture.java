@@ -13,6 +13,7 @@ public class Texture {
 	private Context ctx;
 	private int resourceID;
 	private Bitmap bitmap;
+	private float width, height;
 
 	public Texture(Context ctx, int resourceID) {
 		this.resourceID = resourceID;
@@ -23,9 +24,19 @@ public class Texture {
 		if (bitmap == null || bitmap.isRecycled()) {
 			bitmap = BitmapFactory.decodeResource(ctx.getResources(),
 					resourceID);
+			width = bitmap.getWidth();
+			height = bitmap.getHeight();
 			Log.d("GLES", "Loaded " + resourceID + " to RAM.");
 		}
 		return bitmap;
+	}
+
+	public float getWidth() {
+		return width;
+	}
+
+	public float getHeight() {
+		return height;
 	}
 
 	public void disposeBitmap() {
@@ -42,7 +53,7 @@ public class Texture {
 				GL10.GL_NEAREST);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
 				GL10.GL_LINEAR);
-		
+
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
 				GL10.GL_CLAMP_TO_EDGE);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
@@ -50,7 +61,7 @@ public class Texture {
 
 		gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
 				GL10.GL_REPLACE);
-		
+
 		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 		textureID = textures[0];
 		Log.d("GLES", "Loaded " + resourceID + " to GPU as " + textureID);
