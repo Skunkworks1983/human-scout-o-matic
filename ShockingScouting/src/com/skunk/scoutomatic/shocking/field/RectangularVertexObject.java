@@ -42,4 +42,19 @@ public class RectangularVertexObject extends VertexObject {
 		return setTextureClip(fieldTexture.minU, fieldTexture.minV,
 				fieldTexture.maxU, fieldTexture.maxV);
 	}
+
+	public boolean contains(float x, float y) {
+		return x >= mVertexBuffer.get(0) && y >= mVertexBuffer.get(1)
+				&& x <= mVertexBuffer.get(6) && y <= mVertexBuffer.get(7);
+	}
+
+	public float clampX(float x) {
+		return Math
+				.min(Math.max(x, mVertexBuffer.get(0)), mVertexBuffer.get(6));
+	}
+
+	public float clampY(float y) {
+		return Math.min(Math.max(y, mVertexBuffer.get(1)),
+				mVertexBuffer.get(7));
+	}
 }

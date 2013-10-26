@@ -129,8 +129,9 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_MOVE:
-			worldX = event.getX();
-			worldY = event.getY();
+			// Are we moving out of the world?
+			worldX = fieldObject.clampX(event.getX());
+			worldY = fieldObject.clampY(event.getY());
 			break;
 		}
 		return true;
