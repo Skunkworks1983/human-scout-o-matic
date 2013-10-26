@@ -10,6 +10,7 @@ import android.view.View.OnTouchListener;
 
 import com.skunk.scoutomatic.shocking.FieldActivity;
 import com.skunk.scoutomatic.shocking.R;
+import com.skunk.scoutomatic.shocking.gl.SubTexture;
 import com.skunk.scoutomatic.shocking.gl.Texture;
 
 public class FieldRenderer implements Renderer, OnTouchListener {
@@ -18,7 +19,7 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 	private FieldActivity fieldActivity;
 
 	private RectangularVertexObject fieldObject;
-	private Texture fieldTexture;
+	private SubTexture fieldTexture;
 
 	private RectangularVertexObject robotObject;
 	private Texture robotTexture;
@@ -30,10 +31,12 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 	public FieldRenderer(FieldActivity fieldActivity) {
 		this.fieldActivity = fieldActivity;
 
-		this.fieldTexture = new Texture(fieldActivity.getApplicationContext(),
-				R.drawable.field);
+		this.fieldTexture = new SubTexture(new Texture(
+				fieldActivity.getApplicationContext(), R.drawable.field),
+				0.146484375f, 0, 0.811523438f, 1);
 		this.fieldTexture.getBitmap();
-		fieldObject = new RectangularVertexObject(0, 0, 1, 1);
+		fieldObject = new RectangularVertexObject(0, 0, 1, 1)
+				.setTextureClip(fieldTexture);
 
 		this.robotTexture = new Texture(fieldActivity.getApplicationContext(),
 				R.drawable.first_robot);
