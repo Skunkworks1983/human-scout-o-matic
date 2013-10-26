@@ -5,8 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.graphics.Color;
 
 public class PathVertexObject extends VertexObject {
-	private static float[] generateVerticies(int count, float x, float y,
-			float z) {
+	private static float[] generateVertices(int count, float x, float y, float z) {
 		float[] buff = new float[3 * count];
 		for (int i = 0; i < buff.length; i += 3) {
 			buff[i] = x;
@@ -24,10 +23,12 @@ public class PathVertexObject extends VertexObject {
 		return buff;
 	}
 
-	private static float[] generateColorBuffer(int count, int from, int to) {
+	private static float[] generateColorBuffer(int count, int from, int to,
+			float colorDegredation) {
 		float[] colors = new float[count * 4];
 		for (int i = 0; i < colors.length; i += 4) {
-			float blend = ((float) i) / ((float) colors.length);
+			float blend = (float) Math.pow(((float) i)
+					/ ((float) colors.length), colorDegredation);
 			colors[i] = (Color.red(to) * blend / 255f)
 					+ (Color.red(from) * (1f - blend) / 255f);
 			colors[i + 1] = (Color.green(to) * blend / 255f)
@@ -41,9 +42,9 @@ public class PathVertexObject extends VertexObject {
 	}
 
 	public PathVertexObject(float x, float y, float z, int count, int from,
-			int to) {
-		super(GL10.GL_LINE_STRIP, generateVerticies(count, x, y, z),
-				generateColorBuffer(count, from, to), null,
+			int to, float colorDegredation) {
+		super(GL10.GL_LINE_STRIP, generateVertices(count, x, y, z),
+				generateColorBuffer(count, from, to, colorDegredation), null,
 				generateIndexBuffer(count));
 	}
 

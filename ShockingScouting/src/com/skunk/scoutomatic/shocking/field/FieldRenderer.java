@@ -4,6 +4,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -15,6 +16,8 @@ import com.skunk.scoutomatic.shocking.gl.Texture;
 
 public class FieldRenderer implements Renderer, OnTouchListener {
 	private static final float ROBOT_SIZE = 50f;
+	private static final int PATH_NODE_COUNT = 100;
+	private static final long PATH_NODE_TIME = 50L;
 
 	private FieldActivity fieldActivity;
 
@@ -26,7 +29,8 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 
 	private PathVertexObject pathObject;
 
-	private float worldX = 0.5f, worldY = 0.5f;
+	private float worldX = 100f, worldY = 100f;
+	private long lastPathNode = -1;
 
 	public FieldRenderer(FieldActivity fieldActivity) {
 		this.fieldActivity = fieldActivity;
@@ -43,8 +47,8 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 		this.robotTexture.getBitmap();
 		robotObject = new RectangularVertexObject(0, 0, ROBOT_SIZE, ROBOT_SIZE);
 
-		pathObject = new PathVertexObject(worldX, worldY, 0, 10, 0xffff0000,
-				0x990000ff);
+		pathObject = new PathVertexObject(worldX, worldY, 0, PATH_NODE_COUNT,
+				0xffff0000, 0x000000ff, 2f);
 	}
 
 	@Override
@@ -54,6 +58,8 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 		gl.glDisable(GL10.GL_CULL_FACE);
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_DST_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable(GL10.GL_LINE_SMOOTH);
+		gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);
 
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		fieldTexture.loadToGPU(gl);
@@ -106,7 +112,15 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 		robotObject.draw(gl);
 		gl.glPopMatrix();
 
-		pathObject.pushVertex(worldX, worldY, 0);
+		if (lastPathNode + PATH_NODE_TIME < SystemClock.elapsedRealtime()) {
+			pathObject.pushVertex(worldX, worldY, 0);
+			if (lastPathNode + (5 * PATH_NODE_TIME) < SystemClock
+					.elapsedRealtime()) {
+				lastPathNode = SystemClock.elapsedRealtime();
+			} else {
+				lastPathNode += PATH_NODE_TIME;
+			}
+		}
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 		pathObject.draw(gl);
 	}
