@@ -9,8 +9,6 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 public class Texture {
-	private static int boundTexture = -1;
-
 	private int textureID = -1;
 	private Context ctx;
 	private int resourceID;
@@ -35,10 +33,8 @@ public class Texture {
 	}
 
 	public void loadToGPU(GL10 gl) {
-		if (textureID != -1) {
-			return;
-		}
 		getBitmap();
+		gl.glEnable(GL10.GL_TEXTURE_2D);
 		int[] textures = new int[1];
 		gl.glGenTextures(1, textures, 0);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
@@ -46,10 +42,18 @@ public class Texture {
 				GL10.GL_NEAREST);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
 				GL10.GL_LINEAR);
+		
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+				GL10.GL_CLAMP_TO_EDGE);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+				GL10.GL_CLAMP_TO_EDGE);
+
+		gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
+				GL10.GL_REPLACE);
+		
 		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 		textureID = textures[0];
 		Log.d("GLES", "Loaded " + resourceID + " to GPU as " + textureID);
-		
 
 		// Auto recycle
 		bitmap.recycle();
@@ -63,10 +67,6 @@ public class Texture {
 	}
 
 	public void bind(GL10 gl) {
-		loadToGPU(gl);
-		if (boundTexture != textureID) {
-			boundTexture = textureID;
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-		}
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 	}
 }
