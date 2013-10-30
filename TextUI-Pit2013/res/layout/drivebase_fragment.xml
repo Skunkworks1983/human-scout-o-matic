@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
+    
     <TableRow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
@@ -12,32 +12,52 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Drive Base Motors"
+            android:text="Dimensions"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </TableRow>
-
-    <TableRow
+    
+	<TableRow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-
-        <RadioButton
-            android:id="@+id/drive2CIM"
+        
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="2 CIM"
+            android:gravity="center"
+            android:text="Width"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+        <EditText
+            android:id="@+id/driveWidth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number" >
 
-        <RadioButton
-            android:id="@+id/drive4CIM"
+            <requestFocus />
+        </EditText>
+        
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="4 CIM"
+            android:gravity="center"
+            android:text="Length"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+        <EditText
+            android:id="@+id/driveLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number" >
+
+            <requestFocus />
+        </EditText>
     </TableRow>
-
+    
     <TableRow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,7 +70,7 @@
             android:gravity="center"
             android:text="Number of Wheels"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
+        
     </TableRow>
 
     <TableRow
@@ -95,7 +115,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/driveOtherWheelInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -105,4 +125,198 @@
         </EditText>
     </TableRow>
     
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Wheel Type"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </TableRow>
+    
+	<TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+	    <RadioButton
+            android:id="@+id/driveRegType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Regular"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+	    <RadioButton
+            android:id="@+id/driveMechanum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mechanum"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+	    <RadioButton
+            android:id="@+id/driveOmni"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Omni"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+	</TableRow>
+    	
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp" >
+         
+	    <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Wheel Surface"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	</TableRow>
+	
+    <!-- TODO: All Material Listed Here is Stupid, FIX + This Item is Stupid in General --> 
+
+	<TableRow
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content" >
+
+	    <RadioButton
+	        android:id="@+id/driveRegSurface"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="Regular Material"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <RadioButton
+	        android:id="@+id/driveRubber"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="Rubber"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+	    <RadioButton
+	        android:id="@+id/driveNASurface"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="N/A"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	</TableRow>
+	
+	<TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    
+		<RadioButton
+	        android:id="@+id/driveOtherMaterial"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Other: "
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/driveOtherMaterialInput"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:ems="10" 
+	        android:inputType="text" >
+
+	        <requestFocus />
+	    </EditText>
+	</TableRow>
+
+	<TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Shiftable Transmission"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </TableRow>
+	
+	<TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+		
+		<RadioButton
+            android:id="@+id/driveShiftTransTrue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Yes"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+	    <RadioButton
+            android:id="@+id/driveShiftTransFalse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="No"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+		
+		<RadioButton
+            android:id="@+id/driveShiftTransNA"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="N/A"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	</TableRow>    
+    
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Drive Base Motors"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/drive2CIM"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="2 CIM"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <RadioButton
+            android:id="@+id/drive4CIM"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="4 CIM"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
 </TableLayout>
