@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".gui.PitMainActivity"
-            android:label="Scout-o-Matic-TextUI" >
+            android:label="Scout-o-Matic Pit" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
