@@ -62,6 +62,14 @@ public class FieldActivity extends Activity {
 		buttonContainer.requestLayout();
 	}
 
+	public float getRobotX() {
+		return fieldRenderer.getTouchX();
+	}
+
+	public float getRobotY() {
+		return fieldRenderer.getTouchY();
+	}
+
 	protected void onResume() {
 		super.onResume();
 		glSurf.onResume();
