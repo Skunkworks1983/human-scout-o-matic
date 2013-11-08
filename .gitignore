@@ -15,3 +15,5 @@ data/*
 */gen/*
 log
 */bin/*
+*/lint.xml
+lint.xml
