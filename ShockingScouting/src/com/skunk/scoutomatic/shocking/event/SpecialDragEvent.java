@@ -3,13 +3,13 @@ package com.skunk.scoutomatic.shocking.event;
 public class SpecialDragEvent extends SpecialTouchEvent {
 	private final float startX, startY;
 	private final float endX, endY;
-	private final long length;
+	private final long time;
 	private final long start;
 
-	public SpecialDragEvent(long start, long length, float startX,
-			float startY, float endX, float endY) {
+	public SpecialDragEvent(long start, long time, float startX, float startY,
+			float endX, float endY) {
 		this.start = start;
-		this.length = length;
+		this.time = time;
 		this.startX = startX;
 		this.startY = startY;
 		this.endX = endX;
@@ -20,8 +20,8 @@ public class SpecialDragEvent extends SpecialTouchEvent {
 		return start;
 	}
 
-	public long getLength() {
-		return length;
+	public long getTime() {
+		return time;
 	}
 
 	public float getEndY() {
@@ -38,5 +38,15 @@ public class SpecialDragEvent extends SpecialTouchEvent {
 
 	public float getStartY() {
 		return startY;
+	}
+
+	public float getDistance() {
+		float dX = startX - endX;
+		float dY = startY - endY;
+		return (float) Math.sqrt((dX * dX) + (dY * dY));
+	}
+
+	public String toString() {
+		return "Drag[dist=" + getDistance() + ",time=" + getTime() + "]";
 	}
 }

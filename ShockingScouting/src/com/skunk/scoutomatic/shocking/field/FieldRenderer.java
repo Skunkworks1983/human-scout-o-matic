@@ -132,7 +132,7 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 			// Are we moving out of the world?
 			worldX = fieldObject.clampX(event.getX());
 			worldY = fieldObject.clampY(event.getY());
-			return true;
+			break;
 		}
 		return false;
 	}

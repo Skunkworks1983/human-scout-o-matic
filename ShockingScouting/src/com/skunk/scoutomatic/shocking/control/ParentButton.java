@@ -2,8 +2,9 @@ package com.skunk.scoutomatic.shocking.control;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+
+import com.skunk.scoutomatic.shocking.FieldActivity;
 
 public class ParentButton extends FieldButton {
 	private List<FieldButton> children = new ArrayList<FieldButton>(0);
@@ -13,14 +14,14 @@ public class ParentButton extends FieldButton {
 		this.children.addAll(Arrays.asList(children));
 	}
 
-	public Iterator<FieldButton> getChildren() {
-		return children.iterator();
+	public Iterable<FieldButton> getChildren() {
+		return children;
 	}
 
 	@Override
-	public boolean isVisible() {
+	public boolean isVisible(FieldActivity act) {
 		for (FieldButton bb : children) {
-			if (bb.isVisible()) {
+			if (bb.isVisible(act)) {
 				return true;
 			}
 		}

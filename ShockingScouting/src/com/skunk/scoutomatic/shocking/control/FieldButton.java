@@ -1,5 +1,7 @@
 package com.skunk.scoutomatic.shocking.control;
 
+import com.skunk.scoutomatic.shocking.FieldActivity;
+
 public abstract class FieldButton {
 	protected final String name;
 
@@ -11,5 +13,5 @@ public abstract class FieldButton {
 		return name;
 	}
 
-	public abstract boolean isVisible();
+	public abstract boolean isVisible(FieldActivity frontend);
 }
