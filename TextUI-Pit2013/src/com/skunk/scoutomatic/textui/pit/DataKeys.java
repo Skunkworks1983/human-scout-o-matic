@@ -18,4 +18,16 @@ public interface DataKeys {
 	public static final String DRIVEBASE_SHIFT_TRANS = "robot.drivebase.shiftTrans";
 	public static final String DRIVEBASE_WIDTH = "robot.drivebase.width";
 	public static final String DRIVEBASE_LENGTH = "robot.drivebase.length";
+
+	public static final String FEATURES_SHOOTER_TYPE = "robot.features.shooterType";
+	public static final String FEATURES_SHOOTER_RANGE = "robot.features.shooterRange";
+	public static final String FEATURES_LOADER_TYPE = "robot.features.loaderType";
+	public static final String FEATURES_LOADER_FREQ = "robot.features.loaderFrequency";
+	public static final String FEATURES_PYRAMID_TIER = "robot.features.pyramidTier";
+	public static final String FEATURES_CLIMB_TIME = "robot.features.climbTime";
+	public static final String FEATURES_AUTO_FUNC = "robot.features.autoFunctions";
+	public static final String FEATURES_AUTO_TIME = "robot.features.autoTime";
+	public static final String FEATURES_STARTING_POS = "robot.features.startingPos";
+	public static final String FEATURES_BLOCKER = "robot.features.blocker";
+	public static final String FEATURES_HEIGHT = "robot.features.height";
 }

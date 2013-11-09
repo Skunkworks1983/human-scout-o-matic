@@ -19,12 +19,26 @@ public class DrivebaseFragment extends NamedTabFragmentImpl implements
 		TextWatcher, OnClickListener {
 	private int cimCount = 0;
 	private int wheelCount = 0;
-	private String wheelType = "";
-	private String wheelSurface = "";
-	private int shiftTrans = -1;
+	private int wheelType = 0;
+	private String wheelSurfaceExt = null;
+	private int wheelSurface = 0;
+	private int shiftTrans = 0;
 	private int width = 0;
 	private int length = 0;
 
+	//TODO: Better place for this stuff?
+	public static final int REGULAR = 0;
+
+	public static final int OMNI = 1;
+	public static final int MECHANUM = 2;
+
+	public static final int RUBBER = 1;
+	public static final int NA = 2;
+
+	public static final int T_NA = 0;
+	public static final int T_YES = 1;
+	public static final int T_NO = 2;
+	
 	private final void registerClickListener(View v, int id) {
 		View vv = v.findViewById(id);
 		if (vv != null) {
@@ -46,7 +60,7 @@ public class DrivebaseFragment extends NamedTabFragmentImpl implements
 				.inflate(R.layout.drivebase_fragment, container, false);
 		registerClickListener(v, R.id.drive2CIM);
 		registerKeyChange(v, R.id.driveOtherMaterialInput);
-		
+
 		return v;
 	}
 
@@ -57,13 +71,11 @@ public class DrivebaseFragment extends NamedTabFragmentImpl implements
 
 	@Override
 	public Class<? extends INamedTabFragment> getNext() {
-		// TODO Auto-generated method stub
-		return null;
+		return FeaturesFragment.class;
 	}
 
 	@Override
 	public Class<? extends INamedTabFragment> getPrevious() {
-		// TODO Auto-generated method stub
 		return WelcomeFragment.class;
 	}
 
@@ -71,8 +83,14 @@ public class DrivebaseFragment extends NamedTabFragmentImpl implements
 	public void storeInformation(DataCache data) {
 		data.putInteger(DataKeys.DRIVEBASE_WHEEL_NUM, wheelCount);
 		data.putInteger(DataKeys.DRIVEBASE_CIMS, cimCount);
-		data.putString(DataKeys.DRIVEBASE_WHEEL_TYPE, wheelType);
-		data.putString(DataKeys.DRIVEBASE_WHEEL_SURFACE, wheelSurface);
+		data.putInteger(DataKeys.DRIVEBASE_WHEEL_TYPE, wheelType);
+		if (wheelSurfaceExt == null) {
+			data.putInteger(DataKeys.DRIVEBASE_WHEEL_SURFACE, wheelSurface);
+		}
+
+		else {
+			data.putString(DataKeys.DRIVEBASE_WHEEL_SURFACE, wheelSurfaceExt);
+		}
 		data.putInteger(DataKeys.DRIVEBASE_SHIFT_TRANS, shiftTrans);
 		data.putInteger(DataKeys.DRIVEBASE_WIDTH, width);
 		data.putInteger(DataKeys.DRIVEBASE_LENGTH, length);
@@ -83,17 +101,17 @@ public class DrivebaseFragment extends NamedTabFragmentImpl implements
 													// guesses
 		wheelCount = data.getInteger(DataKeys.DRIVEBASE_WHEEL_NUM, 6);
 		cimCount = data.getInteger(DataKeys.DRIVEBASE_CIMS, 2);
-		wheelType = data.getString(DataKeys.DRIVEBASE_WHEEL_TYPE, "Regular");
-		wheelSurface = data.getString(DataKeys.DRIVEBASE_WHEEL_SURFACE,
-				"Reuglar");
-		shiftTrans = data.getInteger(DataKeys.DRIVEBASE_SHIFT_TRANS, 1);
+		wheelType = data.getInteger(DataKeys.DRIVEBASE_WHEEL_TYPE, REGULAR);
+		wheelSurface = data.getInteger(DataKeys.DRIVEBASE_WHEEL_SURFACE,
+				REGULAR);
+		wheelSurfaceExt = data.getString(DataKeys.DRIVEBASE_WHEEL_SURFACE, null);
+		shiftTrans = data.getInteger(DataKeys.DRIVEBASE_SHIFT_TRANS, T_NA);
 		width = data.getInteger(DataKeys.DRIVEBASE_WIDTH, 36);
 		length = data.getInteger(DataKeys.DRIVEBASE_LENGTH, 36);
 	}
 
 	@Override
 	public boolean needsKeyboard() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -121,33 +139,29 @@ public class DrivebaseFragment extends NamedTabFragmentImpl implements
 			}
 		}
 
-		super.setState(R.id.driveRegType, wheelType.equalsIgnoreCase("regular"));
-		super.setState(R.id.driveOmni, wheelType.equalsIgnoreCase("omni"));
-		super.setState(R.id.driveMechanum,
-				wheelType.equalsIgnoreCase("mechanum"));
+		super.setState(R.id.driveRegType, wheelType == REGULAR);
+		super.setState(R.id.driveOmni, wheelType == OMNI);
+		super.setState(R.id.driveMechanum, wheelType == MECHANUM);
 
-		super.setState(R.id.driveRegSurface,
-				wheelSurface.equalsIgnoreCase("regular"));
-		super.setState(R.id.driveRubber,
-				wheelSurface.equalsIgnoreCase("rubber"));
-		super.setState(R.id.driveNASurface, wheelSurface.equalsIgnoreCase("na"));
+		super.setState(R.id.driveRegSurface, wheelSurface == REGULAR);
+		super.setState(R.id.driveRubber, wheelSurface == RUBBER);
+		super.setState(R.id.driveNASurface, wheelSurface == NA);
 		if (!super.getState(R.id.driveRegSurface)
 				&& !super.getState(R.id.driveRubber)
 				&& !super.getState(R.id.driveNASurface)) {
 			super.setState(R.id.driveOtherMaterial, true);
 			try {
 				super.setTextContents(R.id.driveOtherMaterialInput,
-						wheelSurface);
+						wheelSurfaceExt);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		super.setState(R.id.driveShiftTransTrue, shiftTrans == 0);
-		super.setState(R.id.driveShiftTransFalse, shiftTrans == 1);
-		super.setState(R.id.driveShiftTransNA, shiftTrans == 2);
+		super.setState(R.id.driveShiftTransTrue, shiftTrans == T_NA);
+		super.setState(R.id.driveShiftTransFalse, shiftTrans == T_YES);
+		super.setState(R.id.driveShiftTransNA, shiftTrans == T_NO);
 	}
 
-	// asdiuflasfsdjf
 	@Override
 	public void onTextChanged(CharSequence sq, int arg1, int arg2, int arg3) {
 		String s = sq.toString();
@@ -157,7 +171,7 @@ public class DrivebaseFragment extends NamedTabFragmentImpl implements
 			} catch (NumberFormatException ex) {
 			}
 		} else if (getTextContents(R.id.driveOtherMaterial).equalsIgnoreCase(s)) {
-			wheelSurface = s;
+			wheelSurfaceExt = s;
 		} else if (getTextContents(R.id.driveWidth).equalsIgnoreCase(s)) {
 			try {
 				width = Integer.valueOf(s);
@@ -183,61 +197,61 @@ public class DrivebaseFragment extends NamedTabFragmentImpl implements
 
 	@Override
 	public void onClick(View v) {
-		switch(v.getId()) {
+		switch (v.getId()) {
 		case R.id.drive2CIM:
 			cimCount = 2;
 			break;
-		
+
 		case R.id.drive4CIM:
 			cimCount = 4;
 			break;
-			
+
 		case R.id.drive4Wheel:
 			wheelCount = 4;
 			break;
-		
+
 		case R.id.drive6Wheel:
 			wheelCount = 6;
 			break;
-			
+
 		case R.id.drive8Wheel:
 			wheelCount = 8;
 			break;
-		
+
 		case R.id.driveRegType:
-			wheelSurface = "regular";
+			wheelSurface = REGULAR;
 			break;
-		
-		case R.id.driveMechanum:
-			wheelType = "mechanum";
-			break;
-		
+
 		case R.id.driveOmni:
-			wheelType = "omni";
+			wheelType = OMNI;
 			break;
-		
+
+		case R.id.driveMechanum:
+			wheelType = MECHANUM;
+			break;
+
 		case R.id.driveRegSurface:
-			wheelSurface = "regular";
+			wheelSurface = REGULAR;
 			break;
-			
+
 		case R.id.driveRubber:
-			wheelSurface = "rubber";
+			wheelSurface = RUBBER;
 			break;
 
 		case R.id.driveNASurface:
-			wheelType = "na";
+			wheelType = NA;
 			break;
-		
+
 		case R.id.driveShiftTransTrue:
-			shiftTrans = 0;
+			shiftTrans = T_NA;
 			break;
-		
+
 		case R.id.driveShiftTransFalse:
-			shiftTrans = 1;
+			shiftTrans = T_YES;
 			break;
-			
+
 		case R.id.driveShiftTransNA:
-			shiftTrans = 2;
+			shiftTrans = T_NO;
 			break;
 		}
 		super.postUpdate();
