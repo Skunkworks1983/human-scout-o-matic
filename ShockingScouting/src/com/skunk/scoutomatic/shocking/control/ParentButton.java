@@ -7,11 +7,20 @@ import java.util.List;
 import com.skunk.scoutomatic.shocking.FieldActivity;
 
 public class ParentButton extends FieldButton {
+	public static final int CACHING = 2;
+	public static final int SINGLE_SHOT = 1;
+
 	private List<FieldButton> children = new ArrayList<FieldButton>(0);
+	private byte flags = 0;
+
+	public ParentButton(String name, int flags, FieldButton... children) {
+		super(name);
+		this.flags = (byte) flags;
+		this.children.addAll(Arrays.asList(children));
+	}
 
 	public ParentButton(String name, FieldButton... children) {
-		super(name);
-		this.children.addAll(Arrays.asList(children));
+		this(name, 0, children);
 	}
 
 	public Iterable<FieldButton> getChildren() {
@@ -26,5 +35,13 @@ public class ParentButton extends FieldButton {
 			}
 		}
 		return false;
+	}
+
+	public boolean isCaching() {
+		return (flags & CACHING) == CACHING;
+	}
+
+	public boolean isOneShot() {
+		return (flags & SINGLE_SHOT) == SINGLE_SHOT;
 	}
 }

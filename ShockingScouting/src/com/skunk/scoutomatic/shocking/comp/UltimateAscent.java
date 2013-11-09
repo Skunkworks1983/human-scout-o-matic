@@ -1,6 +1,7 @@
 package com.skunk.scoutomatic.shocking.comp;
 
 import com.skunk.scoutomatic.shocking.FieldActivity;
+import com.skunk.scoutomatic.shocking.control.ActActionButton;
 import com.skunk.scoutomatic.shocking.control.ButtonManager;
 import com.skunk.scoutomatic.shocking.control.DBActionButton;
 import com.skunk.scoutomatic.shocking.control.ParentButton;
@@ -20,9 +21,23 @@ public class UltimateAscent extends YearlyGame {
 				"3");
 		DBActionButton score5 = new DBActionButton("Score 5", "SCORE_TELEOP",
 				"5");
-		ParentButton scoreParent = new ParentButton("Score", score1, score2,
-				score3, score5);
+		ParentButton scoreParent = new ParentButton("Score",
+				ParentButton.CACHING, score1, score2, score3, score5);
 
-		super.registerButtonTrigger(ButtonManager.HELD_DOWN_EVENT, scoreParent);
+		super.registerButtonTrigger(ButtonManager.HELD_DOWN_1_EVENT,
+				scoreParent);
+		super.registerButtonTrigger(ButtonManager.HELD_DOWN_MULTI_EVENT,
+				createLoadingComments());
+	}
+
+	private static ParentButton createLoadingComments() {
+		ActActionButton badLoading = new ActActionButton("Bad Loading",
+				"comment-load", "bad");
+		ActActionButton slowLoading = new ActActionButton("Slow Loading",
+				"comment-load", "slow");
+		ActActionButton fastLoading = new ActActionButton("Fast Loading",
+				"comment-load", "fast");
+		return new ParentButton("Loading", ParentButton.SINGLE_SHOT,
+				badLoading, slowLoading, fastLoading);
 	}
 }

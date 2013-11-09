@@ -3,6 +3,7 @@ package com.skunk.scoutomatic.shocking;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -13,6 +14,7 @@ import com.skunk.scoutomatic.shocking.event.EventFactory;
 import com.skunk.scoutomatic.shocking.event.SpecialEventListener;
 import com.skunk.scoutomatic.shocking.event.SpecialTouchEvent;
 import com.skunk.scoutomatic.shocking.field.FieldRenderer;
+import com.skunk.scoutomatic.util.DatabaseInstance;
 
 public class FieldActivity extends Activity {
 	private FieldRenderer fieldRenderer;
@@ -43,6 +45,7 @@ public class FieldActivity extends Activity {
 		eventFactory = new EventFactory(new SpecialEventListener() {
 			@Override
 			public void onSpecialTouch(SpecialTouchEvent e) {
+				Log.d("EVT", e.toString());
 				getButtonManager().onEvent(e);
 			}
 		});
@@ -79,9 +82,9 @@ public class FieldActivity extends Activity {
 		return eventFactory;
 	}
 
-	private Bundle db = new Bundle();
+	private DatabaseInstance db = new DatabaseInstance();
 
-	public Bundle getMainDatabase() {
+	public DatabaseInstance getMainDatabase() {
 		return db;
 	}
 

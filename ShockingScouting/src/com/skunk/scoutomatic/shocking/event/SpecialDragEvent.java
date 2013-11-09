@@ -5,15 +5,17 @@ public class SpecialDragEvent extends SpecialTouchEvent {
 	private final float endX, endY;
 	private final long time;
 	private final long start;
+	private final int touchCount;
 
-	public SpecialDragEvent(long start, long time, float startX, float startY,
-			float endX, float endY) {
+	public SpecialDragEvent(long start, long time, int touchCount,
+			float startX, float startY, float endX, float endY) {
 		this.start = start;
 		this.time = time;
 		this.startX = startX;
 		this.startY = startY;
 		this.endX = endX;
 		this.endY = endY;
+		this.touchCount = touchCount;
 	}
 
 	public long getStart() {
@@ -40,6 +42,10 @@ public class SpecialDragEvent extends SpecialTouchEvent {
 		return startY;
 	}
 
+	public int getTouchCount() {
+		return touchCount;
+	}
+
 	public float getDistance() {
 		float dX = startX - endX;
 		float dY = startY - endY;
@@ -47,6 +53,7 @@ public class SpecialDragEvent extends SpecialTouchEvent {
 	}
 
 	public String toString() {
-		return "Drag[dist=" + getDistance() + ",time=" + getTime() + "]";
+		return "Drag[dist=" + getDistance() + ",time=" + getTime() + ",count="
+				+ getTouchCount() + "]";
 	}
 }

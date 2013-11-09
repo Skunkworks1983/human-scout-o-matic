@@ -1,8 +1,7 @@
 package com.skunk.scoutomatic.shocking.control;
 
-import android.os.Bundle;
-
 import com.skunk.scoutomatic.shocking.FieldActivity;
+import com.skunk.scoutomatic.util.DatabaseInstance;
 
 public class DBActionButton extends ActionButton {
 	private String value;
@@ -15,15 +14,14 @@ public class DBActionButton extends ActionButton {
 	}
 
 	@Override
-	public void run(FieldActivity act) {
+	public void run(FieldActivity act, DatabaseInstance db) {
 		value = value.replace("%x", String.valueOf(act.getRobotX()));
 		value = value.replace("%y", String.valueOf(act.getRobotY()));
-		Bundle db = act.getMainDatabase();
 		try {
 			if (value.equalsIgnoreCase("true")) {
-				db.putBoolean(key, true);
+				db.getData().putBoolean(key, true);
 			} else if (value.equalsIgnoreCase("false")) {
-				db.putBoolean(key, false);
+				db.getData().putBoolean(key, false);
 			} else {
 				throw new NumberFormatException("Not a bool.");
 			}
@@ -32,29 +30,29 @@ public class DBActionButton extends ActionButton {
 		}
 
 		try {
-			db.putInt(key, Integer.valueOf(value));
+			db.getData().putInt(key, Integer.valueOf(value));
 			return;
 		} catch (Exception e) {
 		}
 
 		try {
-			db.putLong(key, Long.valueOf(value));
+			db.getData().putLong(key, Long.valueOf(value));
 			return;
 		} catch (Exception e) {
 		}
 
 		try {
-			db.putFloat(key, Float.valueOf(value));
+			db.getData().putFloat(key, Float.valueOf(value));
 			return;
 		} catch (Exception e) {
 		}
 
 		try {
-			db.putDouble(key, Double.valueOf(value));
+			db.getData().putDouble(key, Double.valueOf(value));
 			return;
 		} catch (Exception e) {
 		}
 
-		db.putString(key, value);
+		db.getData().putString(key, value);
 	}
 }
