@@ -3,7 +3,6 @@ package com.skunk.scoutomatic.shocking;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 

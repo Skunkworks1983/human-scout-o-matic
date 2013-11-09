@@ -1,13 +1,9 @@
 package com.skunk.scoutomatic.shocking.comp;
 
-import android.util.Log;
-
 import com.skunk.scoutomatic.shocking.FieldActivity;
+import com.skunk.scoutomatic.shocking.control.ButtonManager;
 import com.skunk.scoutomatic.shocking.control.DBActionButton;
 import com.skunk.scoutomatic.shocking.control.ParentButton;
-import com.skunk.scoutomatic.shocking.event.SpecialDragEvent;
-import com.skunk.scoutomatic.shocking.event.SpecialTouchEvent;
-import com.skunk.scoutomatic.util.ObjectFilter;
 
 public class UltimateAscent extends YearlyGame {
 	public UltimateAscent(FieldActivity act) {
@@ -25,15 +21,6 @@ public class UltimateAscent extends YearlyGame {
 		ParentButton scoreParent = new ParentButton("Score", score1, score2,
 				score3);
 
-		super.registerButtonTrigger(new ObjectFilter<SpecialTouchEvent>() {
-			@Override
-			public boolean accept(SpecialTouchEvent t) {
-				if (t instanceof SpecialDragEvent) {
-					return ((SpecialDragEvent) t).getDistance() < 10
-							&& ((SpecialDragEvent) t).getTime() > 1000;
-				}
-				return false;
-			}
-		}, scoreParent);
+		super.registerButtonTrigger(ButtonManager.HELD_DOWN_EVENT, scoreParent);
 	}
 }

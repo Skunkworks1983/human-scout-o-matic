@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.skunk.scoutomatic.shocking.FieldActivity;
+import com.skunk.scoutomatic.shocking.event.SpecialDragEvent;
 import com.skunk.scoutomatic.shocking.event.SpecialTouchEvent;
 import com.skunk.scoutomatic.util.ObjectFilter;
 
@@ -61,9 +62,7 @@ public class ButtonManager {
 				}
 			}
 		} catch (Exception e) {
-			Log.e("ERROR", e.toString());
 		}
-		Log.d("CHILDREN", childCount + " of " + buttonContainer.getChildCount());
 		if (childCount < buttonContainer.getChildCount()) {
 			buttonContainer.removeViews(childCount,
 					buttonContainer.getChildCount() - childCount);
@@ -97,4 +96,15 @@ public class ButtonManager {
 	public void update() {
 		updateButtonList();
 	}
+
+	public static final ObjectFilter<SpecialTouchEvent> HELD_DOWN_EVENT = new ObjectFilter<SpecialTouchEvent>() {
+		@Override
+		public boolean accept(SpecialTouchEvent t) {
+			if (t instanceof SpecialDragEvent) {
+				return ((SpecialDragEvent) t).getDistance() < 20
+						&& ((SpecialDragEvent) t).getTime() > 500;
+			}
+			return false;
+		}
+	};
 }
