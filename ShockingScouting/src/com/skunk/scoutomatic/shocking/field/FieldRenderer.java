@@ -134,6 +134,14 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 			worldY = fieldObject.clampY(event.getY());
 			break;
 		}
-		return true;
+		return false;
+	}
+
+	public float getTouchX() {
+		return worldX;
+	}
+
+	public float getTouchY() {
+		return worldY;
 	}
 }
