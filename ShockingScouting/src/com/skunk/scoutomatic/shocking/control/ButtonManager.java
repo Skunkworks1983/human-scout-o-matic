@@ -103,7 +103,7 @@ public class ButtonManager {
 		} else if (button == confirmButton) {
 			setRoot(null, true);
 		} else if (button instanceof ParentButton) {
-			setRoot(currentRoot, false);
+			setRoot((ParentButton) button, false);
 		} else if (button instanceof ActionButton) {
 			((ActionButton) button)
 					.run(frontend,
@@ -117,6 +117,7 @@ public class ButtonManager {
 
 	protected void setRoot(ParentButton root, boolean save) {
 		if (currentRoot == root) {
+			updateButtonList();
 			return;
 		}
 		if (cacheInstance != null && save) {

@@ -1,15 +1,17 @@
 package com.skunk.scoutomatic.shocking.event;
 
 import android.view.MotionEvent;
+import android.view.MotionEvent.PointerCoords;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
 public class EventFactory implements OnTouchListener {
 	private long heldStart = -1;
 	private float heldBeginX, heldBeginY;
-	private float heldEndX, heldEndY;
+	private float heldLastX, heldLastY;
 	private int heldCount = 0;
 	private final SpecialEventListener onUpdate;
+	private float heldDistance;
 
 	public EventFactory(SpecialEventListener onUpdate) {
 		this.onUpdate = onUpdate;
@@ -24,43 +26,40 @@ public class EventFactory implements OnTouchListener {
 				heldStart = event.getEventTime();
 				heldBeginX = event.getX();
 				heldBeginY = event.getY();
-				heldEndX = 100000;
-				heldEndY = 100000;
+				heldLastX = heldBeginX;
+				heldLastY = heldBeginY;
 				heldCount = event.getPointerCount();
+				heldDistance = 0;
 			}
 			heldCount = Math.max(heldCount, event.getPointerCount());
 			break;
-		case MotionEvent.ACTION_POINTER_UP:
+		case MotionEvent.ACTION_MOVE:
 			if (heldStart > 0) {
-				float oldDist = ((heldBeginX - heldEndX) * (heldBeginX - heldEndX))
-						+ ((heldBeginY - heldEndY) * (heldBeginY - heldEndY));
-				float newDist = ((heldBeginX - event.getX()) * (heldBeginX - event
-						.getX()))
-						+ ((heldBeginY - event.getY()) * (heldBeginY - event
-								.getY()));
-				if (newDist < oldDist) {
-					heldEndX = event.getX();
-					heldEndY = event.getY();
+				PointerCoords temp = new PointerCoords();
+				float bestX = -1, bestY = -1, bestDist = Float.MAX_VALUE;
+				for (int i = 0; i < event.getPointerCount(); i++) {
+					event.getPointerCoords(i, temp);
+					float dist = ((temp.x - heldLastX) * (temp.x - heldLastX))
+							+ ((temp.y - heldLastY) * (temp.y - heldLastY));
+					if (dist < bestDist) {
+						bestDist = dist;
+						bestX = temp.x;
+						bestY = temp.y;
+					}
+				}
+				if (bestX > 0) {
+					heldLastX = bestX;
+					heldLastY = bestY;
+					heldDistance += (float) Math.sqrt(bestDist);
 				}
 			}
 			break;
 		case MotionEvent.ACTION_UP:
 			if (heldStart > 0) {
-				float oldDist = ((heldBeginX - heldEndX) * (heldBeginX - heldEndX))
-						+ ((heldBeginY - heldEndY) * (heldBeginY - heldEndY));
-				float newDist = ((heldBeginX - event.getX()) * (heldBeginX - event
-						.getX()))
-						+ ((heldBeginY - event.getY()) * (heldBeginY - event
-								.getY()));
-				if (newDist < oldDist) {
-					heldEndX = event.getX();
-					heldEndY = event.getY();
-				}
-
 				if (onUpdate != null) {
 					onUpdate.onSpecialTouch(new SpecialDragEvent(heldStart,
 							event.getEventTime() - heldStart, heldCount,
-							heldBeginX, heldBeginY, heldEndX, heldEndY));
+							heldBeginX, heldBeginY, event.getX(), event.getY(), heldDistance));
 				}
 				heldStart = -1;
 			}

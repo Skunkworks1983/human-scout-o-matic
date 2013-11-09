@@ -29,17 +29,31 @@ public class UltimateAscent extends YearlyGame {
 		super.registerButtonTrigger(ButtonManager.HELD_DOWN_1_EVENT,
 				scoreParent);
 		super.registerButtonTrigger(ButtonManager.HELD_DOWN_MULTI_EVENT,
-				createLoadingComments());
+				new ParentButton("Comment", 0, createLoadingComments(),
+						createDefensiveComments()));
 	}
 
 	private static ParentButton createLoadingComments() {
-		ActActionButton badLoading = new ActActionButton("Bad Loading",
+		ActActionButton badLoading = new ActActionButton("Bad Load",
 				"comment-load", "bad");
-		ActActionButton slowLoading = new ActActionButton("Slow Loading",
+		ActActionButton slowLoading = new ActActionButton("Slow Load",
 				"comment-load", "slow");
-		ActActionButton fastLoading = new ActActionButton("Fast Loading",
+		ActActionButton fastLoading = new ActActionButton("Fast Load",
 				"comment-load", "fast");
 		return new ParentButton("Loading", ParentButton.SINGLE_SHOT,
-				badLoading, slowLoading, fastLoading);
+				badLoading, slowLoading, fastLoading) {
+			public boolean isVisible(FieldActivity act) {
+				return act.getRobotX() >= 0.7 || act.getRobotX() <= 0.3;
+			}
+		};
+	}
+
+	private static ParentButton createDefensiveComments() {
+		ActActionButton goodDef = new ActActionButton("Good Def",
+				"comment-defense", "good");
+		ActActionButton badDef = new ActActionButton("Bad Def",
+				"comment-defense", "bad");
+		return new ParentButton("Defense", ParentButton.SINGLE_SHOT, goodDef,
+				badDef);
 	}
 }

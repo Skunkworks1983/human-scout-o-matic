@@ -48,13 +48,23 @@ public class RectangularVertexObject extends VertexObject {
 				&& x <= mVertexBuffer.get(6) && y <= mVertexBuffer.get(7);
 	}
 
+	public float getWidth() {
+		return mVertexBuffer.get(6) - mVertexBuffer.get(0);
+	}
+
+	public float getHeight() {
+		return mVertexBuffer.get(7) - mVertexBuffer.get(1);
+	}
+
 	public float clampX(float x) {
 		return Math
-				.min(Math.max(x, mVertexBuffer.get(0)), mVertexBuffer.get(6));
+				.min(Math.max(x, mVertexBuffer.get(0)), mVertexBuffer.get(6))
+				/ getWidth();
 	}
 
 	public float clampY(float y) {
-		return Math.min(Math.max(y, mVertexBuffer.get(1)),
-				mVertexBuffer.get(7));
+		return Math
+				.min(Math.max(y, mVertexBuffer.get(1)), mVertexBuffer.get(7))
+				/ getHeight();
 	}
 }

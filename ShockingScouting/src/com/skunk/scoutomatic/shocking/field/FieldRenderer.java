@@ -29,7 +29,7 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 
 	private PathVertexObject pathObject;
 
-	private float worldX = 100f, worldY = 100f;
+	private float worldX, worldY;
 	private long lastPathNode = -1;
 
 	public FieldRenderer(FieldActivity fieldActivity) {
@@ -47,8 +47,8 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 		this.robotTexture.getBitmap();
 		robotObject = new RectangularVertexObject(0, 0, ROBOT_SIZE, ROBOT_SIZE);
 
-		pathObject = new PathVertexObject(worldX, worldY, 0, PATH_NODE_COUNT,
-				0xffff0000, 0x000000ff, 2f);
+		pathObject = new PathVertexObject(0, 0, 0, PATH_NODE_COUNT, 0xffff0000,
+				0x000000ff, 2f);
 	}
 
 	@Override
@@ -108,12 +108,14 @@ public class FieldRenderer implements Renderer, OnTouchListener {
 
 		robotTexture.bind(gl);
 		gl.glPushMatrix();
-		gl.glTranslatef(worldX - (ROBOT_SIZE / 2), worldY - (ROBOT_SIZE / 2), 0);
+		gl.glTranslatef(worldX * fieldObject.getWidth() - (ROBOT_SIZE / 2),
+				worldY * fieldObject.getHeight() - (ROBOT_SIZE / 2), 0);
 		robotObject.draw(gl);
 		gl.glPopMatrix();
 
 		if (lastPathNode + PATH_NODE_TIME < SystemClock.elapsedRealtime()) {
-			pathObject.pushVertex(worldX, worldY, 0);
+			pathObject.pushVertex(worldX * fieldObject.getWidth(), worldY
+					* fieldObject.getHeight(), 0);
 			if (lastPathNode + (5 * PATH_NODE_TIME) < SystemClock
 					.elapsedRealtime()) {
 				lastPathNode = SystemClock.elapsedRealtime();
