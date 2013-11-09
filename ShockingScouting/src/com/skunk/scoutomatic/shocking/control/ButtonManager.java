@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -30,6 +29,11 @@ public class ButtonManager {
 	public void registerButtonTrigger(ObjectFilter<SpecialTouchEvent> trigger,
 			ParentButton button) {
 		triggers.put(trigger, button);
+	}
+
+	public void reset() {
+		buttonContainer.removeAllViews();
+		triggers.clear();
 	}
 
 	private void updateButtonList() {
@@ -84,7 +88,6 @@ public class ButtonManager {
 		// Check the triggers; if triggered set it nicely
 		for (Entry<ObjectFilter<SpecialTouchEvent>, ParentButton> trigger : triggers
 				.entrySet()) {
-			Log.d("EVT", evt.toString());
 			if (trigger.getKey().accept(evt)) {
 				currentRoot = trigger.getValue();
 				update();

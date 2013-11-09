@@ -52,7 +52,7 @@ public class FieldActivity extends Activity {
 		glSurf.setOnTouchListener(new CompositeTouchListener(fieldRenderer,
 				eventFactory));
 
-		new UltimateAscent(this);
+		new UltimateAscent(this).init();
 
 	}
 

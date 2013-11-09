@@ -10,7 +10,6 @@ public abstract class YearlyGame {
 
 	public YearlyGame(FieldActivity act) {
 		this.frontend = act;
-		init();
 	}
 
 	/**
