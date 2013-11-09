@@ -21,8 +21,10 @@ public class UltimateAscent extends YearlyGame {
 				"3");
 		DBActionButton score5 = new DBActionButton("Score 5", "SCORE_TELEOP",
 				"5");
+		DBActionButton scoreMiss = new DBActionButton("Miss", "SCORE_TELEOP",
+				"miss");
 		ParentButton scoreParent = new ParentButton("Score",
-				ParentButton.CACHING, score1, score2, score3, score5);
+				ParentButton.CACHING, score1, score2, score3, score5, scoreMiss);
 
 		super.registerButtonTrigger(ButtonManager.HELD_DOWN_1_EVENT,
 				scoreParent);

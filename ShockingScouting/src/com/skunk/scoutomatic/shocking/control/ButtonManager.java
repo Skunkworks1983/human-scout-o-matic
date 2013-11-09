@@ -50,6 +50,8 @@ public class ButtonManager {
 						.iterator();
 				FieldButton nextFake = currentRoot.isCaching() ? confirmButton
 						: cancelButton;
+				float size = Math.min(50, 35 * 7 / (currentRoot.getChildren()
+						.size() + (currentRoot.isCaching() ? 2 : 1)));
 				while (children.hasNext() || nextFake != null) {
 					final FieldButton button = children.hasNext() ? children
 							.next() : nextFake;
@@ -74,7 +76,7 @@ public class ButtonManager {
 								LayoutParams.WRAP_CONTENT);
 						b.setLayoutParams(params);
 						b.setText(button.getName());
-						b.setTextSize(25);
+						b.setTextSize(size);
 						b.setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View e) {

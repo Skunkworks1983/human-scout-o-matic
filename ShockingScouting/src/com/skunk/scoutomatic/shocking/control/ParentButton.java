@@ -2,6 +2,7 @@ package com.skunk.scoutomatic.shocking.control;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import com.skunk.scoutomatic.shocking.FieldActivity;
@@ -23,7 +24,7 @@ public class ParentButton extends FieldButton {
 		this(name, 0, children);
 	}
 
-	public Iterable<FieldButton> getChildren() {
+	public Collection<FieldButton> getChildren() {
 		return children;
 	}
 
