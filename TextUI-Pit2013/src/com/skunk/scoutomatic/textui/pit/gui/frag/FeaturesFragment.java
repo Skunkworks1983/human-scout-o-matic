@@ -45,7 +45,7 @@ public class FeaturesFragment extends NamedTabFragmentImpl implements
 
 	private final void registerKeyChange(View v, int id) {
 		View vv = v.findViewById(id);
-		if (vv != null) {
+		if (vv != null && vv instanceof EditText) {
 			((EditText) vv).addTextChangedListener(this);
 		}
 	}
@@ -132,18 +132,19 @@ public class FeaturesFragment extends NamedTabFragmentImpl implements
 		super.setState(R.id.featureBlockerYes, blocker == true);
 		super.setTextContents(R.id.featureClimbTime,
 				climbTime > 0 ? Integer.toString(climbTime) : "");
-		
-		super.setTextContents(R.id.featureHeight, height > 0 ? Integer.toString(height) : "");
-		
+
+		super.setTextContents(R.id.featureHeight,
+				height > 0 ? Integer.toString(height) : "");
+
 		super.setState(R.id.featureLoaderBelt, loaderType == BELT);
 		super.setState(R.id.featureLoaderScoop, loaderType == SCOOP);
 		super.setState(R.id.featureLoaderFreq1, loaderType == 1);
 		super.setState(R.id.featureLoaderFreq2, loaderType == 2);
-		
+
 		super.setState(R.id.featurePyramidTier1, pyramidTier == 1);
 		super.setState(R.id.featurePyramidTier2, pyramidTier == 2);
 		super.setState(R.id.featurePyramidTier3, pyramidTier == 3);
-		
+
 		super.setState(R.id.featureShooter90, shooterType == NINETY_DEGREE);
 		super.setState(R.id.featureShooterLinear, shooterType == LINEAR);
 		if (shooterType != NINETY_DEGREE && shooterType != LINEAR) {
@@ -155,14 +156,17 @@ public class FeaturesFragment extends NamedTabFragmentImpl implements
 				e.printStackTrace();
 			}
 		}
-		super.setTextContents(R.id.featureShooterRange, shooterRange > 0 ? Integer.toString(shooterRange) : "");
-		super.setTextContents(R.id.featureStartingPosition, startingPos > 0 ? Integer.toString(startingPos) : "");
+		super.setTextContents(R.id.featureShooterRange,
+				shooterRange > 0 ? Integer.toString(shooterRange) : "");
+		super.setTextContents(R.id.featureStartingPosition,
+				startingPos > 0 ? Integer.toString(startingPos) : "");
 	}
-	
+
 	@Override
 	public void onTextChanged(CharSequence sq, int arg1, int arg2, int arg3) {
 		String s = sq.toString();
-		if (getTextContents(R.id.featureAutoNumberofFunctions).equalsIgnoreCase(s)) {
+		if (getTextContents(R.id.featureAutoNumberofFunctions)
+				.equalsIgnoreCase(s)) {
 			try {
 				autoFunctions = Integer.valueOf(s);
 			} catch (NumberFormatException ex) {
@@ -172,29 +176,27 @@ public class FeaturesFragment extends NamedTabFragmentImpl implements
 				autoTime = Integer.valueOf(s);
 			} catch (NumberFormatException ex) {
 			}
-		}
-		else if (getTextContents(R.id.featureClimbTime).equalsIgnoreCase(s)) {
+		} else if (getTextContents(R.id.featureClimbTime).equalsIgnoreCase(s)) {
 			try {
 				climbTime = Integer.valueOf(s);
 			} catch (NumberFormatException ex) {
 			}
-		}
-		else if (getTextContents(R.id.featureHeight).equalsIgnoreCase(s)) {
+		} else if (getTextContents(R.id.featureHeight).equalsIgnoreCase(s)) {
 			try {
 				height = Integer.valueOf(s);
 			} catch (NumberFormatException ex) {
 			}
-		}
-		else if (getTextContents(R.id.featureShooterOtherInput).equalsIgnoreCase(s)) {
+		} else if (getTextContents(R.id.featureShooterOtherInput)
+				.equalsIgnoreCase(s)) {
 			shooterTypeExt = s;
-		}
-		else if (getTextContents(R.id.featureShooterRange).equalsIgnoreCase(s)) {
+		} else if (getTextContents(R.id.featureShooterRange)
+				.equalsIgnoreCase(s)) {
 			try {
 				shooterRange = Integer.valueOf(s);
 			} catch (NumberFormatException ex) {
 			}
-		}
-		else if (getTextContents(R.id.featureStartingPosition).equalsIgnoreCase(s)) {
+		} else if (getTextContents(R.id.featureStartingPosition)
+				.equalsIgnoreCase(s)) {
 			try {
 				startingPos = Integer.valueOf(s);
 			} catch (NumberFormatException ex) {

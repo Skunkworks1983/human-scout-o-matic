@@ -107,13 +107,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
-        <RadioButton
-            android:id="@+id/driveOtherWheel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Other: "
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
         <EditText
             android:id="@+id/driveOtherWheelInput"
             android:layout_width="wrap_content"
@@ -220,13 +213,6 @@
 	<TableRow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-    
-		<RadioButton
-	        android:id="@+id/driveOtherMaterial"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Other: "
-	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
 	        android:id="@+id/driveOtherMaterialInput"
